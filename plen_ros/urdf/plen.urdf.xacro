@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<robot name="diff_drive" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Include Macros -->
+  <xacro:include filename="$(find plen_ros)/urdf/plen_macro.xacro" />
+  <!-- Include Gazebo File -->
+  <!-- <xacro:include filename="$(find plen_ros)/urdf/plen.gazebo.xacro" /> -->
+  
+  <!-- Robot description -->
+  <!-- Links -->
+  <link name="base_footprint"/>
+
+  <mesh_link name="r_foot"
+              origin_rpy="0 0 0" origin_xyz="0 0 0"
+              mass="0"
+              ixx="0" ixy="0" ixz="0"
+              iyy="0" iyz="0"
+              izz="0"
+              matname="red_mat"
+              rgba="1 0 0 1"
+              meshfile="package://plen_ros/meshes/rfoot.stl"
+              meshscale="0.001 0.001 0.001" /> <!-- m to mm -->
+
+  <mesh_link name="r_ankle"
+              origin_rpy="0 0 0" origin_xyz="${-7.55/1000} ${3.5/1000} ${-7.45/1000}"
+              mass="1"
+              ixx="0" ixy="0" ixz="0"
+              iyy="0" iyz="0"
+              izz="0"
+              matname="green_mat"
+              rgba="0 1 0 1"
+              meshfile="package://plen_ros/meshes/rankle.stl"
+              meshscale="0.001 0.001 0.001" /> <!-- m to mm -->
+
+  <!-- <mesh_link name="r_shin"
+              origin_rpy="0 0 0" origin_xyz="0 0 0"
+              mass="1"
+              ixx="0" ixy="0" ixz="0"
+              iyy="0" iyz="0"
+              izz="0"
+              matname="green_mat"
+              rgba="0 1 0 1"
+              meshfile="package://plen_ros/meshes/rshin.stl"
+              meshscale="0.001 0.001 0.001" /> --> <!-- m to mm -->
+  
+  <!-- Joints -->
+  <frame_joint name="base_r_foot" type="fixed"
+                    origin_rpy="0 0 0" origin_xyz="0 0 0"
+                    parent="base_footprint" child="r_foot"/>
+  <!-- Joint 1: Base - RR rev -->      
+  <rev_joint name="r_foot_ankle" type="continuous"
+                    axis_xyz="0 1 0"
+                    origin_rpy="0 0 0" origin_xyz="${8.5/1000} 0 ${19.78/1000}"
+                    parent="r_foot" child="r_ankle"
+                    effort="100"
+                    velocity="100"
+                    damping="1"
+                    friction="0.1"/>
+
+</robot>
