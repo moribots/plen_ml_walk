@@ -11,6 +11,7 @@ Panels:
         - /TF1/Frames1
         - /TF1/Tree1
         - /RobotModel1
+        - /RobotModel1/Links1
       Splitter Ratio: 0.5
     Tree Height: 713
   - Class: rviz/Selection
@@ -67,20 +68,33 @@ Visualization Manager:
         r_ankle:
           Value: false
         r_foot:
+          Value: false
+        r_hip:
           Value: true
+        r_knee:
+          Value: false
+        r_knee_servo:
+          Value: false
         r_shin:
           Value: false
-      Marker Scale: 1
+        r_thigh:
+          Value: false
+      Marker Scale: 0.20000000298023224
       Name: TF
       Show Arrows: false
       Show Axes: true
-      Show Names: false
+      Show Names: true
       Tree:
         base_footprint:
           r_foot:
             r_ankle:
               r_shin:
-                {}
+                r_knee:
+                  r_knee_servo:
+                    {}
+                  r_thigh:
+                    r_hip:
+                      {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -107,7 +121,27 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        r_hip:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_knee:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_knee_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         r_shin:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_thigh:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -146,25 +180,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.13278508186340332
+      Distance: 0.24513541162014008
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.014759254641830921
-        Y: 0.019373754039406776
-        Z: 0.010021446272730827
+        X: 0.011301974765956402
+        Y: 0.007422194350510836
+        Z: 0.07450708746910095
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.41039764881134033
+      Pitch: 0.12479674071073532
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.078547954559326
+      Yaw: 0.03850630670785904
     Saved: ~
 Window Geometry:
   Displays:
