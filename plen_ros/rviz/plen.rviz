@@ -12,7 +12,9 @@ Panels:
         - /TF1/Tree1
         - /RobotModel1
         - /RobotModel1/Links1
-      Splitter Ratio: 0.5
+        - /RobotModel1/Links1/r_hand1
+        - /RobotModel1/Links1/torso1
+      Splitter Ratio: 0.6941176652908325
     Tree Height: 713
   - Class: rviz/Selection
     Name: Selection
@@ -65,36 +67,55 @@ Visualization Manager:
         All Enabled: false
         base_footprint:
           Value: false
-        r_ankle:
+        head:
           Value: false
-        r_foot:
+        lb_servo:
           Value: false
-        r_hip:
-          Value: true
-        r_knee:
+        lt_servo:
           Value: false
-        r_knee_servo:
+        r_arm:
           Value: false
-        r_shin:
+        r_elbow:
           Value: false
-        r_thigh:
+        r_hand:
           Value: false
-      Marker Scale: 0.20000000298023224
+        r_shoulder:
+          Value: false
+        rb_servo:
+          Value: false
+        re_servo:
+          Value: false
+        rs_servo:
+          Value: false
+        rt_servo:
+          Value: false
+        torso:
+          Value: false
+      Marker Scale: 0.18000000715255737
       Name: TF
       Show Arrows: false
       Show Axes: true
       Show Names: true
       Tree:
         base_footprint:
-          r_foot:
-            r_ankle:
-              r_shin:
-                r_knee:
-                  r_knee_servo:
-                    {}
-                  r_thigh:
-                    r_hip:
-                      {}
+          torso:
+            head:
+              {}
+            lb_servo:
+              {}
+            lt_servo:
+              {}
+            r_shoulder:
+              rs_servo:
+                r_arm:
+                  re_servo:
+                    r_elbow:
+                      r_hand:
+                        {}
+            rb_servo:
+              {}
+            rt_servo:
+              {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -111,37 +132,62 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        r_ankle:
+        head:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        r_foot:
+        lb_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        r_hip:
+        lt_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        r_knee:
+        r_arm:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        r_knee_servo:
+        r_elbow:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        r_shin:
+        r_hand:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        r_thigh:
+        r_shoulder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rb_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        re_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rs_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rt_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        torso:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -180,25 +226,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.24513541162014008
+      Distance: 0.347486674785614
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.011301974765956402
-        Y: 0.007422194350510836
-        Z: 0.07450708746910095
+        X: 0.005307332146912813
+        Y: -0.030505085363984108
+        Z: 0.00686220359057188
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.12479674071073532
+      Pitch: 0.11020448058843613
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.03850630670785904
+      Yaw: 5.946177959442139
     Saved: ~
 Window Geometry:
   Displays:
