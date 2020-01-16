@@ -69,7 +69,19 @@ Visualization Manager:
           Value: false
         head:
           Value: false
+        l_arm:
+          Value: false
+        l_elbow:
+          Value: false
+        l_hand:
+          Value: false
+        l_shoulder:
+          Value: false
         lb_servo:
+          Value: false
+        le_servo:
+          Value: false
+        ls_servo:
           Value: false
         lt_servo:
           Value: false
@@ -101,6 +113,13 @@ Visualization Manager:
           torso:
             head:
               {}
+            l_shoulder:
+              ls_servo:
+                l_arm:
+                  le_servo:
+                    l_elbow:
+                      l_hand:
+                        {}
             lb_servo:
               {}
             lt_servo:
@@ -137,7 +156,37 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        l_arm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        l_elbow:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        l_hand:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        l_shoulder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         lb_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        le_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ls_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -241,10 +290,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.11020448058843613
+      Pitch: 0.03520432114601135
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.946177959442139
+      Yaw: 0.033000726252794266
     Saved: ~
 Window Geometry:
   Displays:
