@@ -207,6 +207,28 @@
               meshfile="package://plen_ros/meshes/hand.stl"
               meshscale="0.001 0.001 0.001" />
 
+  <mesh_link name="r_hip"
+              origin_rpy="${pi} ${0} ${pi}" origin_xyz="${0/1000} ${0/1000} ${0/1000}"
+              mass="1"
+              ixx="0" ixy="0" ixz="0"
+              iyy="0" iyz="0"
+              izz="0"
+              matname="blue_mat"
+              rgba="0 0 1 1"
+              meshfile="package://plen_ros/meshes/rhip.stl"
+              meshscale="0.001 0.001 0.001" />
+
+  <mesh_link name="r_thigh"
+              origin_rpy="${0} ${0} ${0}" origin_xyz="${-7.5/1000} ${0} ${-7.5/1000}"
+              mass="1"
+              ixx="0" ixy="0" ixz="0"
+              iyy="0" iyz="0"
+              izz="0"
+              matname="green_mat"
+              rgba="0 1 0 1"
+              meshfile="package://plen_ros/meshes/rthigh.stl"
+              meshscale="0.001 0.001 0.001" />
+
   <!-- <mesh_link name="r_foot"
               origin_rpy="0 0 ${pi/2}" origin_xyz="0 0 0"
               mass="0"
@@ -271,28 +293,6 @@
               matname="green_mat"
               rgba="0 1 0 1"
               meshfile="package://plen_ros/meshes/rthigh.stl"
-              meshscale="0.001 0.001 0.001" />
-
-  <mesh_link name="r_hip"
-              origin_rpy="${pi} ${0} ${-pi/2}" origin_xyz="${0/1000} ${-5.5/1000} ${12.8/1000}"
-              mass="1"
-              ixx="0" ixy="0" ixz="0"
-              iyy="0" iyz="0"
-              izz="0"
-              matname="blue_mat"
-              rgba="0 0 1 1"
-              meshfile="package://plen_ros/meshes/rhip.stl"
-              meshscale="0.001 0.001 0.001" />
-
-  <mesh_link name="r_torso_servo"
-              origin_rpy="${0} ${pi} ${pi}" origin_xyz="${-63.8/1000} ${-32.16/1000} ${130/1000}"
-              mass="1"
-              ixx="0" ixy="0" ixz="0"
-              iyy="0" iyz="0"
-              izz="0"
-              matname="red_mat"
-              rgba="1 0 0 1"
-              meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" /> -->
   
   <!-- Joints -->
@@ -401,7 +401,24 @@
                     origin_rpy="${pi} ${pi/2} ${0}" origin_xyz="${-30/1000} ${0/1000} ${0/1000}"
                     parent="l_elbow" child="l_hand"/>
 
-  <!-- Joint 1: R FOOT - R ANKLE -->      
+  <!-- RIGHT LEG -->
+  <rev_joint name="rb_servo_r_hip" type="continuous"
+                    axis_xyz="0 0 1"
+                    origin_rpy="${pi} 0 ${pi/2}" origin_xyz="${0/1000} ${0/1000} ${14.2/1000}"
+                    parent="rb_servo" child="r_hip"
+                    effort="100"
+                    velocity="100"
+                    damping="1"
+                    friction="0.1"/>
+
+  <rev_joint name="r_hip_r_thigh" type="continuous"
+                    axis_xyz="0 1 0"
+                    origin_rpy="${pi} 0 0" origin_xyz="${5.45/1000} ${-2/1000} ${-12.81/1000}"
+                    parent="r_hip" child="r_thigh"
+                    effort="100"
+                    velocity="100"
+                    damping="1"
+                    friction="0.1"/>
   <!-- <rev_joint name="r_foot_ankle" type="continuous"
                     axis_xyz="1 0 0"
                     origin_rpy="0 0 0" origin_xyz="0 ${8.5/1000} ${19.78/1000}"
@@ -410,8 +427,7 @@
                     velocity="100"
                     damping="1"
                     friction="0.1"/> -->
-
-  <!-- Joint 2: R ANKLE - R SHIN -->      
+    
   <!-- <rev_joint name="r_ankle_shin" type="continuous"
                     axis_xyz="0 1 0"
                     origin_rpy="0 0 0" origin_xyz="${3.75/1000} ${-8.9/1000} ${12.8/1000}"
@@ -420,8 +436,7 @@
                     velocity="100"
                     damping="1"
                     friction="0.1"/> -->
-
-  <!-- Joint 3: R SHIN - R KNEE -->      
+    
   <!-- <rev_joint name="r_shin_knee" type="continuous"
                     axis_xyz="0 1 0"
                     origin_rpy="0 0 0" origin_xyz="${-0.45/1000} ${-0.60/1000} ${33.7/1000}"
@@ -430,13 +445,11 @@
                     velocity="100"
                     damping="1"
                     friction="0.1"/> -->
-
-  <!-- Joint: R KNEE - R KNEE SERVO -->  
+ 
   <!-- <frame_joint name="r_knee_knee_servo" type="fixed"
                     origin_rpy="0 0 0" origin_xyz="0 0 0"
                     parent="r_knee" child="r_knee_servo"/> -->
-
-  <!-- Joint 4: R KNEE - R THIGH -->      
+      
   <!-- <rev_joint name="r_knee_thigh" type="continuous"
                     axis_xyz="0 1 0"
                     origin_rpy="0 0 0" origin_xyz="${0.6/1000} ${0} ${28/1000}"
@@ -445,22 +458,11 @@
                     velocity="100"
                     damping="1"
                     friction="0.1"/> -->
-
-  <!-- Joint 5: R THIGH - R HIP -->      
+  
  <!--  <rev_joint name="r_thigh_hip" type="continuous"
                     axis_xyz="1 0 0"
                     origin_rpy="0 0 0" origin_xyz="${-8/1000} ${7.5/1000} ${12.8/1000}"
                     parent="r_thigh" child="r_hip"
-                    effort="100"
-                    velocity="100"
-                    damping="1"
-                    friction="0.1"/> -->
-
-  <!-- Joint 5: R HIP - R TORSO SERVO -->      
-  <!-- <rev_joint name="r_hip_torso_servo" type="continuous"
-                    axis_xyz="0 0 1"
-                    origin_rpy="${pi} 0 ${pi/2}" origin_xyz="${-0.3/1000} ${-5.6/1000} ${12.4/1000}"
-                    parent="r_hip" child="r_torso_servo"
                     effort="100"
                     velocity="100"
                     damping="1"

@@ -91,7 +91,11 @@ Visualization Manager:
           Value: false
         r_hand:
           Value: false
+        r_hip:
+          Value: true
         r_shoulder:
+          Value: false
+        r_thigh:
           Value: false
         rb_servo:
           Value: false
@@ -132,7 +136,9 @@ Visualization Manager:
                       r_hand:
                         {}
             rb_servo:
-              {}
+              r_hip:
+                r_thigh:
+                  {}
             rt_servo:
               {}
       Update Interval: 0
@@ -211,7 +217,17 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        r_hip:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         r_shoulder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_thigh:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -275,25 +291,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.347486674785614
+      Distance: 0.09641359001398087
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.005307332146912813
-        Y: -0.030505085363984108
-        Z: 0.00686220359057188
+        X: -0.011775649152696133
+        Y: -0.013152657076716423
+        Z: -0.03655700758099556
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.03520432114601135
+      Pitch: -0.5847949385643005
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.033000726252794266
+      Yaw: 1.3598036766052246
     Saved: ~
 Window Geometry:
   Displays:
@@ -311,5 +327,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1918
-  X: 0
-  Y: 0
+  X: 1731
+  Y: 1080
