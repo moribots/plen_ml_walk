@@ -12,7 +12,6 @@ Panels:
         - /TF1/Tree1
         - /RobotModel1
         - /RobotModel1/Links1
-        - /RobotModel1/Links1/r_hand1
         - /RobotModel1/Links1/torso1
       Splitter Ratio: 0.6941176652908325
     Tree Height: 713
@@ -69,13 +68,27 @@ Visualization Manager:
           Value: false
         head:
           Value: false
+        l_ankle:
+          Value: true
         l_arm:
           Value: false
         l_elbow:
           Value: false
+        l_foot:
+          Value: false
         l_hand:
           Value: false
+        l_hip:
+          Value: false
+        l_knee:
+          Value: false
+        l_knee_servo:
+          Value: false
+        l_shin:
+          Value: false
         l_shoulder:
+          Value: false
+        l_thigh:
           Value: false
         lb_servo:
           Value: false
@@ -135,7 +148,15 @@ Visualization Manager:
                       l_hand:
                         {}
             lb_servo:
-              {}
+              l_hip:
+                l_thigh:
+                  l_knee:
+                    l_knee_servo:
+                      {}
+                    l_shin:
+                      l_ankle:
+                        l_foot:
+                          {}
             lt_servo:
               {}
             r_shoulder:
@@ -164,7 +185,7 @@ Visualization Manager:
       Collision Enabled: true
       Enabled: true
       Links:
-        All Links Enabled: true
+        All Links Enabled: false
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
@@ -177,13 +198,23 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+          Value: false
+        l_ankle:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
           Value: true
         l_arm:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         l_elbow:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        l_foot:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -192,112 +223,137 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+          Value: false
+        l_hip:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        l_knee:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        l_knee_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        l_shin:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
           Value: true
         l_shoulder:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
+        l_thigh:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
         lb_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         le_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         ls_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         lt_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_ankle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_arm:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_elbow:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_foot:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_hand:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_hip:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_knee:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_knee_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_shin:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_shoulder:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         r_thigh:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         rb_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         re_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         rs_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         rt_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
         torso:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+          Value: false
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -332,25 +388,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.08378463983535767
+      Distance: 0.0899450033903122
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.009386294521391392
-        Y: -0.021233325824141502
-        Z: -0.1278039962053299
+        X: -0.01482480764389038
+        Y: 0.011230642907321453
+        Z: -0.13444554805755615
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.10979718714952469
+      Pitch: -0.02479729801416397
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.0648074671626091
+      Yaw: 0.013027438893914223
     Saved: ~
 Window Geometry:
   Displays:
