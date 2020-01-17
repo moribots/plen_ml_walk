@@ -85,14 +85,24 @@ Visualization Manager:
           Value: false
         lt_servo:
           Value: false
+        r_ankle:
+          Value: false
         r_arm:
           Value: false
         r_elbow:
           Value: false
+        r_foot:
+          Value: false
         r_hand:
           Value: false
         r_hip:
-          Value: true
+          Value: false
+        r_knee:
+          Value: false
+        r_knee_servo:
+          Value: false
+        r_shin:
+          Value: false
         r_shoulder:
           Value: false
         r_thigh:
@@ -107,7 +117,7 @@ Visualization Manager:
           Value: false
         torso:
           Value: false
-      Marker Scale: 0.18000000715255737
+      Marker Scale: 0.25
       Name: TF
       Show Arrows: false
       Show Axes: true
@@ -138,7 +148,13 @@ Visualization Manager:
             rb_servo:
               r_hip:
                 r_thigh:
-                  {}
+                  r_knee:
+                    r_knee_servo:
+                      {}
+                    r_shin:
+                      r_ankle:
+                        r_foot:
+                          {}
             rt_servo:
               {}
       Update Interval: 0
@@ -202,6 +218,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        r_ankle:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         r_arm:
           Alpha: 1
           Show Axes: false
@@ -212,12 +233,32 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        r_foot:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         r_hand:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
         r_hip:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_knee:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_knee_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_shin:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -291,25 +332,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.09641359001398087
+      Distance: 0.08378463983535767
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.011775649152696133
-        Y: -0.013152657076716423
-        Z: -0.03655700758099556
+        X: -0.009386294521391392
+        Y: -0.021233325824141502
+        Z: -0.1278039962053299
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.5847949385643005
+      Pitch: -0.10979718714952469
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.3598036766052246
+      Yaw: 0.0648074671626091
     Saved: ~
 Window Geometry:
   Displays:
@@ -327,5 +368,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1918
-  X: 1731
-  Y: 1080
+  X: 0
+  Y: 0
