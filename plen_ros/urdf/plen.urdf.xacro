@@ -537,7 +537,7 @@
                     friction="0.1"/>
 
   <rev_joint name="l_hip_l_thigh" type="continuous"
-                    axis_xyz="0 1 0"
+                    axis_xyz="1 0 0"
                     origin_rpy="${pi/2} ${0} ${pi/2}" origin_xyz="${5.5/1000} ${17/1000} ${-12.65/1000}"
                     parent="l_hip" child="l_thigh"
                     effort="100"
