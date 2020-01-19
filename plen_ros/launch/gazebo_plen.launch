@@ -1,0 +1,19 @@
+<launch>
+  <!-- load the urdf into the parameter server from the xacro file-->
+  <!-- this argument is both to load the gazebo plugin and to load the move_0 node -->
+  <arg name="mode" default="0"/> 
+  <param name="robot_description" command="xacro '$(find plen_ros)/urdf/plen.urdf.xacro'" />
+
+  <!-- We reuse the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="true"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="recording" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- Spawn the urdf -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x 0.0 -y 0.0 -z 0.16 -model plen" respawn="false" output="screen"/>
+
+</launch>
