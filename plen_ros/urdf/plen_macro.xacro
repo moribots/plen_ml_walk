@@ -20,7 +20,7 @@
     </joint>
   </xacro:macro>
 
-  <xacro:macro name="mesh_link" params="name origin_xyz origin_rpy meshfile meshscale matname rgba mass ixx ixy ixz iyy iyz izz">
+  <xacro:macro name="mesh_link" params="name origin_xyz origin_rpy meshfile meshscale matname rgba mass i_xyz i_rpy ixx ixy ixz iyx iyy iyz izx izy izz">
     <link name="${name}">
       <visual>
         <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
@@ -41,8 +41,8 @@
 
       <inertial>
         <mass value="${mass}" />
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
-        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" />
+        <origin rpy="${i_rpy}" xyz="${i_xyz}" /> <!-- Inertial Axes -->
+        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyx="${iyx}" iyy="${iyy}" iyz="${iyz}" izx="${izx}" izy="${izy}" izz="${izz}" />
       </inertial>
     </link>
   </xacro:macro>
