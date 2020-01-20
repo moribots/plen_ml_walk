@@ -5,198 +5,363 @@
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="battery">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="head">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="rt_servo">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="lt_servo">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="rb_servo">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="lb_servo">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_shoulder">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="rs_servo">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_arm">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="re_servo">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_elbow">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_hand">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_shoulder">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="ls_servo">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_arm">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="le_servo">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_elbow">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_hand">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_hip">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_thigh">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_knee">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_knee_servo">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_shin">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_ankle">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_foot">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_hip">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_thigh">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_knee">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_knee_servo">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_shin">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_ankle">
     <material>Gazebo/Orange</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_foot">
     <material>Gazebo/Gray</material>
     <mu1>100</mu1> <!-- static -->
     <mu2>100</mu2> <!-- dynamic -->
+    <dampingFactor>0.001</dampingFactor>
+    <kp>10000000.0</kp> <!-- rigidity (damping) -->
+    <kd>1.0</kd> <!-- rigidity (damping) -->
+    <minDepth>0.001</minDepth>
+    <fdir1>1 0 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 </robot>
