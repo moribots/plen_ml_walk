@@ -7,7 +7,7 @@
       <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
       <parent link="${parent}" />
       <child link="${child}" />
-      <limit effort="${effort}" velocity="${velocity}" lower="-0.01" upper="0.01"/>
+      <limit effort="${effort}" velocity="${velocity}" lower="-0.001" upper="0.001"/>
       <joint_properties damping="${damping}" friction="${friction}" />
     </joint>
   </xacro:macro>
@@ -20,7 +20,7 @@
     </joint>
   </xacro:macro>
 
-  <xacro:macro name="mesh_link" params="name origin_xyz origin_rpy meshfile meshscale size c_xyz matname rgba mass i_xyz i_rpy ixx ixy ixz iyx iyy iyz izx izy izz">
+  <xacro:macro name="mesh_link" params="name origin_xyz origin_rpy meshfile meshscale size c_xyz matname rgba mass i_xyz i_rpy ixx ixy ixz iyy iyz izz">
     <link name="${name}">
       <visual>
         <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
@@ -42,7 +42,7 @@
       <inertial>
         <mass value="${mass}" />
         <origin rpy="${i_rpy}" xyz="${i_xyz}" /> <!-- Inertial Axes -->
-        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyx="${iyx}" iyy="${iyy}" iyz="${iyz}" izx="${izx}" izy="${izy}" izz="${izz}" />
+        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyx="${ixy}" iyy="${iyy}" iyz="${iyz}" izx="${ixz}" izy="${iyz}" izz="${izz}" />
       </inertial>
     </link>
   </xacro:macro>
