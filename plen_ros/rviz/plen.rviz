@@ -12,7 +12,6 @@ Panels:
         - /TF1/Tree1
         - /RobotModel1
         - /RobotModel1/Links1
-        - /RobotModel1/Links1/torso1
       Splitter Ratio: 0.6941176652908325
     Tree Height: 713
   - Class: rviz/Selection
@@ -66,6 +65,8 @@ Visualization Manager:
         All Enabled: false
         base_footprint:
           Value: false
+        battery:
+          Value: true
         head:
           Value: false
         l_ankle:
@@ -138,6 +139,8 @@ Visualization Manager:
       Tree:
         base_footprint:
           torso:
+            battery:
+              {}
             head:
               {}
             l_shoulder:
@@ -182,7 +185,7 @@ Visualization Manager:
       Value: true
     - Alpha: 1
       Class: rviz/RobotModel
-      Collision Enabled: false
+      Collision Enabled: true
       Enabled: true
       Links:
         All Links Enabled: true
@@ -194,6 +197,11 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        battery:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         head:
           Alpha: 1
           Show Axes: false
@@ -359,7 +367,7 @@ Visualization Manager:
       TF Prefix: ""
       Update Interval: 0
       Value: true
-      Visual Enabled: true
+      Visual Enabled: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -388,7 +396,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.5193548202514648
+      Distance: 0.2549065947532654
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -403,10 +411,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.07479485124349594
+      Pitch: -0.009795302525162697
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.0629846379160881
+      Yaw: 4.702980041503906
     Saved: ~
 Window Geometry:
   Displays:

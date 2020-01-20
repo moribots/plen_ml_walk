@@ -25,6 +25,20 @@
               meshfile="package://plen_ros/meshes/torso.stl"
               meshscale="0.001 0.001 0.001" /> <!-- m to mm -->
 
+  <mesh_link name="battery"
+              origin_rpy="0 0 0" origin_xyz="0 0 0"
+              i_rpy="0 0 0" i_xyz="${15/2000} ${0} ${46/4000}"
+              mass="${64/1000}"
+              ixx="${64*(11*11+46*46)/(12*1000000000)}" ixy="${0}" ixz="${0}"
+              iyy="${64*(11*11+46*46)/(12*1000000000)}" iyz="${0}"
+              izz="${64*(11*11+51*51)/(12*1000000000)}"
+              c_xyz="${15/2000} ${0} ${46/4000}"
+              size="${11/1000} ${51/1000} ${46/1000}"
+              matname="green_mat"
+              rgba="0 1 0 1"
+              meshfile="package://plen_ros/meshes/battery.stl"
+              meshscale="0.001 0.001 0.001" />
+
   <mesh_link name="head"
               origin_rpy="0 0 0" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0/8000} ${0} ${0/2000}"
@@ -465,6 +479,10 @@
   <frame_joint name="base_torso" type="fixed"
                     origin_rpy="0 0 0" origin_xyz="0 0 0"
                     parent="base_footprint" child="torso"/>
+
+  <frame_joint name="torso_batter" type="fixed"
+                    origin_rpy="0 0 0" origin_xyz="${-36/1000} 0 ${-12/1000}"
+                    parent="torso" child="battery"/>
 
   <frame_joint name="torso_head" type="fixed"
                     origin_rpy="0 0 0" origin_xyz="${-6.5/1000} 0 ${56/1000}"
