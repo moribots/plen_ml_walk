@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<robot name="plen" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<gazebo reference="torso">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="head">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="rt_servo">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="lt_servo">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="rb_servo">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="lb_servo">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_shoulder">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="rs_servo">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_arm">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="re_servo">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_elbow">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_hand">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_shoulder">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="ls_servo">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_arm">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="le_servo">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_elbow">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_hand">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_hip">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_thigh">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_knee">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_knee_servo">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_shin">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_ankle">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="r_foot">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_hip">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_thigh">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_knee">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_knee_servo">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_shin">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_ankle">
+    <material>Gazebo/Orange</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+<gazebo reference="l_foot">
+    <material>Gazebo/Gray</material>
+    <mu1>0.8</mu1> <!-- static -->
+    <mu2>0.8</mu2> <!-- dynamic -->
+</gazebo>
+
+</robot>

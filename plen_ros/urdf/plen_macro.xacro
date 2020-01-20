@@ -7,7 +7,7 @@
       <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
       <parent link="${parent}" />
       <child link="${child}" />
-      <limit effort="${effort}" velocity="${velocity}" />
+      <limit effort="${effort}" velocity="${velocity}" lower="-0.01" upper="0.01"/>
       <joint_properties damping="${damping}" friction="${friction}" />
     </joint>
   </xacro:macro>
@@ -46,96 +46,5 @@
       </inertial>
     </link>
   </xacro:macro>
-
-  <!-- <xacro:macro name="r_box" params="name origin_xyz origin_rpy size matname rgba">
-    <link name="${name}">
-
-      <visual>
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
-        <geometry>
-          <box size="${size}" />
-        </geometry>
-        <material name="${matname}">
-         <color rgba="${rgba}" />
-        </material>
-      </visual>
-
-      <collision>
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
-        <geometry>
-          <box size="${size}"/>
-        </geometry>
-      </collision>
-
-      <inertial>
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
-        <mass value="${mass}"/>
-        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}"
-                 iyy="${iyy}" iyz="${iyz}"
-                 izz="${izz}" />
-      </inertial>
-
-    </link>
-  </xacro:macro> -->
-
-  <!-- <xacro:macro name="r_cyl" params="name origin_xyz origin_rpy length radius matname rgba">
-    <link name="${name}">
-      <visual>
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
-        <geometry>
-          <cylinder length="${length}" radius="${radius}"/>
-        </geometry>
-        <material name="${matname}">
-         <color rgba="${rgba}" />
-        </material>
-      </visual>
-
-      <collision>
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
-        <geometry>
-          <cylinder length="${length}" radius="${radius}"/>
-        </geometry>
-      </collision>
-
-      <inertial>
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
-        <mass value="${mass}"/>
-        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}"
-                 iyy="${iyy}" iyz="${iyz}"
-                 izz="${izz}" />
-      </inertial>
-
-    </link>
-  </xacro:macro> -->
-
-  <!-- <xacro:macro name="r_sph" params="name origin_xyz origin_rpy radius matname rgba">
-    <link name="${name}">
-      <visual>
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
-        <geometry>
-          <sphere radius="${radius}"/>
-        </geometry>
-        <material name="${matname}">
-         <color rgba="${rgba}" />
-        </material>
-      </visual>
-
-      <collision>
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
-        <geometry>
-          <sphere radius="${radius}"/>
-        </geometry>
-      </collision>
-
-      <inertial>
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
-        <mass value="${mass}"/>
-        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}"
-                 iyy="${iyy}" iyz="${iyz}"
-                 izz="${izz}" />
-      </inertial>
-
-    </link>
-  </xacro:macro> -->
 
 </robot>
