@@ -20,7 +20,7 @@
     </joint>
   </xacro:macro>
 
-  <xacro:macro name="mesh_link" params="name origin_xyz origin_rpy meshfile meshscale size matname rgba mass i_xyz i_rpy ixx ixy ixz iyx iyy iyz izx izy izz">
+  <xacro:macro name="mesh_link" params="name origin_xyz origin_rpy meshfile meshscale size c_xyz matname rgba mass i_xyz i_rpy ixx ixy ixz iyx iyy iyz izx izy izz">
     <link name="${name}">
       <visual>
         <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
@@ -33,7 +33,7 @@
       </visual>
 
       <collision>
-        <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+        <origin rpy="${origin_rpy}" xyz="${c_xyz}" />
         <geometry>
           <box size="${size}" />
         </geometry>
