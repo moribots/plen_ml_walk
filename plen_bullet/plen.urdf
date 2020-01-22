@@ -1305,7 +1305,7 @@
     <origin rpy="-1.57079632679 1.57079632679 0" xyz="-0.00535 0.0006 0.01265"/>
     <parent link="r_shoulder"/>
     <child link="rs_servo"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="100" lower="-3.14" upper="3.14" velocity="100"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="rs_servo_r_arm" type="fixed">
