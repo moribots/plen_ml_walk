@@ -1,0 +1,107 @@
+plen:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  # RIGHT LEG:
+  # Joint 1 name: rb_servo_r_hip
+  # Joint 2 name: r_hip_r_thigh
+  # Joint 3 name: r_thigh_r_knee
+  # Joint 4 name: r_knee_r_shin
+  # Joint 5 name: r_shin_r_ankle
+  # Joint 6 name: r_ankle_r_foot
+
+  # LEFT LEG:
+  # Joint 7 name: lb_servo_l_hip
+  # Joint 8 name: l_hip_l_thigh
+  # Joint 9 name: l_thigh_l_knee
+  # Joint 10 name: l_knee_l_shin
+  # Joint 11 name: l_shin_l_ankle
+  # Joint 12 name: l_ankle_l_foot
+
+  # RIGHT ARM:
+  # Joint 13 name: torso_r_shoulder
+  # Joint 14 name: r_shoulder_rs_servo
+  # Joint 15 name: re_servo_r_elbow
+
+  # LEFT ARM:
+  # Joint 16 name: torso_l_shoulder
+  # Joint 17 name: l_shoulder_ls_servo
+  # Joint 18 name: le_servo_l_elbow
+
+  # TOTAL: 18
+
+  # Position Controllers ---------------------------------------
+  j1_pc:
+    type: effort_controllers/JointPositionController
+    joint: rb_servo_r_hip
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j2_pc:
+    type: effort_controllers/JointPositionController
+    joint: r_hip_r_thigh
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j3_pc:
+    type: effort_controllers/JointPositionController
+    joint: r_thigh_r_knee
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j4_pc:
+    type: effort_controllers/JointPositionController
+    joint: r_knee_r_shin
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j5_pc:
+    type: effort_controllers/JointPositionController
+    joint: r_shin_r_ankle
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j6_pc:
+    type: effort_controllers/JointPositionController
+    joint: r_ankle_r_foot
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j7_pc:
+    type: effort_controllers/JointPositionController
+    joint: lb_servo_l_hip
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j8_pc:
+    type: effort_controllers/JointPositionController
+    joint: l_hip_l_thigh
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j9_pc:
+    type: effort_controllers/JointPositionController
+    joint: l_thigh_l_knee
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j10_pc:
+    type: effort_controllers/JointPositionController
+    joint: l_knee_l_shin
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j11_pc:
+    type: effort_controllers/JointPositionController
+    joint: l_shin_l_ankle
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j12_pc:
+    type: effort_controllers/JointPositionController
+    joint: l_ankle_l_foot
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j13_pc:
+    type: effort_controllers/JointPositionController
+    joint: torso_r_shoulder
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j14_pc:
+    type: effort_controllers/JointPositionController
+    joint: r_shoulder_rs_servo
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j15_pc:
+    type: effort_controllers/JointPositionController
+    joint: re_servo_r_elbow
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j16_pc:
+    type: effort_controllers/JointPositionController
+    joint: torso_l_shoulder
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j17_pc:
+    type: effort_controllers/JointPositionController
+    joint: l_shoulder_ls_servo
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  j18_pc:
+    type: effort_controllers/JointPositionController
+    joint: le_servo_l_elbow
+    pid: {p: 100.0, i: 0.01, d: 10.0}

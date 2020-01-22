@@ -1,0 +1,3 @@
+[submodule "plen_ros/openai_ros"]
+	path = plen_ros/openai_ros
+	url = https://bitbucket.org/theconstructcore/openai_ros.git

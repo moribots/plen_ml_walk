@@ -1,0 +1,165 @@
+#!/usr/bin/env python
+
+import random
+import numpy as np
+import rospy
+import os
+from gazebo_msgs.msg import ModelStates
+from geometry_msgs.msg import Pose
+from gazebo_msgs.srv import ApplyJointEffort
+from gazebo_msgs.srv import SetModelConfiguration
+from std_msgs.msg import Float64
+from gazebo_msgs.srv import DeleteModel, SpawnModel
+from std_srvs.srv import Empty
+from controller_manager_msgs.srv import LoadController, UnloadController, SwitchController
+
+
+def main():
+    # unload_controllers()
+    # delete_model("plen")
+    # p = os.popen("rosrun xacro xacro ~/Projects/plen/src/plen/plen_ros/urdf/plen.urdf.xacro")
+    # xml_string = p.read()
+    # p.close()
+    # pose = Pose()
+    # pose.position.x = 0
+    # pose.position.y = 0
+    # pose.position.z = 0.16
+    # pose.orientation.x = 0
+    # pose.orientation.y = 0
+    # pose.orientation.z = 0
+    # pose.orientation.w = 1
+    # spawn_model("plen", xml_string, "", pose, "world")
+    # load_controllers()
+    # RIGHT LEG
+    rhip.publish(0)
+    rthigh.publish(0)
+    rknee.publish(0)
+    rshin.publish(0)
+    rankle.publish(0)
+    rfoot.publish(0)
+    # LEFT LEG
+    lhip.publish(0)
+    lthigh.publish(0)
+    lknee.publish(0)
+    lshin.publish(0)
+    lankle.publish(0)
+    lfoot.publish(0)
+    # RIGHT ARM
+    rshoulder.publish(0)
+    rarm.publish(0)
+    relbow.publish(0)
+    # LEFT ARM
+    lshoulder.publish(0)
+    larm.publish(0)
+    lelbow.publish(0)
+
+
+def load_controllers():
+    rospy.loginfo("STARTING")
+    rospy.wait_for_service('plen/controller_manager/load_controller')
+    rospy.loginfo("STARTING")
+    rospy.wait_for_service('plen/controller_manager/switch_controller')
+    controllers = [
+        'joint_state_controller', '/plen/j1_pc', '/plen/j2_pc', '/plen/j3_pc',
+        '/plen/j4_pc', '/plen/j5_pc', '/plen/j6_pc', '/plen/j7_pc',
+        '/plen/j8_pc', '/plen/j9_pc', '/plen/j10_pc', '/plen/j11_pc',
+        '/plen/j12_pc', '/plen/j13_pc', '/plen/j14_pc', '/plen/j15_pc',
+        '/plen/j16_pc', '/plen/j17_pc', '/plen/j18_pc'
+    ]
+    for i in controllers:
+        load_controller(i)
+        # print("loaded:"+str(i))
+    switch_controller(controllers, [], 2)
+
+
+def unload_controllers():
+    # rospy.loginfo("STARTING")
+    rospy.wait_for_service('plen/controller_manager/load_controller')
+    # rospy.loginfo("STARTING")
+    rospy.wait_for_service('plen/controller_manager/switch_controller')
+    controllers = [
+        'joint_state_controller', '/plen/j1_pc', '/plen/j2_pc', '/plen/j3_pc',
+        '/plen/j4_pc', '/plen/j5_pc', '/plen/j6_pc', '/plen/j7_pc',
+        '/plen/j8_pc', '/plen/j9_pc', '/plen/j10_pc', '/plen/j11_pc',
+        '/plen/j12_pc', '/plen/j13_pc', '/plen/j14_pc', '/plen/j15_pc',
+        '/plen/j16_pc', '/plen/j17_pc', '/plen/j18_pc'
+    ]
+    switch_controller([], controllers, 2)
+    for i in controllers:
+        unload_controller(i)
+        # print("unloaded:"+str(i))
+
+
+if __name__ == '__main__':
+    rospy.init_node('joint_test')
+    rospy.loginfo("STARTING")
+    rospy.wait_for_service('/gazebo/reset_world')
+    rospy.wait_for_service('/gazebo/delete_model')
+    rospy.wait_for_service('/gazebo/spawn_urdf_model')
+    rospy.wait_for_service('plen/controller_manager/load_controller')
+    rospy.wait_for_service('plen/controller_manager/switch_controller')
+
+    # RIGHT LEG:
+    # Joint 1 name: rb_servo_r_hip
+    # Joint 2 name: r_hip_r_thigh
+    # Joint 3 name: r_thigh_r_knee
+    # Joint 4 name: r_knee_r_shin
+    # Joint 5 name: r_shin_r_ankle
+    # Joint 6 name: r_ankle_r_foot
+
+    # LEFT LEG:
+    # Joint 7 name: lb_servo_l_hip
+    # Joint 8 name: l_hip_l_thigh
+    # Joint 9 name: l_thigh_l_knee
+    # Joint 10 name: l_knee_l_shin
+    # Joint 11 name: l_shin_l_ankle
+    # Joint 12 name: l_ankle_l_foot
+
+    # RIGHT ARM:
+    # Joint 13 name: torso_r_shoulder
+    # Joint 14 name: r_shoulder_rs_servo
+    # Joint 15 name: re_servo_r_elbow
+
+    # LEFT ARM:
+    # Joint 16 name: torso_l_shoulder
+    # Joint 17 name: l_shoulder_ls_servo
+    # Joint 18 name: le_servo_l_elbow
+
+    # RIGHT LEG
+    rhip = rospy.Publisher('/plen/j1_pc/command', Float64, queue_size=1)
+    rthigh = rospy.Publisher('/plen/j2_pc/command', Float64, queue_size=1)
+    rknee = rospy.Publisher('/plen/j3_pc/command', Float64, queue_size=1)
+    rshin = rospy.Publisher('/plen/j4_pc/command', Float64, queue_size=1)
+    rankle = rospy.Publisher('/plen/j5_pc/command', Float64, queue_size=1)
+    rfoot = rospy.Publisher('/plen/j6_pc/command', Float64, queue_size=1)
+    # LEFT LEG
+    lhip = rospy.Publisher('/plen/j7_pc/command', Float64, queue_size=1)
+    lthigh = rospy.Publisher('/plen/8_pc/command', Float64, queue_size=1)
+    lknee = rospy.Publisher('/plen/j9_pc/command', Float64, queue_size=1)
+    lshin = rospy.Publisher('/plen/j10_pc/command', Float64, queue_size=1)
+    lankle = rospy.Publisher('/plen/j11_pc/command', Float64, queue_size=1)
+    lfoot = rospy.Publisher('/plen/j12_pc/command', Float64, queue_size=1)
+    # RIGHT ARM
+    rshoulder = rospy.Publisher('/plen/j13_pc/command', Float64, queue_size=1)
+    rarm = rospy.Publisher('/plen/j14_pc/command', Float64, queue_size=1)
+    relbow = rospy.Publisher('/plen/j15_pc/command', Float64, queue_size=1)
+    # LEFT ARM
+    lshoulder = rospy.Publisher('/plen/j16_pc/command', Float64, queue_size=1)
+    larm = rospy.Publisher('/plen/j17_pc/command', Float64, queue_size=1)
+    lelbow = rospy.Publisher('/plen/j18_pc/command', Float64, queue_size=1)
+
+
+    # maybe do some 'wait for service' here
+    delete_model = rospy.ServiceProxy("gazebo/delete_model", DeleteModel)
+    spawn_model = rospy.ServiceProxy("gazebo/spawn_urdf_model", SpawnModel)
+    reset_simulation = rospy.ServiceProxy('/gazebo/reset_world', Empty)
+    unload_controller = rospy.ServiceProxy(
+        'plen/controller_manager/unload_controller', UnloadController)
+    load_controller = rospy.ServiceProxy(
+        'plen/controller_manager/load_controller', LoadController)
+    switch_controller = rospy.ServiceProxy(
+        'plen/controller_manager/switch_controller', SwitchController)
+    rospy.loginfo("STARTED")
+    # maybe do some 'wait for service' here
+    reset_simulation = rospy.ServiceProxy('/gazebo/reset_world', Empty)
+    main()

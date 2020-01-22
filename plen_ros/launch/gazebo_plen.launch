@@ -1,7 +1,5 @@
 <launch>
-  <!-- load the urdf into the parameter server from the xacro file-->
-  <!-- this argument is both to load the gazebo plugin and to load the move_0 node -->
-  <arg name="mode" default="0"/> 
+  <!-- Load the urdf into the parameter server from the xacro file-->
   <param name="robot_description" command="xacro '$(find plen_ros)/urdf/plen.urdf.xacro'" />
 
   <!-- We reuse the logic in empty_world.launch, changing only the name of the world to be launched -->
@@ -13,7 +11,26 @@
     <arg name="debug" value="false"/>
   </include>
 
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find plen_ros)/config/plen_control.yaml" command="load"/>
+
+  <!-- Load the controllers -->
+  <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/plen" args="j1_pc j2_pc j3_pc j4_pc j5_pc j6_pc j7_pc j8_pc j9_pc j10_pc j11_pc j12_pc j13_pc j14_pc j15_pc j16_pc j17_pc j18_pc joint_state_controller"/> -->
+
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <remap from="/joint_states" to="/plen/joint_states" />
+  </node>
+
   <!-- Spawn the urdf -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x 0.0 -y 0.0 -z 0.16 -model plen" respawn="false" output="screen"/>
+
+  <!-- send fake joint values -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="True"/>
+  </node>
 
 </launch>

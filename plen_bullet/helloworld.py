@@ -2,9 +2,12 @@
 import pybullet as p
 import time
 import pybullet_data
+import numpy as np
 physicsClient = p.connect(p.GUI)  # or p.DIRECT for non-graphical version
 p.setAdditionalSearchPath(pybullet_data.getDataPath())  # optionally
 p.setGravity(0, 0, -9.81)
+# p.setTimeStep(1./240.)       # slow, accurate
+p.setRealTimeSimulation(0)  # we want to be faster than real time :)
 planeId = p.loadURDF("plane.urdf")
 StartPos = [0, 0, 0.14]
 StartOrientation = p.getQuaternionFromEuler([0, 0, 0])
@@ -17,14 +20,20 @@ joint = []
 # for i in range(32):
 #     joint = p.getJointInfo(boxId, i)
 #     print("Joint {} name: {}".format(i, joint[1]))
-for i in range(10000):
+printer = 0
+for i in range(100000000):
     # Control Motors
-    maxVelocity = 2
+    maxVelocity = 100
     mode = p.POSITION_CONTROL
     p.stepSimulation()
-    time.sleep(1. / 240.)  # 240hz
-    if i == 1000:
-    	p.setJointMotorControl2(boxId, 21, controlMode=mode, maxVelocity=maxVelocity, targetPosition=1)
+    if i == 500:
+    	p.setJointMotorControl2(boxId, 21, controlMode=mode, targetPosition=np.pi / 3)
+    joint = p.getJointState(boxId, 21)
+    if printer == 0:
+	    # print("Joint Pos: {}".format(joint[0]))
+	    if joint[0] >= abs(np.pi / 3 - 0.00001):
+	    	print("Time Elapsed: {}(s)".format((1./240.) * (i - 500.)))
+	    	printer = 1
 p.disconnect()
 
 """

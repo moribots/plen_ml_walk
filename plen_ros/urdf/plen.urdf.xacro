@@ -11,7 +11,7 @@
   <link name="base_footprint"/>
 
   <!-- TORSO -->
-  <mesh_link name="torso"
+  <xacro:mesh_link name="torso"
               origin_rpy="0 0 0" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0/8000} ${0} ${0/2000}"
               mass="${43.968/1000}"
@@ -25,7 +25,7 @@
               meshfile="package://plen_ros/meshes/torso.stl"
               meshscale="0.001 0.001 0.001" /> <!-- m to mm -->
 
-  <mesh_link name="battery"
+  <xacro:mesh_link name="battery"
               origin_rpy="0 0 0" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${15/2000} ${0} ${46/4000}"
               mass="${64/1000}"
@@ -39,7 +39,7 @@
               meshfile="package://plen_ros/meshes/battery.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="head"
+  <xacro:mesh_link name="head"
               origin_rpy="0 0 0" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0/8000} ${0} ${0/2000}"
               mass="${10/1000}"
@@ -53,7 +53,7 @@
               meshfile="package://plen_ros/meshes/head.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="rt_servo"
+  <xacro:mesh_link name="rt_servo"
               origin_rpy="0 0 ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${25/4000} ${0/2000}"
               mass="${12/1000}"
@@ -67,7 +67,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="lt_servo"
+  <xacro:mesh_link name="lt_servo"
               origin_rpy="0 0 ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${25/4000} ${0/2000}"
               mass="${12/1000}"
@@ -81,7 +81,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="rb_servo"
+  <xacro:mesh_link name="rb_servo"
               origin_rpy="0 0 ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${25/4000} ${0/2000}"
               mass="${12/1000}"
@@ -95,7 +95,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="lb_servo"
+  <xacro:mesh_link name="lb_servo"
               origin_rpy="0 0 ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${25/4000} ${0/2000}"
               mass="${12/1000}"
@@ -109,7 +109,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="r_shoulder"
+  <xacro:mesh_link name="r_shoulder"
               origin_rpy="0 0 ${0}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${25/2000}"
               mass="${2.954/1000}"
@@ -123,7 +123,7 @@
               meshfile="package://plen_ros/meshes/shoulder.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="rs_servo"
+  <xacro:mesh_link name="rs_servo"
               origin_rpy="0 0 ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${25/4000} ${0/2000}"
               mass="${12/1000}"
@@ -137,7 +137,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="r_arm"
+  <xacro:mesh_link name="r_arm"
               origin_rpy="0 0 ${0}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${0/2000}"
               mass="${5.091/1000}"
@@ -151,7 +151,7 @@
               meshfile="package://plen_ros/meshes/arm.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="re_servo"
+  <xacro:mesh_link name="re_servo"
               origin_rpy="0 0 ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${25/4000} ${0/2000}"
               mass="${12/1000}"
@@ -165,7 +165,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="r_elbow"
+  <xacro:mesh_link name="r_elbow"
               origin_rpy="0 0 ${0}" origin_xyz="${-13.5/1000} 0 0"
               i_rpy="0 0 0" i_xyz="${-27/4000} ${0} ${0/2000}"
               mass="${3.046/1000}"
@@ -179,7 +179,7 @@
               meshfile="package://plen_ros/meshes/elbow.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="r_hand"
+  <xacro:mesh_link name="r_hand"
               origin_rpy="0 0 ${0}" origin_xyz="${0/1000} 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${0/2000}"
               mass="${8.305/1000}"
@@ -193,7 +193,7 @@
               meshfile="package://plen_ros/meshes/hand.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="l_shoulder"
+  <xacro:mesh_link name="l_shoulder"
               origin_rpy="0 0 ${0}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${25/2000}"
               mass="${2.954/1000}"
@@ -207,7 +207,7 @@
               meshfile="package://plen_ros/meshes/shoulder.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="ls_servo"
+  <xacro:mesh_link name="ls_servo"
               origin_rpy="0 0 ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${25/4000} ${0/2000}"
               mass="${12/1000}"
@@ -221,7 +221,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="l_arm"
+  <xacro:mesh_link name="l_arm"
               origin_rpy="0 0 ${0}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${0/2000}"
               mass="${5.091/1000}"
@@ -235,7 +235,7 @@
               meshfile="package://plen_ros/meshes/arm.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="le_servo"
+  <xacro:mesh_link name="le_servo"
               origin_rpy="0 0 ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${25/4000} ${0/2000}"
               mass="${12/1000}"
@@ -249,7 +249,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="l_elbow"
+  <xacro:mesh_link name="l_elbow"
               origin_rpy="0 0 ${0}" origin_xyz="${-13.5/1000} 0 0"
               i_rpy="0 0 0" i_xyz="${-27/4000} ${0} ${0/2000}"
               mass="${3.046/1000}"
@@ -263,7 +263,7 @@
               meshfile="package://plen_ros/meshes/elbow.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="l_hand"
+  <xacro:mesh_link name="l_hand"
               origin_rpy="0 0 ${0}" origin_xyz="${0/1000} 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${0/2000}"
               mass="${8.305/1000}"
@@ -277,7 +277,7 @@
               meshfile="package://plen_ros/meshes/hand.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="r_hip"
+  <xacro:mesh_link name="r_hip"
               origin_rpy="${pi} ${0} ${pi}" origin_xyz="${0/1000} ${0/1000} ${0/1000}"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${-18/2000}"
               mass="${2.568/1000}"
@@ -291,7 +291,7 @@
               meshfile="package://plen_ros/meshes/rhip.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="r_thigh"
+  <xacro:mesh_link name="r_thigh"
               origin_rpy="${0} ${0} ${0}" origin_xyz="${-7.5/1000} ${0} ${-7.5/1000}"
               i_rpy="0 0 0" i_xyz="${-14/2000} ${0} ${14/2000}"
               mass="${40/1000}"
@@ -306,7 +306,7 @@
               meshscale="0.001 0.001 0.001" />
               <!-- og mass: 21.617-->
 
-  <mesh_link name="r_knee"
+  <xacro:mesh_link name="r_knee"
               origin_rpy="${0} ${0} ${0}" origin_xyz="${0/1000} ${0/1000} ${0/1000}"
               i_rpy="0 0 0" i_xyz="${35/2000} ${-30/2000} ${0/2000}"
               mass="${5.004/1000}"
@@ -320,7 +320,7 @@
               meshfile="package://plen_ros/meshes/rknee.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="r_knee_servo"
+  <xacro:mesh_link name="r_knee_servo"
               origin_rpy="0 0 ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${25/4000} ${0/2000}"
               mass="${12/1000}"
@@ -334,7 +334,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="r_shin"
+  <xacro:mesh_link name="r_shin"
               origin_rpy="0 ${0} ${0}" origin_xyz="${16.8/1000} ${0} ${-9.1/1000}"
               i_rpy="0 0 0" i_xyz="${36/2000} ${0} ${8/2000}"
               mass="${6.965/1000}"
@@ -348,7 +348,7 @@
               meshfile="package://plen_ros/meshes/rshin.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="r_ankle"
+  <xacro:mesh_link name="r_ankle"
               origin_rpy="${0} ${0} ${0}" origin_xyz="${0/1000} ${0/1000} ${0/1000}"
               i_rpy="0 0 0" i_xyz="${14/2000} ${-14/2000} ${-28/2000}"
               mass="${40/1000}"
@@ -362,7 +362,7 @@
               meshfile="package://plen_ros/meshes/rankle.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="r_foot"
+  <xacro:mesh_link name="r_foot"
               origin_rpy="0 0 ${0}" origin_xyz="${-8.5/1000} 0 ${-19.8/1000}"
               i_rpy="0 0 0" i_xyz="${-37/4000} ${0} ${-9/1000}"
               mass="${15/1000}"
@@ -376,7 +376,7 @@
               meshfile="package://plen_ros/meshes/rfoot.stl"
               meshscale="0.001 0.001 0.001" /> 
 
-  <mesh_link name="l_hip"
+  <xacro:mesh_link name="l_hip"
               origin_rpy="${0} ${0} ${pi}" origin_xyz="${0/1000} ${0/1000} ${1/1000}"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${-18/2000}"
               mass="${2.568/1000}"
@@ -390,7 +390,7 @@
               meshfile="package://plen_ros/meshes/lhip.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="l_thigh"
+  <xacro:mesh_link name="l_thigh"
               origin_rpy="${0} ${pi/2} ${0}" origin_xyz="${0/1000} ${0} ${0/1000}"
               i_rpy="0 0 0" i_xyz="${-28/2000} ${-14/2000} ${-14/2000}"
               mass="${40/1000}"
@@ -404,7 +404,7 @@
               meshfile="package://plen_ros/meshes/rankle.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="l_knee"
+  <xacro:mesh_link name="l_knee"
               origin_rpy="${0} ${0} ${0}" origin_xyz="${0/1000} ${0/1000} ${0/1000}"
               i_rpy="0 0 0" i_xyz="${35/2000} ${-2/2000} ${0/2000}"
               mass="${5.004/1000}"
@@ -418,7 +418,7 @@
               meshfile="package://plen_ros/meshes/lknee.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="l_knee_servo"
+  <xacro:mesh_link name="l_knee_servo"
               origin_rpy="0 0 ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${25/4000} ${0/2000}"
               mass="${12/1000}"
@@ -432,7 +432,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="l_shin"
+  <xacro:mesh_link name="l_shin"
               origin_rpy="0 ${0} ${0}" origin_xyz="${-16.9/1000} ${0} ${-9.1/1000}"
               i_rpy="0 0 0" i_xyz="${-36/2000} ${0} ${8/2000}"
               mass="${6.965/1000}"
@@ -446,7 +446,7 @@
               meshfile="package://plen_ros/meshes/rshin.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="l_ankle"
+  <xacro:mesh_link name="l_ankle"
               origin_rpy="${0} ${0} ${0}" origin_xyz="${-7.5/1000} ${0/1000} ${-7.5/1000}"
               i_rpy="0 0 0" i_xyz="${-14/2000} ${0/2000} ${14/2000}"
               mass="${40/1000}"
@@ -460,7 +460,7 @@
               meshfile="package://plen_ros/meshes/rthigh.stl"
               meshscale="0.001 0.001 0.001" />
 
-  <mesh_link name="l_foot"
+  <xacro:mesh_link name="l_foot"
               origin_rpy="0 0 ${0}" origin_xyz="${8.85/1000} 0 ${-14.2/1000}"
               i_rpy="0 0 0" i_xyz="${37/4000} ${0} ${-9/1000}"
               mass="${15/1000}"
@@ -476,36 +476,36 @@
   
   <!-- Joints -->
   <!-- TORSO -->
-  <frame_joint name="base_torso" type="fixed"
+  <xacro:frame_joint name="base_torso" type="fixed"
                     origin_rpy="0 0 0" origin_xyz="0 0 0"
                     parent="base_footprint" child="torso"/>
 
-  <frame_joint name="torso_batter" type="fixed"
+  <xacro:frame_joint name="torso_batter" type="fixed"
                     origin_rpy="0 0 0" origin_xyz="${-36/1000} 0 ${-12/1000}"
                     parent="torso" child="battery"/>
 
-  <frame_joint name="torso_head" type="fixed"
+  <xacro:frame_joint name="torso_head" type="fixed"
                     origin_rpy="0 0 0" origin_xyz="${-6.5/1000} 0 ${56/1000}"
                     parent="torso" child="head"/>
 
-  <frame_joint name="torso_rt_servo" type="fixed"
+  <xacro:frame_joint name="torso_rt_servo" type="fixed"
                     origin_rpy="${-pi/2} 0 ${pi}" origin_xyz="${-6.6/1000} ${-22/1000} ${30.8/1000}"
                     parent="torso" child="rt_servo"/>
 
-  <frame_joint name="torso_lt_servo" type="fixed"
+  <xacro:frame_joint name="torso_lt_servo" type="fixed"
                     origin_rpy="${-pi/2} 0 ${0}" origin_xyz="${-6.6/1000} ${22/1000} ${30.8/1000}"
                     parent="torso" child="lt_servo"/>
 
-  <frame_joint name="torso_rb_servo" type="fixed"
+  <xacro:frame_joint name="torso_rb_servo" type="fixed"
                     origin_rpy="${pi} 0 ${pi}" origin_xyz="${-6.6/1000} ${-22.8/1000} ${-24.75/1000}"
                     parent="torso" child="rb_servo"/>
 
-  <frame_joint name="torso_lb_servo" type="fixed"
+  <xacro:frame_joint name="torso_lb_servo" type="fixed"
                     origin_rpy="${pi} 0 ${0}" origin_xyz="${-6.6/1000} ${22.8/1000} ${-24.75/1000}"
                     parent="torso" child="lb_servo"/>
 
   <!-- RIGHT ARM -->     
-  <rev_joint name="torso_r_shoulder" type="revolute"
+  <xacro:rev_joint name="torso_r_shoulder" number="13" type="revolute"
                     axis_xyz="0 0 1"
                     origin_rpy="${pi/2} ${-pi/2} 0" origin_xyz="${-6.6/1000} ${-38/1000} ${30.8/1000}"
                     parent="torso" child="r_shoulder"
@@ -514,7 +514,7 @@
                     damping="1"
                     friction="1"/>
      
-  <rev_joint name="r_shoulder_rs_servo" type="revolute"
+  <xacro:rev_joint name="r_shoulder_rs_servo" number="14" type="revolute"
                     axis_xyz="0 0 1"
                     origin_rpy="${-pi/2} ${pi/2} ${0}" origin_xyz="${-5.35/1000} ${0.6/1000} ${12.65/1000}"
                     parent="r_shoulder" child="rs_servo"
@@ -523,15 +523,15 @@
                     damping="1"
                     friction="1"/>
 
-  <frame_joint name="rs_servo_r_arm" type="fixed"
+  <xacro:frame_joint name="rs_servo_r_arm" type="fixed"
                     origin_rpy="${-pi/2} 0 ${0}" origin_xyz="${0/1000} ${19.5/1000} ${-2/1000}"
                     parent="rs_servo" child="r_arm"/>
 
-  <frame_joint name="r_arm_re_servo" type="fixed"
+  <xacro:frame_joint name="r_arm_re_servo" type="fixed"
                     origin_rpy="${-pi/2} 0 ${0}" origin_xyz="${0/1000} ${2/1000} ${19.5/1000}"
                     parent="r_arm" child="re_servo"/>
 
-  <rev_joint name="re_servo_r_elbow" type="revolute"
+  <xacro:rev_joint name="re_servo_r_elbow" number="15" type="revolute"
                     axis_xyz="0 1 0"
                     origin_rpy="${-pi/2} ${0} ${pi/2}" origin_xyz="${0/1000} ${0/1000} ${-1.5/1000}"
                     parent="re_servo" child="r_elbow"
@@ -540,12 +540,12 @@
                     damping="1"
                     friction="1"/>
 
-  <frame_joint name="r_elbow_r_hand" type="fixed"
+  <xacro:frame_joint name="r_elbow_r_hand" type="fixed"
                     origin_rpy="${pi} ${pi/2} ${0}" origin_xyz="${-30/1000} ${0/1000} ${0/1000}"
                     parent="r_elbow" child="r_hand"/>
 
   <!-- LEFT ARM --> 
-  <rev_joint name="torso_l_shoulder" type="revolute"
+  <xacro:rev_joint name="torso_l_shoulder" number="16" type="revolute"
                     axis_xyz="0 0 1"
                     origin_rpy="${-pi/2} ${-pi/2} ${0}" origin_xyz="${-6.6/1000} ${38/1000} ${30.8/1000}"
                     parent="torso" child="l_shoulder"
@@ -554,7 +554,7 @@
                     damping="1"
                     friction="1"/>
      
-  <rev_joint name="l_shoulder_ls_servo" type="revolute"
+  <xacro:rev_joint name="l_shoulder_ls_servo" number="17" type="revolute"
                     axis_xyz="0 0 1"
                     origin_rpy="${-pi/2} ${pi/2} ${0}" origin_xyz="${-5.35/1000} ${0.6/1000} ${12.65/1000}"
                     parent="l_shoulder" child="ls_servo"
@@ -563,15 +563,15 @@
                     damping="1"
                     friction="1"/>
 
-  <frame_joint name="ls_servo_l_arm" type="fixed"
+  <xacro:frame_joint name="ls_servo_l_arm" type="fixed"
                     origin_rpy="${-pi/2} 0 ${0}" origin_xyz="${0/1000} ${19.5/1000} ${-2/1000}"
                     parent="ls_servo" child="l_arm"/>
 
-  <frame_joint name="l_arm_le_servo" type="fixed"
+  <xacro:frame_joint name="l_arm_le_servo" type="fixed"
                     origin_rpy="${-pi/2} 0 ${0}" origin_xyz="${0/1000} ${2/1000} ${19.5/1000}"
                     parent="l_arm" child="le_servo"/>
 
-  <rev_joint name="le_servo_l_elbow" type="revolute"
+  <xacro:rev_joint name="le_servo_l_elbow" number="18" type="revolute"
                     axis_xyz="0 1 0"
                     origin_rpy="${-pi/2} ${0} ${pi/2}" origin_xyz="${0/1000} ${0/1000} ${-1.5/1000}"
                     parent="le_servo" child="l_elbow"
@@ -580,12 +580,12 @@
                     damping="1"
                     friction="1"/>
 
-  <frame_joint name="l_elbow_l_hand" type="fixed"
+  <xacro:frame_joint name="l_elbow_l_hand" type="fixed"
                     origin_rpy="${pi} ${pi/2} ${0}" origin_xyz="${-30/1000} ${0/1000} ${0/1000}"
                     parent="l_elbow" child="l_hand"/>
 
   <!-- RIGHT LEG -->
-  <rev_joint name="rb_servo_r_hip" type="revolute"
+  <xacro:rev_joint name="rb_servo_r_hip" number="1" type="revolute"
                     axis_xyz="0 0 1"
                     origin_rpy="${pi} 0 ${pi/2}" origin_xyz="${0/1000} ${0/1000} ${14.2/1000}"
                     parent="rb_servo" child="r_hip"
@@ -594,7 +594,7 @@
                     damping="1"
                     friction="1"/>
 
-  <rev_joint name="r_hip_r_thigh" type="revolute"
+  <xacro:rev_joint name="r_hip_r_thigh" number="2" type="revolute"
                     axis_xyz="0 1 0"
                     origin_rpy="${pi} 0 0" origin_xyz="${5.45/1000} ${-2/1000} ${-12.81/1000}"
                     parent="r_hip" child="r_thigh"
@@ -603,7 +603,7 @@
                     damping="1"
                     friction="1"/>
 
-  <rev_joint name="r_thigh_r_knee" type="revolute"
+  <xacro:rev_joint name="r_thigh_r_knee" number="3" type="revolute"
                     axis_xyz="0 1 0"
                     origin_rpy="${pi/2} ${-pi/2} 0" origin_xyz="${-23/1000} ${7.5/1000} ${12.75/1000}"
                     parent="r_thigh" child="r_knee"
@@ -612,11 +612,11 @@
                     damping="1"
                     friction="1"/>
 
-  <frame_joint name="r_knee_knee_servo" type="fixed"
+  <xacro:frame_joint name="r_knee_knee_servo" type="fixed"
                     origin_rpy="${-pi/2} 0 0" origin_xyz="${28/1000} ${-12.8/1000} ${0.5/1000}"
                     parent="r_knee" child="r_knee_servo"/>
 
-  <rev_joint name="r_knee_r_shin" type="revolute"
+  <xacro:rev_joint name="r_knee_r_shin" number="4" type="revolute"
                     axis_xyz="0 1 0"
                     origin_rpy="0 0 0" origin_xyz="${28.1/1000} ${-14.6/1000} ${0.45/1000}"
                     parent="r_knee" child="r_shin"
@@ -625,7 +625,7 @@
                     damping="1"
                     friction="1"/>
 
-  <rev_joint name="r_shin_r_ankle" type="revolute"
+  <xacro:rev_joint name="r_shin_r_ankle" number="5" type="revolute"
                     axis_xyz="0 0 1"
                     origin_rpy="${-pi/2} ${-pi/2} ${pi}" origin_xyz="${33.75/1000} ${-17/1000} ${0/1000}"
                     parent="r_shin" child="r_ankle"
@@ -634,7 +634,7 @@
                     damping="1"
                     friction="1"/>
 
-  <rev_joint name="r_ankle_r_foot" type="revolute"
+  <xacro:rev_joint name="r_ankle_r_foot" number="6" type="revolute"
                     axis_xyz="0 1 0"
                     origin_rpy="${-pi/2} ${-pi/2} 0" origin_xyz="${4.2/1000} ${-12.7/1000} ${-7.4/1000}"
                     parent="r_ankle" child="r_foot"
@@ -644,7 +644,7 @@
                     friction="1"/>
 
   <!-- LEFT LEG -->
-  <rev_joint name="lb_servo_l_hip" type="revolute"
+  <xacro:rev_joint name="lb_servo_l_hip" number="7" type="revolute"
                     axis_xyz="0 0 1"
                     origin_rpy="${pi} 0 ${pi/2}" origin_xyz="${0/1000} ${0/1000} ${14.2/1000}"
                     parent="lb_servo" child="l_hip"
@@ -653,7 +653,7 @@
                     damping="1"
                     friction="1"/>
 
-  <rev_joint name="l_hip_l_thigh" type="revolute"
+  <xacro:rev_joint name="l_hip_l_thigh" number="8" type="revolute"
                     axis_xyz="1 0 0"
                     origin_rpy="${pi/2} ${0} ${pi/2}" origin_xyz="${5.5/1000} ${17/1000} ${-12.65/1000}"
                     parent="l_hip" child="l_thigh"
@@ -662,7 +662,7 @@
                     damping="1"
                     friction="1"/>
 
-  <rev_joint name="l_thigh_l_knee" type="revolute"
+  <xacro:rev_joint name="l_thigh_l_knee" number="9" type="revolute"
                     axis_xyz="0 1 0"
                     origin_rpy="${-pi/2} ${0} ${-pi/2}" origin_xyz="${-7.4/1000} ${-12.8/1000} ${-8.6/1000}"
                     parent="l_thigh" child="l_knee"
@@ -671,11 +671,11 @@
                     damping="1"
                     friction="1"/>
 
-  <frame_joint name="l_knee_knee_servo" type="fixed"
+  <xacro:frame_joint name="l_knee_knee_servo" type="fixed"
                     origin_rpy="${-pi/2} ${pi} 0" origin_xyz="${28/1000} ${1.45/1000} ${0/1000}"
                     parent="l_knee" child="l_knee_servo"/>
 
-  <rev_joint name="l_knee_l_shin" type="revolute"
+  <xacro:rev_joint name="l_knee_l_shin" number="10" type="revolute"
                     axis_xyz="0 1 0"
                     origin_rpy="0 ${pi} ${0}" origin_xyz="${28.1/1000} ${-0.2/1000} ${0.45/1000}"
                     parent="l_knee" child="l_shin"
@@ -684,7 +684,7 @@
                     damping="1"
                     friction="1"/>
 
-  <rev_joint name="l_shin_l_ankle" type="revolute"
+  <xacro:rev_joint name="l_shin_l_ankle" number="11" type="revolute"
                     axis_xyz="0 1 0"
                     origin_rpy="${pi} ${pi/2} ${0}" origin_xyz="${-33.75/1000} ${-2/1000} ${0/1000}"
                     parent="l_shin" child="l_ankle"
@@ -693,7 +693,7 @@
                     damping="1"
                     friction="1"/>
 
-  <rev_joint name="l_ankle_l_foot" type="revolute"
+  <xacro:rev_joint name="l_ankle_l_foot" number="12" type="revolute"
                     axis_xyz="0 1 0"
                     origin_rpy="${pi} ${0} ${-pi/2}" origin_xyz="${-4.2/1000} ${7.5/1000} ${12.8/1000}"
                     parent="l_ankle" child="l_foot"

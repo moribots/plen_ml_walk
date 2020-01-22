@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rev_joint" params="name type axis_xyz origin_rpy origin_xyz parent child effort velocity damping friction">
+  <xacro:macro name="rev_joint" params="name number type axis_xyz origin_rpy origin_xyz parent child effort velocity damping friction">
     <joint name="${name}" type="${type}">
       <axis xyz="${axis_xyz}" />
       <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
@@ -10,6 +10,17 @@
       <limit effort="${effort}" velocity="${velocity}" lower="-0.001" upper="0.001"/>
       <joint_properties damping="${damping}" friction="${friction}" />
     </joint>
+
+    <transmission name="tran${number}">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${name}">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor${number}">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    </transmission>
   </xacro:macro>
 
   <xacro:macro name="frame_joint" params="name type origin_rpy origin_xyz parent child">
