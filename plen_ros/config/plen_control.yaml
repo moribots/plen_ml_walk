@@ -31,77 +31,77 @@ plen:
   # Joint 18 name: le_servo_l_elbow
 
   # TOTAL: 18
-# {pp: 3.0, ii: 0.001, dd: 0.0022}
+# {pro: 3.0, int: 0.001, der: 0.0022}
   # Position Controllers ---------------------------------------
   j1_pc:
     type: effort_controllers/JointPositionController
     joint: rb_servo_r_hip
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j2_pc:
     type: effort_controllers/JointPositionController
     joint: r_hip_r_thigh
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j3_pc:
     type: effort_controllers/JointPositionController
     joint: r_thigh_r_knee
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j4_pc:
     type: effort_controllers/JointPositionController
     joint: r_knee_r_shin
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j5_pc:
     type: effort_controllers/JointPositionController
     joint: r_shin_r_ankle
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j6_pc:
     type: effort_controllers/JointPositionController
     joint: r_ankle_r_foot
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j7_pc:
     type: effort_controllers/JointPositionController
     joint: lb_servo_l_hip
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j8_pc:
     type: effort_controllers/JointPositionController
     joint: l_hip_l_thigh
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j9_pc:
     type: effort_controllers/JointPositionController
     joint: l_thigh_l_knee
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j10_pc:
     type: effort_controllers/JointPositionController
     joint: l_knee_l_shin
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j11_pc:
     type: effort_controllers/JointPositionController
     joint: l_shin_l_ankle
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j12_pc:
     type: effort_controllers/JointPositionController
     joint: l_ankle_l_foot
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j13_pc:
     type: effort_controllers/JointPositionController
     joint: torso_r_shoulder
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j14_pc:
     type: effort_controllers/JointPositionController
     joint: r_shoulder_rs_servo
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j15_pc:
     type: effort_controllers/JointPositionController
     joint: re_servo_r_elbow
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j16_pc:
     type: effort_controllers/JointPositionController
     joint: torso_l_shoulder
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j17_pc:
     type: effort_controllers/JointPositionController
     joint: l_shoulder_ls_servo
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}
   j18_pc:
     type: effort_controllers/JointPositionController
     joint: le_servo_l_elbow
-    pid: {p: 3.0, i: 0.001, d: 0.0022}
+    pid: {p: 4.0, i: 0.001, d: 0.0023}

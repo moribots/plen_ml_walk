@@ -4,10 +4,10 @@ import random
 import numpy as np
 import rospy
 import os
-from gazebo_msgs.msg import ModelStates
+from gazebo_msgs.msg import ModelState
 from geometry_msgs.msg import Pose
-from gazebo_msgs.srv import ApplyJointEffort
-from gazebo_msgs.srv import SetModelConfiguration
+from gazebo_msgs.srv import SetModelState, SetModelStateRequest
+from gazebo_msgs.srv import SetModelConfiguration, SetModelConfigurationRequest
 from std_msgs.msg import Float64
 from gazebo_msgs.srv import DeleteModel, SpawnModel
 from std_srvs.srv import Empty
@@ -15,44 +15,70 @@ from controller_manager_msgs.srv import LoadController, UnloadController, Switch
 
 
 def main():
-    unload_controllers()
-    delete_model("plen")
-    p = os.popen("rosrun xacro xacro ~/Projects/plen/src/plen/plen_ros/urdf/plen.urdf.xacro")
-    xml_string = p.read()
-    p.close()
+    # PAUSE
+    pause()
+
     pose = Pose()
     pose.position.x = 0
     pose.position.y = 0
-    pose.position.z = 0.16
+    pose.position.z = 0.158
     pose.orientation.x = 0
     pose.orientation.y = 0
     pose.orientation.z = 0
     pose.orientation.w = 1
-    spawn_model("plen", xml_string, "", pose, "world")
-    load_controllers()
-    rospy.loginfo("Controller Started")
+
+    # RESET PLEN POSITION
+    state = ModelState()
+    state.pose = pose
+    state.model_name = "plen"
+    reset_model(state)
+
+    # RESET PLEN JOINTS
+    config = SetModelConfigurationRequest()
+    config.model_name = 'plen'
+    config.urdf_param_name = 'robot_description'
+    config.joint_names = [
+        'rb_servo_r_hip', 'r_hip_r_thigh',
+        'r_thigh_r_knee', 'r_knee_r_shin',
+        'r_shin_r_ankle', 'r_ankle_r_foot',
+        'lb_servo_l_hip', 'l_hip_l_thigh',
+        'l_thigh_l_knee', 'l_knee_l_shin',
+        'l_shin_l_ankle', 'l_ankle_l_foot',
+        'torso_r_shoulder', 'r_shoulder_rs_servo',
+        're_servo_r_elbow', 'torso_l_shoulder',
+        'l_shoulder_ls_servo', 'le_servo_l_elbow']
+    config.joint_positions = np.zeros(18)
+    reset_joints(config)
     # RIGHT LEG
-    rhip.publish(0)
-    rthigh.publish(0)
-    rknee.publish(0)
-    rshin.publish(0)
-    rankle.publish(0)
-    rfoot.publish(0)
-    # LEFT LEG
-    lhip.publish(0)
-    lthigh.publish(0)
-    lknee.publish(0)
-    lshin.publish(0)
-    lankle.publish(0)
-    lfoot.publish(0)
-    # RIGHT ARM
-    rshoulder.publish(0)
-    rarm.publish(0)
-    relbow.publish(0)
-    # LEFT ARM
-    lshoulder.publish(0)
-    larm.publish(0)
-    lelbow.publish(0)
+    # for p in range(1):
+	   #  rhip.publish(0)
+	   #  rthigh.publish(0)
+	   #  rknee.publish(0)
+	   #  rshin.publish(0)
+	   #  rankle.publish(0)
+	   #  rfoot.publish(0)
+	   #  # LEFT LEG
+	   #  lhip.publish(0)
+	   #  lthigh.publish(0)
+	   #  lknee.publish(0)
+	   #  lshin.publish(0)
+	   #  lankle.publish(0)
+	   #  lfoot.publish(0)
+	   #  # RIGHT ARM
+	   #  rshoulder.publish(0)
+	   #  rarm.publish(0)
+	   #  relbow.publish(0)
+	   #  # LEFT ARM
+	   #  lshoulder.publish(0)
+	   #  larm.publish(0)
+	   #  lelbow.publish(0)
+    reset_joints(config)
+    # UNPAUSE
+    unpause()
+    rospy.sleep(0.1)
+    for i in range(1): # must set to 1000 for pub to work. look into this
+		rarm.publish(1.57)
+		larm.publish(1.57)
 
 
 def load_controllers():
@@ -149,18 +175,33 @@ if __name__ == '__main__':
     larm = rospy.Publisher('/plen/j17_pc/command', Float64, queue_size=1)
     lelbow = rospy.Publisher('/plen/j18_pc/command', Float64, queue_size=1)
 
-
-    # maybe do some 'wait for service' here
+    # MODEL SPAWN/DELETE
+    rospy.wait_for_service('gazebo/delete_model')
     delete_model = rospy.ServiceProxy("gazebo/delete_model", DeleteModel)
+    rospy.wait_for_service('gazebo/spawn_urdf_model')
     spawn_model = rospy.ServiceProxy("gazebo/spawn_urdf_model", SpawnModel)
+    rospy.wait_for_service('gazebo/reset_world')
     reset_simulation = rospy.ServiceProxy('/gazebo/reset_world', Empty)
+
+    # Reset PLEN
+    rospy.wait_for_service('gazebo/pause_physics')
+    pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
+    rospy.wait_for_service('gazebo/unpause_physics')
+    unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
+    rospy.wait_for_service('gazebo/set_model_state')
+    reset_model = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
+    rospy.wait_for_service('gazebo/set_model_configuration')
+    reset_joints = rospy.ServiceProxy('/gazebo/set_model_configuration',
+                                      SetModelConfiguration)
+    # LOAD/UNLOAD CONTROLLERS
+    rospy.wait_for_service('plen/controller_manager/unload_controller')
     unload_controller = rospy.ServiceProxy(
         'plen/controller_manager/unload_controller', UnloadController)
+    rospy.wait_for_service('plen/controller_manager/load_controller')
     load_controller = rospy.ServiceProxy(
         'plen/controller_manager/load_controller', LoadController)
+    rospy.wait_for_service('plen/controller_manager/switch_controller')
     switch_controller = rospy.ServiceProxy(
         'plen/controller_manager/switch_controller', SwitchController)
     rospy.loginfo("STARTED")
-    # maybe do some 'wait for service' here
-    reset_simulation = rospy.ServiceProxy('/gazebo/reset_world', Empty)
     main()

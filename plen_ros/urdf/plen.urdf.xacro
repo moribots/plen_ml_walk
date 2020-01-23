@@ -509,7 +509,7 @@
                     axis_xyz="0 0 1"
                     origin_rpy="${pi/2} ${-pi/2} 0" origin_xyz="${-6.6/1000} ${-38/1000} ${30.8/1000}"
                     parent="torso" child="r_shoulder"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
      
@@ -517,7 +517,7 @@
                     axis_xyz="0 0 1"
                     origin_rpy="${-pi/2} ${pi/2} ${0}" origin_xyz="${-5.35/1000} ${0.6/1000} ${12.65/1000}"
                     parent="r_shoulder" child="rs_servo"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -533,7 +533,7 @@
                     axis_xyz="0 1 0"
                     origin_rpy="${-pi/2} ${0} ${pi/2}" origin_xyz="${0/1000} ${0/1000} ${-1.5/1000}"
                     parent="re_servo" child="r_elbow"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -546,7 +546,7 @@
                     axis_xyz="0 0 1"
                     origin_rpy="${-pi/2} ${-pi/2} ${0}" origin_xyz="${-6.6/1000} ${38/1000} ${30.8/1000}"
                     parent="torso" child="l_shoulder"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
      
@@ -554,7 +554,7 @@
                     axis_xyz="0 0 1"
                     origin_rpy="${-pi/2} ${pi/2} ${0}" origin_xyz="${-5.35/1000} ${0.6/1000} ${12.65/1000}"
                     parent="l_shoulder" child="ls_servo"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -570,7 +570,7 @@
                     axis_xyz="0 1 0"
                     origin_rpy="${-pi/2} ${0} ${pi/2}" origin_xyz="${0/1000} ${0/1000} ${-1.5/1000}"
                     parent="le_servo" child="l_elbow"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -583,7 +583,7 @@
                     axis_xyz="0 0 1"
                     origin_rpy="${pi} 0 ${pi/2}" origin_xyz="${0/1000} ${0/1000} ${14.2/1000}"
                     parent="rb_servo" child="r_hip"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -591,7 +591,7 @@
                     axis_xyz="0 1 0"
                     origin_rpy="${pi} 0 0" origin_xyz="${5.45/1000} ${-2/1000} ${-12.81/1000}"
                     parent="r_hip" child="r_thigh"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -599,7 +599,7 @@
                     axis_xyz="0 1 0"
                     origin_rpy="${pi/2} ${-pi/2} 0" origin_xyz="${-23/1000} ${7.5/1000} ${12.75/1000}"
                     parent="r_thigh" child="r_knee"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -611,7 +611,7 @@
                     axis_xyz="0 1 0"
                     origin_rpy="0 0 0" origin_xyz="${28.1/1000} ${-14.6/1000} ${0.45/1000}"
                     parent="r_knee" child="r_shin"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -619,7 +619,7 @@
                     axis_xyz="0 0 1"
                     origin_rpy="${-pi/2} ${-pi/2} ${pi}" origin_xyz="${33.75/1000} ${-17/1000} ${0/1000}"
                     parent="r_shin" child="r_ankle"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -627,7 +627,7 @@
                     axis_xyz="0 1 0"
                     origin_rpy="${-pi/2} ${-pi/2} 0" origin_xyz="${4.2/1000} ${-12.7/1000} ${-7.4/1000}"
                     parent="r_ankle" child="r_foot"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -636,7 +636,7 @@
                     axis_xyz="0 0 1"
                     origin_rpy="${pi} 0 ${pi/2}" origin_xyz="${0/1000} ${0/1000} ${14.2/1000}"
                     parent="lb_servo" child="l_hip"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -644,7 +644,7 @@
                     axis_xyz="1 0 0"
                     origin_rpy="${pi/2} ${0} ${pi/2}" origin_xyz="${5.5/1000} ${17/1000} ${-12.65/1000}"
                     parent="l_hip" child="l_thigh"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -652,7 +652,7 @@
                     axis_xyz="0 1 0"
                     origin_rpy="${-pi/2} ${0} ${-pi/2}" origin_xyz="${-7.4/1000} ${-12.8/1000} ${-8.6/1000}"
                     parent="l_thigh" child="l_knee"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -664,7 +664,7 @@
                     axis_xyz="0 1 0"
                     origin_rpy="0 ${pi} ${0}" origin_xyz="${28.1/1000} ${-0.2/1000} ${0.45/1000}"
                     parent="l_knee" child="l_shin"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -672,7 +672,7 @@
                     axis_xyz="0 1 0"
                     origin_rpy="${pi} ${pi/2} ${0}" origin_xyz="${-33.75/1000} ${-2/1000} ${0/1000}"
                     parent="l_shin" child="l_ankle"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/>
 
@@ -680,9 +680,9 @@
                     axis_xyz="0 1 0"
                     origin_rpy="${pi} ${0} ${-pi/2}" origin_xyz="${-4.2/1000} ${7.5/1000} ${12.8/1000}"
                     parent="l_ankle" child="l_foot"
-                    effort="3" velocity="1"
+                    effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"/> <!-- effort and velocity taken from FEETECH FS90-FB datasheet -->
 
   <!-- <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
