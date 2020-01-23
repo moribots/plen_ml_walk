@@ -5,7 +5,6 @@
 <gazebo>
 <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
   <robotNamespace>/plen</robotNamespace>
-  <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
 </plugin>
 </gazebo>
 
@@ -17,7 +16,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="battery">
@@ -28,7 +27,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="head">
@@ -39,7 +38,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="rt_servo">
@@ -50,7 +49,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="lt_servo">
@@ -61,7 +60,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="rb_servo">
@@ -72,7 +71,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="lb_servo">
@@ -83,7 +82,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_shoulder">
@@ -94,7 +93,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="rs_servo">
@@ -105,7 +104,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_arm">
@@ -116,7 +115,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="re_servo">
@@ -127,7 +126,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_elbow">
@@ -138,7 +137,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_hand">
@@ -149,7 +148,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_shoulder">
@@ -160,7 +159,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="ls_servo">
@@ -171,7 +170,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_arm">
@@ -182,7 +181,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="le_servo">
@@ -193,7 +192,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_elbow">
@@ -204,7 +203,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_hand">
@@ -215,7 +214,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_hip">
@@ -226,7 +225,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_thigh">
@@ -237,7 +236,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_knee">
@@ -248,7 +247,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_knee_servo">
@@ -259,7 +258,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_shin">
@@ -270,7 +269,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_ankle">
@@ -281,7 +280,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="r_foot">
@@ -292,7 +291,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_hip">
@@ -303,7 +302,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_thigh">
@@ -314,7 +313,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_knee">
@@ -325,7 +324,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_knee_servo">
@@ -336,7 +335,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_shin">
@@ -347,7 +346,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_ankle">
@@ -358,7 +357,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 <gazebo reference="l_foot">
@@ -369,7 +368,7 @@
     <kp>10000000.0</kp> <!-- rigidity (damping) -->
     <kd>1.0</kd> <!-- rigidity (damping) -->
     <minDepth>0.001</minDepth>
-    <fdir1>1 0 0</fdir1> <!-- friction direction -->
+    <fdir1>1 1 0</fdir1> <!-- friction direction -->
 </gazebo>
 
 </robot>

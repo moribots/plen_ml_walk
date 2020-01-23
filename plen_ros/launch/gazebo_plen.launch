@@ -16,8 +16,10 @@
   <rosparam file="$(find plen_ros)/config/plen_control.yaml" command="load"/>
 
   <!-- Load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/plen" args="j1_pc j2_pc j3_pc j4_pc j5_pc j6_pc j7_pc j8_pc j9_pc j10_pc j11_pc j12_pc j13_pc j14_pc j15_pc j16_pc j17_pc j18_pc joint_state_controller"/>
   <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" ns="/plen" args="j1_pc j2_pc j3_pc j4_pc j5_pc j6_pc j7_pc j8_pc j9_pc j10_pc j11_pc j12_pc j13_pc j14_pc j15_pc j16_pc j17_pc j18_pc joint_state_controller"/> -->
+    output="screen" ns="/plen" args="j1_pc joint_state_controller"/> -->
 
 
   <!-- convert joint states to TF transforms for rviz, etc -->
@@ -28,9 +30,12 @@
   <!-- Spawn the urdf -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x 0.0 -y 0.0 -z 0.16 -model plen" respawn="false" output="screen"/>
 
+  <!-- Plot to tune PID Vals -->
+  <node name="err_plot" pkg="rqt_plot" type="rqt_plot" args="/plen/j4_pc/state/set_point /plen/j4_pc/state/process_value" />
+
   <!-- send fake joint values -->
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+  <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="use_gui" value="True"/>
-  </node>
+  </node> -->
 
 </launch>

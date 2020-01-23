@@ -15,21 +15,22 @@ from controller_manager_msgs.srv import LoadController, UnloadController, Switch
 
 
 def main():
-    # unload_controllers()
-    # delete_model("plen")
-    # p = os.popen("rosrun xacro xacro ~/Projects/plen/src/plen/plen_ros/urdf/plen.urdf.xacro")
-    # xml_string = p.read()
-    # p.close()
-    # pose = Pose()
-    # pose.position.x = 0
-    # pose.position.y = 0
-    # pose.position.z = 0.16
-    # pose.orientation.x = 0
-    # pose.orientation.y = 0
-    # pose.orientation.z = 0
-    # pose.orientation.w = 1
-    # spawn_model("plen", xml_string, "", pose, "world")
-    # load_controllers()
+    unload_controllers()
+    delete_model("plen")
+    p = os.popen("rosrun xacro xacro ~/Projects/plen/src/plen/plen_ros/urdf/plen.urdf.xacro")
+    xml_string = p.read()
+    p.close()
+    pose = Pose()
+    pose.position.x = 0
+    pose.position.y = 0
+    pose.position.z = 0.16
+    pose.orientation.x = 0
+    pose.orientation.y = 0
+    pose.orientation.z = 0
+    pose.orientation.w = 1
+    spawn_model("plen", xml_string, "", pose, "world")
+    load_controllers()
+    rospy.loginfo("Controller Started")
     # RIGHT LEG
     rhip.publish(0)
     rthigh.publish(0)
