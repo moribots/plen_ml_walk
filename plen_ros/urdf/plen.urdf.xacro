@@ -374,7 +374,27 @@
               matname="red_mat"
               rgba="1 0 0 1"
               meshfile="package://plen_ros/meshes/rfoot.stl"
-              meshscale="0.001 0.001 0.001" /> 
+              meshscale="0.001 0.001 0.001" />
+
+  <link name="rfs_link">
+      <inertial >
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.000008" />
+            <inertia ixx="1.28e-08" ixy="0.0" ixz="0.0" iyy="1.28e-08" iyz="0.0" izz="1.28e-08"/>
+        </inertial>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="${41/1000} ${62.867/1000} ${2/1000}"/>
+            </geometry>
+        </collision>
+        <visual>
+            <origin rpy="0.0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <box size="${41/1000} ${62.867/1000} ${2/1000}"/>
+            </geometry>
+        </visual>
+  </link>
 
   <xacro:mesh_link name="l_hip"
               origin_rpy="${0} ${0} ${pi}" origin_xyz="${0/1000} ${0/1000} ${1/1000}"
@@ -473,6 +493,26 @@
               rgba="1 0 0 1"
               meshfile="package://plen_ros/meshes/lfoot.stl"
               meshscale="0.001 0.001 0.001" />
+
+  <link name="lfs_link">
+      <inertial >
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.000008" />
+            <inertia ixx="1.28e-08" ixy="0.0" ixz="0.0" iyy="1.28e-08" iyz="0.0" izz="1.28e-08"/>
+        </inertial>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="${41/1000} ${62.867/1000} ${2/1000}"/>
+            </geometry>
+        </collision>
+        <visual>
+            <origin rpy="0.0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <box size="${41/1000} ${62.867/1000} ${2/1000}"/>
+            </geometry>
+        </visual>
+  </link>
   
   <!-- Joints -->
   <!-- TORSO -->
@@ -631,6 +671,12 @@
                     damping="1"
                     friction="1"/>
 
+  <joint name="r_foot_r_sensor" type="fixed">
+        <parent link="r_foot"/>
+        <child link="rfs_link"/>
+        <origin xyz="${-37/4000} ${0} ${-19/1000}" rpy="0 0 0"/>
+  </joint>
+
   <!-- LEFT LEG -->
   <xacro:rev_joint name="lb_servo_l_hip" number="7" type="revolute"
                     axis_xyz="0 0 1"
@@ -683,6 +729,12 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"/> <!-- effort and velocity taken from FEETECH FS90-FB datasheet -->
+
+  <joint name="l_foot_l_sensor" type="fixed">
+        <parent link="l_foot"/>
+        <child link="lfs_link"/>
+        <origin xyz="${37/4000} ${0} ${-19/1000}" rpy="0 0 0"/>
+  </joint>
 
   <!-- <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
