@@ -34,6 +34,7 @@
         <!--<updateRate>50.0</updateRate>-->
         <alwaysOn>true</alwaysOn>
         <gaussianNoise>0</gaussianNoise>
+        <frameName>plen/imu</frameName>
     </plugin>
 </gazebo>
 
@@ -343,8 +344,8 @@
         and then reading the collision name -->
       </contact>
       <plugin name="bumper0_plugin" filename="libgazebo_ros_bumper.so">
-        <bumperTopicName>rfoot_rfs_state</bumperTopicName>
-        <frameName>rfs_link</frameName>
+        <bumperTopicName>plen/right_foot_contact</bumperTopicName>
+        <frameName>plen/right_foot_contact</frameName>
       </plugin>
     </sensor>
 </gazebo>
@@ -446,8 +447,8 @@
         and then reading the collision name -->
       </contact>
       <plugin name="bumper0_plugin" filename="libgazebo_ros_bumper.so">
-        <bumperTopicName>lfoot_lfs_state</bumperTopicName>
-        <frameName>lfs_link</frameName>
+        <bumperTopicName>plen/left_foot_contact</bumperTopicName>
+        <frameName>plen/left_foot_contact</frameName>
       </plugin>
     </sensor>
 </gazebo>
