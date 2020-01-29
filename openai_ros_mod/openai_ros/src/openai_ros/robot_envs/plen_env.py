@@ -9,6 +9,7 @@ from geometry_msgs.msg import Point, Quaternion, Vector3
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float64
 from openai_ros.openai_ros_common import ROSLauncher
+from openai_ros.task_envs.plen.joint_publisher import JointPub
 
 
 class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
@@ -49,13 +50,6 @@ class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
         # Variables that we give through the constructor.
         # None in this case
 
-        # Internal Vars
-        # Doesnt have any accesibles
-        self.controllers_list = ['joint_state_controller',
-                                 'haa_joint_position_controller',
-                                 'hfe_joint_position_controller',
-                                 'kfe_joint_position_controller']
-
         # It doesnt use namespace
         self.robot_name_space = "plen"
 
@@ -85,19 +79,9 @@ class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
         rospy.Subscriber("/plen/joint_states", JointState,
                          self._joints_state_callback)
 
-        self.publishers_array = []
-        """ REPLACE BELOW WITH JOINT ACTUATORS
+        """ JOINT ACTUATORS (PUB)
         """
-        self._haa_joint_pub = rospy.Publisher(
-            '/plen/haa_joint_position_controller/command', Float64, queue_size=1)
-        self._hfe_joint_pub = rospy.Publisher(
-            '/plen/hfe_joint_position_controller/command', Float64, queue_size=1)
-        self._kfe_joint_pub = rospy.Publisher(
-            '/plen/kfe_joint_position_controller/command', Float64, queue_size=1)
-
-        self.publishers_array.append(self._haa_joint_pub)
-        self.publishers_array.append(self._hfe_joint_pub)
-        self.publishers_array.append(self._kfe_joint_pub)
+        self.joints = JointPub()
 
         self._check_all_publishers_ready()
 
@@ -117,9 +101,6 @@ class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
         self._check_all_sensors_ready()
         rospy.logdebug("END PlenEnv _check_all_systems_ready...")
         return True
-
-    # CubeSingleDiskEnv virtual methods
-    # ----------------------------
 
     """ CHECK ALL SUBSCRIBERS AND PUBLISHERS READY
     """
@@ -200,40 +181,10 @@ class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
     def _joints_state_callback(self, data):
         self.joint_states = data
 
-    def _check_all_publishers_ready(self):
-        """
-        Checks that all the publishers are working
-        :return:
-        """
-        rospy.logdebug("START ALL SENSORS READY")
-        for publisher_object in self.publishers_array:
-            self._check_pub_connection(publisher_object)
-        rospy.logdebug("ALL SENSORS READY")
-
-    def _check_pub_connection(self, publisher_object):
-
-        rate = rospy.Rate(10)  # 10hz
-        while publisher_object.get_num_connections() == 0 and not rospy.is_shutdown():
-            rospy.logdebug(
-                "No susbribers to publisher_object yet so we wait and try again")
-            try:
-                rate.sleep()
-            except rospy.ROSInterruptException:
-                # This is to avoid error when world is rested, time when backwards.
-                pass
-        rospy.logdebug("publisher_object Publisher Connected")
-
-        rospy.logdebug("All Publishers READY")
-
-    # Methods that the TrainingEnvironment will need to define here as virtual
-    # because they will be used in RobotGazeboEnv GrandParentClass and defined in the
-    # TrainingEnvironment.
-    # ----------------------------
-
     def _set_init_pose(self):
         """Sets the Robot in its init pose
         """
-        raise NotImplementedError()
+        self.joints.set_init_pose
 
     def _init_env_variables(self):
         """Inits variables needed to be initialised each time we reset at the start
@@ -249,9 +200,37 @@ class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
     def _set_action(self, action):
         """Applies the given action to the simulation.
         """
-        raise NotImplementedError()
+        # Given the action selected by the learning algorithm,
+        # we perform the corresponding movement of the robot
+
+        # 1st, decide which action corresponsd to which joint is incremented
+        next_action_position = self.get_action_to_position(action)
+
+        # We move it to that pos
+        self.gazebo.unpauseSim()
+        self.monoped_joint_pubisher_object.move_joints(next_action_position)
+        # Then we send the command to the robot and let it go
+        # for running_step seconds
+        time.sleep(self.running_step)
+        self.gazebo.pauseSim()
+
+        # We now process the latest data saved in the class state to calculate
+        # the state and the rewards. This way we guarantee that they work
+        # with the same exact data.
+        # Generate State based on observations
+        observation = self.monoped_state_object.get_observations()
+
+        # finally we get an evaluation based on what happened in the sim
+        reward,done = self.monoped_state_object.process_data()
+
+        # Get the State Discrete Stringuified version of the observations
+        state = self.get_state(observation)
+
+        return state, reward, done, {}
 
     def _get_obs(self):
+        """Returns the observation.
+        """
         raise NotImplementedError()
 
     def _is_done(self, observations):
@@ -261,70 +240,6 @@ class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
 
     # Methods that the TrainingEnvironment will need.
     # ----------------------------
-    def move_joints(self, joints_array, epsilon=0.05, update_rate=10, time_sleep=0.05, check_position=True):
-        """
-        It will move the Plen Joints to the given Joint_Array values
-        """
-        i = 0
-        for publisher_object in self.publishers_array:
-            joint_value = Float64()
-            joint_value.data = joints_array[i]
-            rospy.logdebug("JointsPos>>"+str(joint_value))
-            publisher_object.publish(joint_value)
-            i += 1
-
-        if check_position:
-            self.wait_time_for_execute_movement(
-                joints_array, epsilon, update_rate)
-        else:
-            self.wait_time_movement_hard(time_sleep=time_sleep)
-
-    def wait_time_for_execute_movement(self, joints_array, epsilon, update_rate):
-        """
-        We wait until Joints are where we asked them to be based on the joints_states
-        :param joints_array:Joints Values in radians of each of the three joints of Plen leg.
-        :param epsilon: Error acceptable in odometry readings.
-        :param update_rate: Rate at which we check the joint_states.
-        :return:
-        """
-        rospy.logdebug("START wait_until_twist_achieved...")
-
-        rate = rospy.Rate(update_rate)
-        start_wait_time = rospy.get_rostime().to_sec()
-        end_wait_time = 0.0
-
-        rospy.logdebug("Desired JointsState>>" + str(joints_array))
-        rospy.logdebug("epsilon>>" + str(epsilon))
-
-        while not rospy.is_shutdown():
-            current_joint_states = self._check_joint_states_ready()
-
-            values_to_check = [current_joint_states.position[0],
-                               current_joint_states.position[1],
-                               current_joint_states.position[2]]
-
-            vel_values_are_close = self.check_array_similar(
-                joints_array, values_to_check, epsilon)
-
-            if vel_values_are_close:
-                rospy.logdebug("Reached JointStates!")
-                end_wait_time = rospy.get_rostime().to_sec()
-                break
-            rospy.logdebug("Not there yet, keep waiting...")
-            rate.sleep()
-        delta_time = end_wait_time - start_wait_time
-        rospy.logdebug("[Wait Time=" + str(delta_time)+"]")
-
-        rospy.logdebug("END wait_until_jointstate_achieved...")
-
-        return delta_time
-
-    def wait_time_movement_hard(self, time_sleep):
-        """
-        Hard Wait to avoid inconsistencies in times executing actions
-        """
-        rospy.logdebug("Test Wait="+str(time_sleep))
-        time.sleep(time_sleep)
 
     def check_array_similar(self, ref_value_array, check_value_array, epsilon):
         """

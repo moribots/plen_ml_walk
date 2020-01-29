@@ -148,13 +148,21 @@ class RobotGazeboEnv(gym.Env):
 
         else:
             rospy.logwarn("DONT RESET CONTROLLERS")
+            # Unpause
             self.gazebo.unpauseSim()
+            # Check Controllers/Sensors
             self._check_all_systems_ready()
+            # Set Joints to Init
             self._set_init_pose()
+            # Pause
             self.gazebo.pauseSim()
+            # Reset Pose or Sim (see input to GazeboConnection)
             self.gazebo.resetSim()
+            # Unpause
             self.gazebo.unpauseSim()
+            # Check Controllers/Sensors
             self._check_all_systems_ready()
+            # Pause
             self.gazebo.pauseSim()
 
         rospy.logdebug("RESET SIM END")
