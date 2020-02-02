@@ -7,6 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import gym
 import os
+from time import sleep
 
 # Twin Delayed Deterministic Policy Gradient
 
@@ -33,11 +34,11 @@ class Actor(nn.Module):
         # Super calls the nn.Module Constructor
         super(Actor, self).__init__()
         # input layer
-        self.fc1 = nn.Linear(state_dim, 400)
+        self.fc1 = nn.Linear(state_dim, 256)
         # hidden layer
-        self.fc2 = nn.Linear(400, 300)
+        self.fc2 = nn.Linear(256, 256)
         # output layer
-        self.fc3 = nn.Linear(300, action_dim)
+        self.fc3 = nn.Linear(256, action_dim)
         # wrap from -max to +max
         self.max_action = max_action
 
@@ -70,14 +71,14 @@ class Critic(nn.Module):
         super(Critic, self).__init__()
 
         # Q1 architecture
-        self.fc1 = nn.Linear(state_dim + action_dim, 400)
-        self.fc2 = nn.Linear(400, 300)
-        self.fc3 = nn.Linear(300, 1)
+        self.fc1 = nn.Linear(state_dim + action_dim, 256)
+        self.fc2 = nn.Linear(256, 256)
+        self.fc3 = nn.Linear(256, 1)
 
         # Q2 architecture
-        self.fc4 = nn.Linear(state_dim + action_dim, 400)
-        self.fc5 = nn.Linear(400, 300)
-        self.fc6 = nn.Linear(300, 1)
+        self.fc4 = nn.Linear(state_dim + action_dim, 256)
+        self.fc5 = nn.Linear(256, 256)
+        self.fc6 = nn.Linear(256, 1)
 
     def forward(self, state, action):
         # concatenate state and actions by adding rows
@@ -374,6 +375,7 @@ def evaluate_policy(policy, env_name, seed, eval_episodes=10, render=False):
         while not done:
             if render:
                 eval_env.render()
+                # sleep(0.01)
             action = policy.select_action(np.array(state))
             state, reward, done, _ = eval_env.step(action)
             avg_reward += reward
@@ -384,6 +386,8 @@ def evaluate_policy(policy, env_name, seed, eval_episodes=10, render=False):
     print("Evaluation over {} episodes: {}"
           .format(eval_episodes, avg_reward))
     print("---------------------------------------")
+    if render:
+        eval_env.close()
     return avg_reward
 
 
@@ -394,6 +398,9 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
 
     if not os.path.exists("./results"):
         os.makedirs("./results")
+
+    if not os.path.exists("./models"):
+        os.makedirs("./models")
 
     env = gym.make(env_name)
 
@@ -410,7 +417,7 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
     replay_buffer = ReplayBuffer()
 
     # Evaluate untrained policy and init list for storage
-    evaluations = [evaluate_policy(policy, env_name, seed)]
+    evaluations = [evaluate_policy(policy, env_name, seed, 1, True)]
 
     state = env.reset()
     done = False
@@ -464,10 +471,10 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
 
         # Evaluate episode
         if (t + 1) % eval_freq == 0:
-            evaluations.append(evaluate_policy(policy, env_name, seed, True))
-            np.save("./results/{file_name}", evaluations)
+            evaluations.append(evaluate_policy(policy, env_name, seed, 1, True))
+            np.save("./results/" + str(file_name), evaluations)
             if save_model:
-                policy.save("./models/{file_name}")
+                policy.save("./models/" + str(file_name))
 
 
 if __name__ == "__main__":
