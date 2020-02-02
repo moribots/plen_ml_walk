@@ -79,6 +79,9 @@ class JointPub(object):
         # Initial joint state
         self.init_pos = np.zeros(18)
 
+        # Check Joint Publishers Ready
+        self.check_joints_connection
+
     def set_init_pose(self):
         """
         Sets joints to initial position [0,0,0,...]

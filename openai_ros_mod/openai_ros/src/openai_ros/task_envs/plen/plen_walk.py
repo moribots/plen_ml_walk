@@ -1,7 +1,7 @@
 import rospy
 import numpy
 from gym import spaces
-from openai_ros.robot_envs import hopper_env
+from openai_ros.robot_envs import plen_env
 from gym.envs.registration import register
 from geometry_msgs.msg import Point
 from geometry_msgs.msg import Vector3
@@ -10,10 +10,10 @@ from openai_ros.task_envs.task_commons import LoadYamlFileParamsTest
 from openai_ros.openai_ros_common import ROSLauncher
 import os
 
-class HopperStayUpEnv(hopper_env.HopperEnv):
+class PlenWalkEnv(plen_env.PlenEnv):
     def __init__(self):
         """
-        Make Hopper Learn how to Stay Up indefenitly
+        Make plen Learn how to Stay Up indefenitly
         """
 
         # Only variable needed to be set here
@@ -23,10 +23,10 @@ class HopperStayUpEnv(hopper_env.HopperEnv):
         3-4) Increment/Decrement hfe_joint
         5-6) Increment/Decrement kfe_joint
         """
-        rospy.logdebug("Start HopperStayUpEnv INIT...")
+        rospy.logdebug("Start PlenWalkEnv INIT...")
 
         # This is the path where the simulation files, the Task and the Robot gits will be downloaded if not there
-        ros_ws_abspath = rospy.get_param("/monoped/ros_ws_abspath", None)
+        ros_ws_abspath = rospy.get_param("/plenros_ws_abspath", None)
         assert ros_ws_abspath is not None, "You forgot to set ros_ws_abspath in your yaml file of your main RL script. Set ros_ws_abspath: \'YOUR/SIM_WS/PATH\'"
         assert os.path.exists(ros_ws_abspath), "The Simulation ROS Workspace path " + ros_ws_abspath + \
                                                " DOESNT exist, execute: mkdir -p " + ros_ws_abspath + \
@@ -38,10 +38,10 @@ class HopperStayUpEnv(hopper_env.HopperEnv):
 
         # Load Params from the desired Yaml file
         LoadYamlFileParamsTest(rospackage_name="openai_ros",
-                               rel_path_from_package_to_file="src/openai_ros/task_envs/hopper/config",
-                               yaml_file_name="hopper_stay_up.yaml")
+                               rel_path_from_package_to_file="src/openai_ros/task_envs/plen/config",
+                               yaml_file_name="plen_walk.yaml")
 
-        number_actions = rospy.get_param('/monoped/n_actions')
+        number_actions = rospy.get_param('/plenn_actions')
         self.action_space = spaces.Discrete(number_actions)
 
         # We set the reward range, which is not compulsory but here we do it.
@@ -51,54 +51,54 @@ class HopperStayUpEnv(hopper_env.HopperEnv):
 
         self.init_joint_states = Vector3()
         self.init_joint_states.x = rospy.get_param(
-            '/monoped/init_joint_states/haa_joint')
+            '/pleninit_joint_states/haa_joint')
         self.init_joint_states.y = rospy.get_param(
-            '/monoped/init_joint_states/hfe_joint')
+            '/pleninit_joint_states/hfe_joint')
         self.init_joint_states.z = rospy.get_param(
-            '/monoped/init_joint_states/kfe_joint')
+            '/pleninit_joint_states/kfe_joint')
 
         # Get Desired Point to Get
         self.desired_point = Point()
-        self.desired_point.x = rospy.get_param("/monoped/desired_point/x")
-        self.desired_point.y = rospy.get_param("/monoped/desired_point/y")
-        self.desired_point.z = rospy.get_param("/monoped/desired_point/z")
+        self.desired_point.x = rospy.get_param("/plendesired_point/x")
+        self.desired_point.y = rospy.get_param("/plendesired_point/y")
+        self.desired_point.z = rospy.get_param("/plendesired_point/z")
         self.accepted_error_in_des_pos = rospy.get_param(
-            "/monoped/accepted_error_in_des_pos")
+            "/plenaccepted_error_in_des_pos")
 
-        self.desired_yaw = rospy.get_param("/monoped/desired_yaw")
+        self.desired_yaw = rospy.get_param("/plendesired_yaw")
 
         self.joint_increment_value = rospy.get_param(
-            "/monoped/joint_increment_value")
-        self.init_move_time = rospy.get_param("/monoped/init_move_time", 1.0)
-        self.move_time = rospy.get_param("/monoped/move_time", 0.05)
-        self.check_position = rospy.get_param("/monoped/check_position", True)
+            "/plenjoint_increment_value")
+        self.init_move_time = rospy.get_param("/pleninit_move_time", 1.0)
+        self.move_time = rospy.get_param("/plenmove_time", 0.05)
+        self.check_position = rospy.get_param("/plencheck_position", True)
 
         self.accepted_joint_error = rospy.get_param(
-            "/monoped/accepted_joint_error")
-        self.update_rate = rospy.get_param("/monoped/update_rate")
+            "/plenaccepted_joint_error")
+        self.update_rate = rospy.get_param("/plenupdate_rate")
 
         self.dec_obs = rospy.get_param(
-            "/monoped/number_decimals_precision_obs")
+            "/plennumber_decimals_precision_obs")
 
-        self.desired_force = rospy.get_param("/monoped/desired_force")
+        self.desired_force = rospy.get_param("/plendesired_force")
 
-        self.max_x_pos = rospy.get_param("/monoped/max_x_pos")
-        self.max_y_pos = rospy.get_param("/monoped/max_y_pos")
+        self.max_x_pos = rospy.get_param("/plenmax_x_pos")
+        self.max_y_pos = rospy.get_param("/plenmax_y_pos")
 
-        self.min_height = rospy.get_param("/monoped/min_height")
-        self.max_height = rospy.get_param("/monoped/max_height")
+        self.min_height = rospy.get_param("/plenmin_height")
+        self.max_height = rospy.get_param("/plenmax_height")
 
         self.distance_from_desired_point_max = rospy.get_param(
-            "/monoped/distance_from_desired_point_max")
+            "/plendistance_from_desired_point_max")
 
-        self.max_incl_roll = rospy.get_param("/monoped/max_incl")
-        self.max_incl_pitch = rospy.get_param("/monoped/max_incl")
-        self.max_contact_force = rospy.get_param("/monoped/max_contact_force")
+        self.max_incl_roll = rospy.get_param("/plenmax_incl")
+        self.max_incl_pitch = rospy.get_param("/plenmax_incl")
+        self.max_contact_force = rospy.get_param("/plenmax_contact_force")
 
-        self.maximum_haa_joint = rospy.get_param("/monoped/maximum_haa_joint")
-        self.maximum_hfe_joint = rospy.get_param("/monoped/maximum_hfe_joint")
-        self.maximum_kfe_joint = rospy.get_param("/monoped/maximum_kfe_joint")
-        self.min_kfe_joint = rospy.get_param("/monoped/min_kfe_joint")
+        self.maximum_haa_joint = rospy.get_param("/plenmaximum_haa_joint")
+        self.maximum_hfe_joint = rospy.get_param("/plenmaximum_hfe_joint")
+        self.maximum_kfe_joint = rospy.get_param("/plenmaximum_kfe_joint")
+        self.min_kfe_joint = rospy.get_param("/plenmin_kfe_joint")
 
         # We place the Maximum and minimum values of observations
         self.joint_ranges_array = {"maximum_haa": self.maximum_haa_joint,
@@ -143,21 +143,21 @@ class HopperStayUpEnv(hopper_env.HopperEnv):
 
         # Rewards
         self.weight_joint_position = rospy.get_param(
-            "/monoped/rewards_weight/weight_joint_position")
+            "/plenrewards_weight/weight_joint_position")
         self.weight_contact_force = rospy.get_param(
-            "/monoped/rewards_weight/weight_contact_force")
+            "/plenrewards_weight/weight_contact_force")
         self.weight_orientation = rospy.get_param(
-            "/monoped/rewards_weight/weight_orientation")
+            "/plenrewards_weight/weight_orientation")
         self.weight_distance_from_des_point = rospy.get_param(
-            "/monoped/rewards_weight/weight_distance_from_des_point")
+            "/plenrewards_weight/weight_distance_from_des_point")
 
-        self.alive_reward = rospy.get_param("/monoped/alive_reward")
-        self.done_reward = rospy.get_param("/monoped/done_reward")
+        self.alive_reward = rospy.get_param("/plenalive_reward")
+        self.done_reward = rospy.get_param("/plendone_reward")
 
         # Here we will add any init functions prior to starting the MyRobotEnv
-        super(HopperStayUpEnv, self).__init__(ros_ws_abspath)
+        super(PlenWalkEnv, self).__init__(ros_ws_abspath)
 
-        rospy.logdebug("END HopperStayUpEnv INIT...")
+        rospy.logdebug("END PlenWalkEnv INIT...")
 
     def _set_init_pose(self):
         """
@@ -265,7 +265,7 @@ class HopperStayUpEnv(hopper_env.HopperEnv):
         """
         Here we define what sensor data defines our robots observations
         To know which Variables we have access to, we need to read the
-        HopperEnv API DOCS
+        PlenEnv API DOCS
         Returns the state of the robot needed for OpenAI QLearn Algorithm
         The state will be defined by an array of the:
         1) distance from desired point in meters
@@ -459,8 +459,8 @@ class HopperStayUpEnv(hopper_env.HopperEnv):
         """
         has_flipped = True
 
-        self.max_roll = rospy.get_param("/monoped/max_roll")
-        self.max_pitch = rospy.get_param("/monoped/max_pitch")
+        self.max_roll = rospy.get_param("/plenmax_roll")
+        self.max_pitch = rospy.get_param("/plenmax_pitch")
 
         rospy.logdebug("#### HAS FLIPPED? ########")
         rospy.logdebug("RPY current_orientation"+str(current_orientation))
