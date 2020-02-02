@@ -1,12 +1,12 @@
+#!/usr/bin/env python
+
 import copy
 import numpy as np
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
 import torch.nn.functional as F
-from tensorboardX import SummaryWriter
 import gym
-import sys
+import os
 
 # Twin Delayed Deterministic Policy Gradient
 
@@ -149,6 +149,7 @@ class ReplayBuffer(object):
         Args:
             batch_size (int): size of sample
         """
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         ind = np.random.randint(0, len(self.storage), size=batch_size)
         states, actions, next_states, rewards, dones = [], [], [], [], []
@@ -156,14 +157,19 @@ class ReplayBuffer(object):
         for i in ind:
             s, a, s_, r, d = self.storage[i]
             states.append(np.array(s, copy=False))
+            state = torch.FloatTensor(np.array(states)).to(device)
             actions.append(np.array(a, copy=False))
+            action = torch.FloatTensor(np.array(actions)).to(device)
             next_states.append(np.array(s_, copy=False))
+            next_state = torch.FloatTensor(np.array(next_states)).to(device)
             rewards.append(np.array(r, copy=False))
+            reward = torch.FloatTensor(np.array(rewards).reshape(-1,
+                                                                 1)).to(device)
             dones.append(np.array(d, copy=False))
+            not_done = torch.FloatTensor(
+                1. - (np.array(dones).reshape(-1, 1))).to(device)
 
-        return np.array(states), np.array(actions), np.array(
-            next_states), np.array(rewards).reshape(
-                -1, 1), np.array(dones).reshape(-1, 1)
+        return state, action, next_state, reward, not_done
 
 
 class TD3Agent(object):
@@ -182,7 +188,6 @@ class TD3Agent(object):
 
     """
     def __init__(self,
-                 env,
                  state_dim,
                  action_dim,
                  max_action,
@@ -191,6 +196,8 @@ class TD3Agent(object):
                  policy_noise=0.2,
                  noise_clip=0.5,
                  policy_freq=2):
+
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         self.actor = Actor(state_dim, action_dim, max_action).to(self.device)
         self.actor_target = copy.deepcopy(self.actor)
@@ -210,14 +217,12 @@ class TD3Agent(object):
         self.policy_freq = policy_freq
 
         self.total_it = 0
-        self.env = env
 
-    def select_action(self, state, noise=0.1):
+    def select_action(self, state):
         """Select an appropriate action from the agent policy
 
             Args:
                 state (array): current state of environment
-                noise (float): how much noise to add to actions
 
             Returns:
                 action (float): action clipped within action range
@@ -226,12 +231,8 @@ class TD3Agent(object):
         # Turn float value into a CUDA Float Tensor
         state = torch.FloatTensor(state.reshape(1, -1)).to(self.device)
         action = self.actor(state).cpu().data.numpy().flatten()
-        if noise != 0:
-            action = (action + np.random.normal(
-                0, noise, size=self.env.action_space.shape[0]))
 
-        return action.clip(self.env.action_space.low,
-                           self.env.action_space.high)
+        return action
 
     def train(self, replay_buffer, batch_size=100):
         """Train and update actor and critic networks
@@ -253,18 +254,17 @@ class TD3Agent(object):
 
         with torch.no_grad():
             """
-            Autograd: If you set its attribute .requires_grad as True,
+            Autograd: if you set its attribute .requires_gras as True,
             (DEFAULT)
-            it starts to track all operations on it. When you finish your
-            computation you can call .backward() and have all the gradients
-            computed automatically. The gradient for this tensor will be
-            accumulated into .grad attribute.
+            it tracks all operations on it. When you finish your
+            computation, call .backward() to have all gradients computed
+            automatically. The gradient for this tensor is then accumulated
+            into the .grad attribute.
 
-            To prevent tracking history (and using memory), you can wrap
-            the code block in with torch.no_grad():. This can be particularly
-            helpfulwhen evaluating a model because the model may have
-            trainable parameters with requires_grad=True (DEFAULT),
-            but for which we don’t need the gradients
+            To prevent tracking history and using memory, wrap the code block
+            in "with torch.no_grad()". This is heplful when evaluating a model
+            as it may have trainable params with requires_grad=True (DEFAULT),
+            but for which we don't need the gradients.
 
             Here, we don't want to track the acyclic graph's history
             when getting our next action because we DON'T want to train
@@ -350,7 +350,9 @@ class TD3Agent(object):
             torch.load(filename + "_actor_optimizer"))
 
 
-def evaluate_policy(policy, env, eval_episodes=100, render=False):
+# Runs policy for X episodes and returns average reward
+# A fixed seed is used for the eval environment
+def evaluate_policy(policy, env_name, seed, eval_episodes=10, render=False):
     """run several episodes using the best agent policy
 
         Args:
@@ -363,27 +365,111 @@ def evaluate_policy(policy, env, eval_episodes=100, render=False):
             avg_reward (float): average reward over the number of evaluations
 
     """
+    eval_env = gym.make(env_name)
+    eval_env.seed(seed + 100)
 
     avg_reward = 0.
-    for i in range(eval_episodes):
-        obs = env.reset()
-        done = False
+    for _ in range(eval_episodes):
+        state, done = eval_env.reset(), False
         while not done:
             if render:
-                env.render()
-            action = policy.select_action(np.array(obs), noise=0)
-            obs, reward, done, _ = env.step(action)
+                eval_env.render()
+            action = policy.select_action(np.array(state))
+            state, reward, done, _ = eval_env.step(action)
             avg_reward += reward
 
     avg_reward /= eval_episodes
 
-    print("\n---------------------------------------")
-    print("Evaluation over {:d} episodes: {:f}".format(eval_episodes,
-                                                       avg_reward))
+    print("---------------------------------------")
+    print("Evaluation over {} episodes: {}"
+          .format(eval_episodes, avg_reward))
     print("---------------------------------------")
     return avg_reward
 
 
-def trainer():
+def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
+            batch_size, eval_freq, save_model, file_name="best_avg"):
     """
     """
+
+    if not os.path.exists("./results"):
+        os.makedirs("./results")
+
+    env = gym.make(env_name)
+
+    # Set seeds
+    env.seed(seed)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+
+    state_dim = env.observation_space.shape[0]
+    action_dim = env.action_space.shape[0]
+    max_action = float(env.action_space.high[0])
+
+    policy = TD3Agent(state_dim, action_dim, max_action)
+    replay_buffer = ReplayBuffer()
+
+    # Evaluate untrained policy and init list for storage
+    evaluations = [evaluate_policy(policy, env_name, seed)]
+
+    state = env.reset()
+    done = False
+    episode_reward = 0
+    episode_timesteps = 0
+    episode_num = 0
+
+    for t in range(int(max_timesteps)):
+
+        episode_timesteps += 1
+
+        # Select action randomly or according to policy
+        # Random Action - no training yet, just storing in buffer
+        if t < start_timesteps:
+            action = env.action_space.sample()
+        else:
+            # According to policy + Exploraton Noise
+            action = policy.select_action(
+                np.array(state) +
+                np.random.normal(0, max_action *
+                                 expl_noise, size=action_dim)).clip(
+                                     -max_action, max_action)
+
+        # Perform action
+        next_state, reward, done, _ = env.step(action)
+        done_bool = float(
+            done) if episode_timesteps < env._max_episode_steps else 0
+
+        # Store data in replay buffer
+        replay_buffer.add((state, action, next_state, reward, done_bool))
+
+        state = next_state
+        episode_reward += reward
+
+        # Train agent after collecting sufficient data for buffer
+        if t >= start_timesteps:
+            policy.train(replay_buffer, batch_size)
+
+        if done:
+            # +1 to account for 0 indexing.
+            # +0 on ep_timesteps since it will increment +1 even if done=True
+            print(
+                "Total T: {} Episode Num: {} Episode T: {} Reward: {}"
+                .format(t + 1, episode_num, episode_timesteps, episode_reward)
+            )
+            # Reset environment
+            state, done = env.reset(), False
+            episode_reward = 0
+            episode_timesteps = 0
+            episode_num += 1
+
+        # Evaluate episode
+        if (t + 1) % eval_freq == 0:
+            evaluations.append(evaluate_policy(policy, env_name, seed, True))
+            np.save("./results/{file_name}", evaluations)
+            if save_model:
+                policy.save("./models/{file_name}")
+
+
+if __name__ == "__main__":
+    """ The Main Function """
+    trainer("Pendulum-v0", 0, 1e6, 1e4, 0.1, 100, 5e3, True)
