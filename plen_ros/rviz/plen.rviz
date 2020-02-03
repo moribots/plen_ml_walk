@@ -77,8 +77,6 @@ Visualization Manager:
           Value: false
         l_foot:
           Value: false
-        l_foot_sensor:
-          Value: false
         l_hand:
           Value: false
         l_hip:
@@ -97,6 +95,8 @@ Visualization Manager:
           Value: false
         le_servo:
           Value: false
+        lfs_link:
+          Value: false
         ls_servo:
           Value: false
         lt_servo:
@@ -108,8 +108,6 @@ Visualization Manager:
         r_elbow:
           Value: false
         r_foot:
-          Value: false
-        r_foot_sensor:
           Value: false
         r_hand:
           Value: false
@@ -128,6 +126,8 @@ Visualization Manager:
         rb_servo:
           Value: false
         re_servo:
+          Value: false
+        rfs_link:
           Value: false
         rs_servo:
           Value: false
@@ -163,7 +163,7 @@ Visualization Manager:
                     l_shin:
                       l_ankle:
                         l_foot:
-                          l_foot_sensor:
+                          lfs_link:
                             {}
             lt_servo:
               {}
@@ -183,7 +183,7 @@ Visualization Manager:
                     r_shin:
                       r_ankle:
                         r_foot:
-                          r_foot_sensor:
+                          rfs_link:
                             {}
             rt_servo:
               {}
@@ -191,10 +191,10 @@ Visualization Manager:
       Value: true
     - Alpha: 1
       Class: rviz/RobotModel
-      Collision Enabled: true
+      Collision Enabled: false
       Enabled: true
       Links:
-        All Links Enabled: false
+        All Links Enabled: true
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
@@ -207,33 +207,28 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         head:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         l_ankle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         l_arm:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         l_elbow:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
-        l_foot:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
           Value: true
-        l_foot_sensor:
+        l_foot:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -242,78 +237,78 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         l_hip:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         l_knee:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         l_knee_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         l_shin:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         l_shoulder:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         l_thigh:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         lb_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         le_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
-        ls_servo:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: false
-        lt_servo:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: false
-        r_ankle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: false
-        r_arm:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: false
-        r_elbow:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: false
-        r_foot:
+          Value: true
+        lfs_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        r_foot_sensor:
+        ls_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        lt_servo:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_ankle:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_arm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_elbow:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        r_foot:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -322,68 +317,73 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         r_hip:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         r_knee:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         r_knee_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         r_shin:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         r_shoulder:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         r_thigh:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         rb_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         re_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
+        rfs_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         rs_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         rt_servo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
         torso:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: false
+          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
       Update Interval: 0
       Value: true
-      Visual Enabled: false
+      Visual Enabled: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -412,25 +412,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.18576881289482117
+      Distance: 0.4588802456855774
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.045577000826597214
-        Y: -0.038794755935668945
-        Z: -0.10762887448072433
+        X: -0.040406662970781326
+        Y: 0.037325941026210785
+        Z: -0.06052587181329727
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.26479512453079224
+      Pitch: 0.24520687758922577
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.2897952198982239
+      Yaw: 6.067988872528076
     Saved: ~
 Window Geometry:
   Displays:

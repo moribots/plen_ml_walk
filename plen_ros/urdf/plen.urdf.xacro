@@ -393,6 +393,9 @@
             <geometry>
                 <box size="${41/1000} ${62.867/1000} ${2/1000}"/>
             </geometry>
+            <material name="blue_mat">
+              <color rgba="0 0 1 1" />
+            </material>
         </visual>
   </link>
 
@@ -511,6 +514,9 @@
             <geometry>
                 <box size="${41/1000} ${62.867/1000} ${2/1000}"/>
             </geometry>
+            <material name="blue_mat">
+              <color rgba="0 0 1 1" />
+            </material>
         </visual>
   </link>
   
@@ -674,7 +680,7 @@
   <joint name="r_foot_r_sensor" type="fixed">
         <parent link="r_foot"/>
         <child link="rfs_link"/>
-        <origin xyz="${-37/4000} ${0} ${-19/1000}" rpy="0 0 0"/>
+        <origin xyz="${-37/4000} ${0} ${-18/1000}" rpy="0 0 0"/>
   </joint>
 
   <!-- LEFT LEG -->
@@ -733,7 +739,7 @@
   <joint name="l_foot_l_sensor" type="fixed">
         <parent link="l_foot"/>
         <child link="lfs_link"/>
-        <origin xyz="${37/4000} ${0} ${-19/1000}" rpy="0 0 0"/>
+        <origin xyz="${37/4000} ${0} ${-18/1000}" rpy="0 0 0"/>
   </joint>
 
   <!-- <transmission name="tran1">

@@ -1,27 +1,19 @@
 import rospy
-import numpy
+import numpy as np
 from gym import spaces
 from openai_ros.robot_envs import plen_env
 from gym.envs.registration import register
-from geometry_msgs.msg import Point
-from geometry_msgs.msg import Vector3
+from geometry_msgs.msg import Point, Twist, Vector3
 from tf.transformations import euler_from_quaternion
 from openai_ros.task_envs.task_commons import LoadYamlFileParamsTest
 from openai_ros.openai_ros_common import ROSLauncher
 import os
 
+
 class PlenWalkEnv(plen_env.PlenEnv):
     def __init__(self):
         """
-        Make plen Learn how to Stay Up indefenitly
-        """
-
-        # Only variable needed to be set here
-        """
-        For this version, we consider 6 actions
-        1-2) Increment/Decrement haa_joint
-        3-4) Increment/Decrement hfe_joint
-        5-6) Increment/Decrement kfe_joint
+        Make PLEN learn how to Walk
         """
         rospy.logdebug("Start PlenWalkEnv INIT...")
 
@@ -38,126 +30,118 @@ class PlenWalkEnv(plen_env.PlenEnv):
 
         # Load Params from the desired Yaml file
         LoadYamlFileParamsTest(rospackage_name="openai_ros",
-                               rel_path_from_package_to_file="src/openai_ros/task_envs/plen/config",
+                               rel_path_from_package_to_file=
+                               "src/openai_ros/task_envs/plen/config",
                                yaml_file_name="plen_walk.yaml")
 
-        number_actions = rospy.get_param('/plenn_actions')
-        self.action_space = spaces.Discrete(number_actions)
+        low_act = np.ones(18) * - 1
+        high_act = low_act * - 1
+        self.action_space = spaces.Box(low_act, high_act, dtype=np.float32)
 
         # We set the reward range, which is not compulsory but here we do it.
-        self.reward_range = (-numpy.inf, numpy.inf)
+        self.reward_range = (-np.inf, np.inf)
 
         # Actions and Observations
 
-        self.init_joint_states = Vector3()
-        self.init_joint_states.x = rospy.get_param(
-            '/pleninit_joint_states/haa_joint')
-        self.init_joint_states.y = rospy.get_param(
-            '/pleninit_joint_states/hfe_joint')
-        self.init_joint_states.z = rospy.get_param(
-            '/pleninit_joint_states/kfe_joint')
+        self.init_joint_states = np.zeros(18)
 
-        # Get Desired Point to Get
-        self.desired_point = Point()
-        self.desired_point.x = rospy.get_param("/plendesired_point/x")
-        self.desired_point.y = rospy.get_param("/plendesired_point/y")
-        self.desired_point.z = rospy.get_param("/plendesired_point/z")
-        self.accepted_error_in_des_pos = rospy.get_param(
-            "/plenaccepted_error_in_des_pos")
+        # Desired Velocity
+        self.desired_vel = Twist()
+        self.desired_vel.linear.x = 1
+        # others = 0
 
-        self.desired_yaw = rospy.get_param("/plendesired_yaw")
-
-        self.joint_increment_value = rospy.get_param(
-            "/plenjoint_increment_value")
-        self.init_move_time = rospy.get_param("/pleninit_move_time", 1.0)
-        self.move_time = rospy.get_param("/plenmove_time", 0.05)
-        self.check_position = rospy.get_param("/plencheck_position", True)
+        self.desired_yaw = rospy.get_param("/plen/desired_yaw")
 
         self.accepted_joint_error = rospy.get_param(
-            "/plenaccepted_joint_error")
-        self.update_rate = rospy.get_param("/plenupdate_rate")
+            "/plen/accepted_joint_error")
+        self.update_rate = rospy.get_param("/plen/update_rate")
 
-        self.dec_obs = rospy.get_param(
-            "/plennumber_decimals_precision_obs")
+        self.dec_obs = rospy.get_param("/plen/number_decimals_precision_obs")
 
-        self.desired_force = rospy.get_param("/plendesired_force")
+        self.desired_force = rospy.get_param("/plen/desired_force")
 
-        self.max_x_pos = rospy.get_param("/plenmax_x_pos")
-        self.max_y_pos = rospy.get_param("/plenmax_y_pos")
+        self.max_x_pos = rospy.get_param("/plen/max_x_pos")
+        self.max_y_pos = rospy.get_param("/plen/max_y_pos")
 
-        self.min_height = rospy.get_param("/plenmin_height")
-        self.max_height = rospy.get_param("/plenmax_height")
+        self.min_height = rospy.get_param("/plen/min_height")
+        self.max_height = rospy.get_param("/plen/max_height")
 
         self.distance_from_desired_point_max = rospy.get_param(
-            "/plendistance_from_desired_point_max")
+            "/plen/distance_from_desired_point_max")
 
-        self.max_incl_roll = rospy.get_param("/plenmax_incl")
-        self.max_incl_pitch = rospy.get_param("/plenmax_incl")
-        self.max_contact_force = rospy.get_param("/plenmax_contact_force")
+        self.max_incl_roll = rospy.get_param("/plen/max_incl")
+        self.max_incl_pitch = rospy.get_param("/plen/max_incl")
+        self.max_contact_force = rospy.get_param("/plen/max_contact_force")
 
-        self.maximum_haa_joint = rospy.get_param("/plenmaximum_haa_joint")
-        self.maximum_hfe_joint = rospy.get_param("/plenmaximum_hfe_joint")
-        self.maximum_kfe_joint = rospy.get_param("/plenmaximum_kfe_joint")
-        self.min_kfe_joint = rospy.get_param("/plenmin_kfe_joint")
+        self.maximum_haa_joint = rospy.get_param("/plen/maximum_haa_joint")
+        self.maximum_hfe_joint = rospy.get_param("/plen/maximum_hfe_joint")
+        self.maximum_kfe_joint = rospy.get_param("/plen/maximum_kfe_joint")
+        self.min_kfe_joint = rospy.get_param("/plen/min_kfe_joint")
 
         # We place the Maximum and minimum values of observations
-        self.joint_ranges_array = {"maximum_haa": self.maximum_haa_joint,
-                                   "minimum_haa_joint": -self.maximum_haa_joint,
-                                   "maximum_hfe_joint": self.maximum_hfe_joint,
-                                   "minimum_hfe_joint": self.maximum_hfe_joint,
-                                   "maximum_kfe_joint": self.maximum_kfe_joint,
-                                   "min_kfe_joint": self.min_kfe_joint
-                                   }
+        self.joint_ranges_array = {
+            "maximum_haa": self.maximum_haa_joint,
+            "minimum_haa_joint": -self.maximum_haa_joint,
+            "maximum_hfe_joint": self.maximum_hfe_joint,
+            "minimum_hfe_joint": self.maximum_hfe_joint,
+            "maximum_kfe_joint": self.maximum_kfe_joint,
+            "min_kfe_joint": self.min_kfe_joint
+        }
 
-        high = numpy.array([self.distance_from_desired_point_max,
-                            self.max_incl_roll,
-                            self.max_incl_pitch,
-                            3.14,
-                            self.max_contact_force,
-                            self.maximum_haa_joint,
-                            self.maximum_hfe_joint,
-                            self.maximum_kfe_joint,
-                            self.max_x_pos,
-                            self.max_y_pos,
-                            self.max_height
-                            ])
+        high = np.array([
+            self.distance_from_desired_point_max, self.max_incl_roll,
+            self.max_incl_pitch, 3.14, self.max_contact_force,
+            self.maximum_haa_joint, self.maximum_hfe_joint,
+            self.maximum_kfe_joint, self.max_x_pos, self.max_y_pos,
+            self.max_height
+        ])
 
-        low = numpy.array([0.0,
-                           -1*self.max_incl_roll,
-                           -1*self.max_incl_pitch,
-                           -1*3.14,
-                           0.0,
-                           -1*self.maximum_haa_joint,
-                           -1*self.maximum_hfe_joint,
-                           self.min_kfe_joint,
-                           -1*self.max_x_pos,
-                           -1*self.max_y_pos,
-                           self.min_height
-                           ])
+        low = np.array([
+            0.0, -1 * self.max_incl_roll, -1 * self.max_incl_pitch, -1 * 3.14,
+            0.0, -1 * self.maximum_haa_joint, -1 * self.maximum_hfe_joint,
+            self.min_kfe_joint, -1 * self.max_x_pos, -1 * self.max_y_pos,
+            self.min_height
+        ])
 
         self.observation_space = spaces.Box(low, high)
 
-        rospy.logdebug("ACTION SPACES TYPE===>"+str(self.action_space))
+        rospy.logdebug("ACTION SPACES TYPE===>" + str(self.action_space))
         rospy.logdebug("OBSERVATION SPACES TYPE===>" +
                        str(self.observation_space))
 
         # Rewards
         self.weight_joint_position = rospy.get_param(
-            "/plenrewards_weight/weight_joint_position")
+            "/plen/rewards_weight/weight_joint_position")
         self.weight_contact_force = rospy.get_param(
-            "/plenrewards_weight/weight_contact_force")
+            "/plen/rewards_weight/weight_contact_force")
         self.weight_orientation = rospy.get_param(
-            "/plenrewards_weight/weight_orientation")
+            "/plen/rewards_weight/weight_orientation")
         self.weight_distance_from_des_point = rospy.get_param(
-            "/plenrewards_weight/weight_distance_from_des_point")
+            "/plen/rewards_weight/weight_distance_from_des_point")
 
-        self.alive_reward = rospy.get_param("/plenalive_reward")
-        self.done_reward = rospy.get_param("/plendone_reward")
+        self.alive_reward = rospy.get_param("/plen/alive_reward")
+        self.done_reward = rospy.get_param("/plen/done_reward")
 
         # Here we will add any init functions prior to starting the MyRobotEnv
         super(PlenWalkEnv, self).__init__(ros_ws_abspath)
 
         rospy.logdebug("END PlenWalkEnv INIT...")
+
+    def env_to_agent(self, env_range, env_val):
+        # Convert using y = mx + b
+        agent_range = [-1, 1]
+        m = (agent_range[1] - agent_range[0]) / (env_range[1] - env_range[0])
+        b = agent_range[1] - (m * env_range[1])
+        agent_val = m * env_val + b
+        return agent_val
+
+    def agent_to_env(self, env_range, agent_val):
+        # Convert using y = mx + b
+        agent_range = [-1, 1]
+        m = (env_range[1] - env_range[0]) / (agent_range[1] - agent_range[0])
+        b = env_range[1] - (m * agent_range[1])
+        env_val = m * agent_val + b
+        return env_val
 
     def _set_init_pose(self):
         """
@@ -165,9 +149,10 @@ class PlenWalkEnv(plen_env.PlenEnv):
         and lands the robot. Its preparing it to be reseted in the world.
         """
 
-        joints_array = [self.init_joint_states.x,
-                        self.init_joint_states.y,
-                        self.init_joint_states.z]
+        joints_array = [
+            self.init_joint_states.x, self.init_joint_states.y,
+            self.init_joint_states.z
+        ]
 
         self.move_joints(joints_array,
                          epsilon=self.accepted_joint_error,
@@ -198,17 +183,18 @@ class PlenWalkEnv(plen_env.PlenEnv):
         :param action: The action integer that sets what movement to do next.
         """
 
-        rospy.logdebug("Start Set Action ==>"+str(action))
+        rospy.logdebug("Start Set Action ==>" + str(action))
 
         # We get current Joints values
         joint_states = self.get_joint_states()
         joint_states_position = joint_states.position
-        rospy.logdebug("get_action_to_position>>>"+str(joint_states_position))
+        rospy.logdebug("get_action_to_position>>>" +
+                       str(joint_states_position))
 
         action_position = [0.0, 0.0, 0.0]
 
-        rospy.logdebug(
-            "OLD-JOINT-STATE [haa,hfa,kfe]>>>"+str(joint_states_position))
+        rospy.logdebug("OLD-JOINT-STATE [haa,hfa,kfe]>>>" +
+                       str(joint_states_position))
 
         if action == 0:  # Increment haa_joint
             rospy.logdebug("Increment haa_joint")
@@ -247,19 +233,20 @@ class PlenWalkEnv(plen_env.PlenEnv):
             action_position[2] = joint_states_position[2] - \
                 self.joint_increment_value
 
-        rospy.logdebug("NEW-JOINT-STATE [haa,hfa,kfe]>>>"+str(action_position))
-        rospy.logdebug("JOINT-RANGES>>>"+str(self.joint_ranges_array))
+        rospy.logdebug("NEW-JOINT-STATE [haa,hfa,kfe]>>>" +
+                       str(action_position))
+        rospy.logdebug("JOINT-RANGES>>>" + str(self.joint_ranges_array))
 
-        rospy.logdebug("START ACTION EXECUTE>>>"+str(action))
+        rospy.logdebug("START ACTION EXECUTE>>>" + str(action))
         # We tell monoped where to place its joints next
         self.move_joints(action_position,
                          epsilon=self.accepted_joint_error,
                          update_rate=self.update_rate,
                          time_sleep=self.move_time,
                          check_position=self.check_position)
-        rospy.logdebug("END ACTION EXECUTE>>>"+str(action))
+        rospy.logdebug("END ACTION EXECUTE>>>" + str(action))
 
-        rospy.logdebug("END Set Action ==>"+str(action))
+        rospy.logdebug("END Set Action ==>" + str(action))
 
     def _get_obs(self):
         """
@@ -335,7 +322,7 @@ class PlenWalkEnv(plen_env.PlenEnv):
         monoped_height_ok = self.monoped_height_ok(height_base)
         monoped_orientation_ok = self.monoped_orientation_ok()
 
-        done = not(monoped_height_ok and monoped_orientation_ok)
+        done = not (monoped_height_ok and monoped_orientation_ok)
 
         return done
 
@@ -347,17 +334,17 @@ class PlenWalkEnv(plen_env.PlenEnv):
         """
 
         joints_state_array = observations[5:8]
-        r1 = self.calculate_reward_joint_position(
-            joints_state_array, self.weight_joint_position)
+        r1 = self.calculate_reward_joint_position(joints_state_array,
+                                                  self.weight_joint_position)
         # Desired Force in Newtons, taken form idle contact with 9.81 gravity.
 
         force_magnitude = observations[4]
-        r2 = self.calculate_reward_contact_force(
-            force_magnitude, self.weight_contact_force)
+        r2 = self.calculate_reward_contact_force(force_magnitude,
+                                                 self.weight_contact_force)
 
         rpy_array = observations[1:4]
-        r3 = self.calculate_reward_orientation(
-            rpy_array, self.weight_orientation)
+        r3 = self.calculate_reward_orientation(rpy_array,
+                                               self.weight_orientation)
 
         current_position = Point()
         current_position.x = observations[8]
@@ -397,22 +384,22 @@ class PlenWalkEnv(plen_env.PlenEnv):
         x_current = current_position.x
         y_current = current_position.y
 
-        x_pos_are_close = (x_current <= x_pos_plus) and (
-            x_current > x_pos_minus)
-        y_pos_are_close = (y_current <= y_pos_plus) and (
-            y_current > y_pos_minus)
+        x_pos_are_close = (x_current <= x_pos_plus) and (x_current >
+                                                         x_pos_minus)
+        y_pos_are_close = (y_current <= y_pos_plus) and (y_current >
+                                                         y_pos_minus)
 
         is_in_desired_pos = x_pos_are_close and y_pos_are_close
 
         rospy.logdebug("###### IS DESIRED POS ? ######")
-        rospy.logdebug("current_position"+str(current_position))
-        rospy.logdebug("x_pos_plus"+str(x_pos_plus) +
-                       ",x_pos_minus="+str(x_pos_minus))
-        rospy.logdebug("y_pos_plus"+str(y_pos_plus) +
-                       ",y_pos_minus="+str(y_pos_minus))
-        rospy.logdebug("x_pos_are_close"+str(x_pos_are_close))
-        rospy.logdebug("y_pos_are_close"+str(y_pos_are_close))
-        rospy.logdebug("is_in_desired_pos"+str(is_in_desired_pos))
+        rospy.logdebug("current_position" + str(current_position))
+        rospy.logdebug("x_pos_plus" + str(x_pos_plus) + ",x_pos_minus=" +
+                       str(x_pos_minus))
+        rospy.logdebug("y_pos_plus" + str(y_pos_plus) + ",y_pos_minus=" +
+                       str(y_pos_minus))
+        rospy.logdebug("x_pos_are_close" + str(x_pos_are_close))
+        rospy.logdebug("y_pos_are_close" + str(y_pos_are_close))
+        rospy.logdebug("is_in_desired_pos" + str(is_in_desired_pos))
         rospy.logdebug("############")
 
         return is_in_desired_pos
@@ -424,13 +411,13 @@ class PlenWalkEnv(plen_env.PlenEnv):
         is_inside = False
 
         rospy.logdebug("##### INSIDE WORK SPACE? #######")
-        rospy.logdebug("XYZ current_position"+str(current_position))
-        rospy.logdebug("work_space_x_max"+str(self.work_space_x_max) +
-                       ",work_space_x_min="+str(self.work_space_x_min))
-        rospy.logdebug("work_space_y_max"+str(self.work_space_y_max) +
-                       ",work_space_y_min="+str(self.work_space_y_min))
-        rospy.logdebug("work_space_z_max"+str(self.work_space_z_max) +
-                       ",work_space_z_min="+str(self.work_space_z_min))
+        rospy.logdebug("XYZ current_position" + str(current_position))
+        rospy.logdebug("work_space_x_max" + str(self.work_space_x_max) +
+                       ",work_space_x_min=" + str(self.work_space_x_min))
+        rospy.logdebug("work_space_y_max" + str(self.work_space_y_max) +
+                       ",work_space_y_min=" + str(self.work_space_y_min))
+        rospy.logdebug("work_space_z_max" + str(self.work_space_z_max) +
+                       ",work_space_z_min=" + str(self.work_space_z_min))
         rospy.logdebug("############")
 
         if current_position.x > self.work_space_x_min and current_position.x <= self.work_space_x_max:
@@ -445,8 +432,8 @@ class PlenWalkEnv(plen_env.PlenEnv):
         Detects if there is something too close to the monoped front
         """
         rospy.logdebug("##### SONAR TOO CLOSE? #######")
-        rospy.logdebug("sonar_value"+str(sonar_value) +
-                       ",min_sonar_value="+str(self.min_sonar_value))
+        rospy.logdebug("sonar_value" + str(sonar_value) + ",min_sonar_value=" +
+                       str(self.min_sonar_value))
         rospy.logdebug("############")
 
         too_close = sonar_value < self.min_sonar_value
@@ -463,15 +450,15 @@ class PlenWalkEnv(plen_env.PlenEnv):
         self.max_pitch = rospy.get_param("/plenmax_pitch")
 
         rospy.logdebug("#### HAS FLIPPED? ########")
-        rospy.logdebug("RPY current_orientation"+str(current_orientation))
-        rospy.logdebug("max_roll"+str(self.max_roll) +
-                       ",min_roll="+str(-1*self.max_roll))
-        rospy.logdebug("max_pitch"+str(self.max_pitch) +
-                       ",min_pitch="+str(-1*self.max_pitch))
+        rospy.logdebug("RPY current_orientation" + str(current_orientation))
+        rospy.logdebug("max_roll" + str(self.max_roll) + ",min_roll=" +
+                       str(-1 * self.max_roll))
+        rospy.logdebug("max_pitch" + str(self.max_pitch) + ",min_pitch=" +
+                       str(-1 * self.max_pitch))
         rospy.logdebug("############")
 
-        if current_orientation.x > -1*self.max_roll and current_orientation.x <= self.max_roll:
-            if current_orientation.y > -1*self.max_pitch and current_orientation.y <= self.max_pitch:
+        if current_orientation.x > -1 * self.max_roll and current_orientation.x <= self.max_roll:
+            if current_orientation.y > -1 * self.max_pitch and current_orientation.y <= self.max_pitch:
                 has_flipped = False
 
         return has_flipped
@@ -493,19 +480,19 @@ class PlenWalkEnv(plen_env.PlenEnv):
         :param p_end:
         :return:
         """
-        a = numpy.array((pstart.x, pstart.y, pstart.z))
-        b = numpy.array((p_end.x, p_end.y, p_end.z))
+        a = np.array((pstart.x, pstart.y, pstart.z))
+        b = np.array((p_end.x, p_end.y, p_end.z))
 
-        distance = numpy.linalg.norm(a - b)
+        distance = np.linalg.norm(a - b)
 
         return distance
 
     def get_orientation_euler(self, quaternion_vector):
         # We convert from quaternions to euler
-        orientation_list = [quaternion_vector.x,
-                            quaternion_vector.y,
-                            quaternion_vector.z,
-                            quaternion_vector.w]
+        orientation_list = [
+            quaternion_vector.x, quaternion_vector.y, quaternion_vector.z,
+            quaternion_vector.w
+        ]
 
         roll, pitch, yaw = euler_from_quaternion(orientation_list)
         return roll, pitch, yaw
@@ -516,11 +503,10 @@ class PlenWalkEnv(plen_env.PlenEnv):
         base_orientation = imu.orientation
 
         euler_rpy = Vector3()
-        euler = euler_from_quaternion([base_orientation.x,
-                                       base_orientation.y,
-                                       base_orientation.z,
-                                       base_orientation.w]
-                                      )
+        euler = euler_from_quaternion([
+            base_orientation.x, base_orientation.y, base_orientation.z,
+            base_orientation.w
+        ])
         euler_rpy.x = euler[0]
         euler_rpy.y = euler[1]
         euler_rpy.z = euler[2]
@@ -541,10 +527,10 @@ class PlenWalkEnv(plen_env.PlenEnv):
         # We extract what we need that is only the total_wrench force
         contact_force = self.get_contact_force(lowerleg_contactsensor_state)
         # We create an array with each component XYZ
-        contact_force_np = numpy.array(
+        contact_force_np = np.array(
             (contact_force.x, contact_force.y, contact_force.z))
         # We calculate the magnitude of the Force Vector, array.
-        force_magnitude = numpy.linalg.norm(contact_force_np)
+        force_magnitude = np.linalg.norm(contact_force_np)
 
         return force_magnitude
 
@@ -590,10 +576,11 @@ class PlenWalkEnv(plen_env.PlenEnv):
             # Abs to remove sign influence, it doesnt matter the direction of turn.
             acumulated_joint_pos += abs(joint_pos)
             rospy.logdebug(
-                "calculate_reward_joint_position>>acumulated_joint_pos=" + str(acumulated_joint_pos))
+                "calculate_reward_joint_position>>acumulated_joint_pos=" +
+                str(acumulated_joint_pos))
         reward = weight * acumulated_joint_pos
-        rospy.logdebug(
-            "calculate_reward_joint_position>>reward=" + str(reward))
+        rospy.logdebug("calculate_reward_joint_position>>reward=" +
+                       str(reward))
         return reward
 
     def calculate_reward_contact_force(self, force_magnitude, weight=1.0):
@@ -607,10 +594,10 @@ class PlenWalkEnv(plen_env.PlenEnv):
         """
         force_displacement = force_magnitude - self.desired_force
 
-        rospy.logdebug(
-            "calculate_reward_contact_force>>force_magnitude=" + str(force_magnitude))
-        rospy.logdebug(
-            "calculate_reward_contact_force>>force_displacement=" + str(force_displacement))
+        rospy.logdebug("calculate_reward_contact_force>>force_magnitude=" +
+                       str(force_magnitude))
+        rospy.logdebug("calculate_reward_contact_force>>force_displacement=" +
+                       str(force_displacement))
         # Abs to remove sign
         reward = weight * abs(force_displacement)
         rospy.logdebug("calculate_reward_contact_force>>reward=" + str(reward))
@@ -627,13 +614,15 @@ class PlenWalkEnv(plen_env.PlenEnv):
         """
 
         yaw_displacement = rpy_array[2] - self.desired_yaw
-        acumulated_orientation_displacement = abs(
-            rpy_array[0]) + abs(rpy_array[1]) + abs(yaw_displacement)
+        acumulated_orientation_displacement = abs(rpy_array[0]) + abs(
+            rpy_array[1]) + abs(yaw_displacement)
         reward = weight * acumulated_orientation_displacement
         rospy.logdebug("calculate_reward_orientation>>reward=" + str(reward))
         return reward
 
-    def calculate_reward_distance_from_des_point(self, current_position, weight=1.0):
+    def calculate_reward_distance_from_des_point(self,
+                                                 current_position,
+                                                 weight=1.0):
         """
         We calculate the distance from the desired point.
         The closser the better

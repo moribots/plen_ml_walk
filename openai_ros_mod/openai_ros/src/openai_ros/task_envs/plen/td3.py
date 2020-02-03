@@ -417,7 +417,7 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
     replay_buffer = ReplayBuffer()
 
     # Evaluate untrained policy and init list for storage
-    evaluations = [evaluate_policy(policy, env_name, seed, 1, True)]
+    evaluations = [evaluate_policy(policy, env_name, seed, 1)]
 
     state = env.reset()
     done = False
@@ -435,11 +435,10 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
             action = env.action_space.sample()
         else:
             # According to policy + Exploraton Noise
-            action = policy.select_action(
-                np.array(state) +
-                np.random.normal(0, max_action *
-                                 expl_noise, size=action_dim)).clip(
-                                     -max_action, max_action)
+            action = (
+                policy.select_action(np.array(state))
+                + np.random.normal(0, max_action * expl_noise, size=action_dim)
+                ).clip(-max_action, max_action)
 
         # Perform action
         next_state, reward, done, _ = env.step(action)
@@ -471,7 +470,7 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
 
         # Evaluate episode
         if (t + 1) % eval_freq == 0:
-            evaluations.append(evaluate_policy(policy, env_name, seed, 1, True))
+            evaluations.append(evaluate_policy(policy, env_name, seed, 5, True))
             np.save("./results/" + str(file_name), evaluations)
             if save_model:
                 policy.save("./models/" + str(file_name))
@@ -479,4 +478,4 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
 
 if __name__ == "__main__":
     """ The Main Function """
-    trainer("Pendulum-v0", 0, 1e6, 1e4, 0.1, 100, 5e3, True)
+    trainer("BipedalWalker-v2", 0, 1e6, 1e4, 0.1, 100, 15e3, True)
