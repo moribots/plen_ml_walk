@@ -8,7 +8,7 @@ from tf.transformations import euler_from_quaternion
 from openai_ros.task_envs.task_commons import LoadYamlFileParamsTest
 from openai_ros.openai_ros_common import ROSLauncher
 import os
-
+import time
 
 register(
     id='PlenWalkEnv-v0',
@@ -41,93 +41,104 @@ class PlenWalkEnv(plen_env.PlenEnv):
                                "src/openai_ros/task_envs/plen/config",
                                yaml_file_name="plen_walk.yaml")
 
+        # How long to step the simulation for (sec)
+        self.running_step = 0.05
+
+        # Agent Action Space
         low_act = np.ones(18) * -1
         high_act = low_act * -1
         self.action_space = spaces.Box(low_act, high_act, dtype=np.float32)
 
-        # We set the reward range, which is not compulsory but here we do it.
-        self.reward_range = (-np.inf, np.inf)
+        # Environment Action Space
+        self.env_ranges = [
+            [-1.7, 1.7],  # RIGHT LEG
+            [-1.54, 0.12],
+            [-1.7, 0.75],
+            [-0.2, 0.95],
+            [-0.95, 1.54],
+            [-0.45, 0.8],
+            [-1.7, 1.7],  # LEFT LEG
+            [-0.12, 1.54],
+            [-0.75, 1.7],
+            [-0.95, 0.2],
+            [-1.54, 0.95],
+            [-0.8, 0.45],
+            [-1.7, 1.7],  # RIGHT ARM
+            [-0.15, 1.7],
+            [-0.2, 0.5],
+            [-1.7, 1.7],  # LEFT ARM
+            [-0.15, 1.7],
+            [-0.2, 0.5]
+        ]
 
-        # Actions and Observations
-
+        # Initial Joint States
         self.init_joint_states = np.zeros(18)
 
-        # Desired Velocity
-        self.desired_vel = Twist()
-        self.desired_vel.linear.x = 1
-        # others = 0
+        # Possible Rewards
+        self.reward_range = (-np.inf, np.inf)
 
-        self.desired_yaw = rospy.get_param("/plen/desired_yaw")
+        # Observation Values
 
-        self.accepted_joint_error = rospy.get_param(
-            "/plen/accepted_joint_error")
-        self.update_rate = rospy.get_param("/plen/update_rate")
+        # TODO: REPLACE SCALARS BY .YAML GET PARAM
 
-        self.dec_obs = rospy.get_param("/plen/number_decimals_precision_obs")
+        # JOINTS (see self.env_ranges)
+        # Low values of Joint Position Space
+        self.joints_low = []
+        # High values of Joint Position Space
+        self.joints_high = []
+        for j_state in self.env_ranges:
+            self.joints_low.append(j_state[0])
+            self.joints_high.append(j_state[1])
 
-        self.desired_force = rospy.get_param("/plen/desired_force")
+        # JOINT EFFORT
+        self.joint_effort_low = [0] * 18
+        self.joint_effort_high = [0.15] * 18
 
-        self.max_x_pos = rospy.get_param("/plen/max_x_pos")
-        self.max_y_pos = rospy.get_param("/plen/max_y_pos")
+        # TORSO HEIGHT (0, 0.25)
+        self.torso_height_min = 0
+        self.torso_height_max = 0.25
 
-        self.min_height = rospy.get_param("/plen/min_height")
-        self.max_height = rospy.get_param("/plen/max_height")
+        # TORSO TWIST (x) (-inf, inf)
+        self.torso_vx_min = -np.inf
+        self.torso_vx_max = np.inf
 
-        self.distance_from_desired_point_max = rospy.get_param(
-            "/plen/distance_from_desired_point_max")
+        # TORSO ROLL (-pi, pi)
+        self.torso_roll_min = - np.pi
+        self.torso_roll_max = np.pi
 
-        self.max_incl_roll = rospy.get_param("/plen/max_incl")
-        self.max_incl_pitch = rospy.get_param("/plen/max_incl")
-        self.max_contact_force = rospy.get_param("/plen/max_contact_force")
+        # TORSO PITCH (-pi, pi)
+        self.torso_pitch_min = - np.pi
+        self.torso_pitch_max = np.pi
 
-        self.maximum_haa_joint = rospy.get_param("/plen/maximum_haa_joint")
-        self.maximum_hfe_joint = rospy.get_param("/plen/maximum_hfe_joint")
-        self.maximum_kfe_joint = rospy.get_param("/plen/maximum_kfe_joint")
-        self.min_kfe_joint = rospy.get_param("/plen/min_kfe_joint")
+        # TORSO DEVIATION FROM X AXIS (-inf, inf)
+        self.torso_y_min = -np.inf
+        self.torso_y_max = np.inf
 
-        # We place the Maximum and minimum values of observations
-        self.joint_ranges_array = {
-            "maximum_haa": self.maximum_haa_joint,
-            "minimum_haa_joint": -self.maximum_haa_joint,
-            "maximum_hfe_joint": self.maximum_hfe_joint,
-            "minimum_hfe_joint": self.maximum_hfe_joint,
-            "maximum_kfe_joint": self.maximum_kfe_joint,
-            "min_kfe_joint": self.min_kfe_joint
-        }
+        # RIGHT FOOT CONTACT (0, 1)
+        self.rfs_min = 0
+        self.rfs_max = 1
 
-        high = np.array([
-            self.distance_from_desired_point_max, self.max_incl_roll,
-            self.max_incl_pitch, 3.14, self.max_contact_force,
-            self.maximum_haa_joint, self.maximum_hfe_joint,
-            self.maximum_kfe_joint, self.max_x_pos, self.max_y_pos,
-            self.max_height
+        # LEFT FOOT CONTACT (0, 1)
+        self.lfs_min = 0
+        self.lfs_max = 1
+
+        obs_low = np.array([
+            self.joints_low, self.joint_effort_low, self.torso_height_min,
+            self.torso_vx_min, self.torso_roll_min, self.torso_pitch_min,
+            self.torso_y_min, self.rfs_min, self.lfs_min
         ])
 
-        low = np.array([
-            0.0, -1 * self.max_incl_roll, -1 * self.max_incl_pitch, -1 * 3.14,
-            0.0, -1 * self.maximum_haa_joint, -1 * self.maximum_hfe_joint,
-            self.min_kfe_joint, -1 * self.max_x_pos, -1 * self.max_y_pos,
-            self.min_height
+        obs_high = np.array([
+            self.joints_high, self.joint_effort_high, self.torso_height_max,
+            self.torso_vx_max, self.torso_roll_max, self.torso_pitch_max,
+            self.torso_y_max, self.rfs_max, self.lfs_max
         ])
 
-        self.observation_space = spaces.Box(low, high)
+        self.observation_space = spaces.Box(obs_low, obs_high)
 
         rospy.logdebug("ACTION SPACES TYPE===>" + str(self.action_space))
         rospy.logdebug("OBSERVATION SPACES TYPE===>" +
                        str(self.observation_space))
-
-        # Rewards
-        self.weight_joint_position = rospy.get_param(
-            "/plen/rewards_weight/weight_joint_position")
-        self.weight_contact_force = rospy.get_param(
-            "/plen/rewards_weight/weight_contact_force")
-        self.weight_orientation = rospy.get_param(
-            "/plen/rewards_weight/weight_orientation")
-        self.weight_distance_from_des_point = rospy.get_param(
-            "/plen/rewards_weight/weight_distance_from_des_point")
-
-        self.alive_reward = rospy.get_param("/plen/alive_reward")
-        self.done_reward = rospy.get_param("/plen/done_reward")
 
         # Here we will add any init functions prior to starting the MyRobotEnv
         super(PlenWalkEnv, self).__init__(ros_ws_abspath)
@@ -135,6 +146,9 @@ class PlenWalkEnv(plen_env.PlenEnv):
         rospy.logdebug("END PlenWalkEnv INIT...")
 
     def env_to_agent(self, env_range, env_val):
+        """ Convert an action from the Environment space
+            to the Agent Space ([-1, 1])
+        """
         # Convert using y = mx + b
         agent_range = [-1, 1]
         m = (agent_range[1] - agent_range[0]) / (env_range[1] - env_range[0])
@@ -143,6 +157,9 @@ class PlenWalkEnv(plen_env.PlenEnv):
         return agent_val
 
     def agent_to_env(self, env_range, agent_val):
+        """ Convert an action from the Agent space ([-1, 1])
+            to the Environment Space
+        """
         # Convert using y = mx + b
         agent_range = [-1, 1]
         m = (env_range[1] - env_range[0]) / (agent_range[1] - agent_range[0])
@@ -153,7 +170,7 @@ class PlenWalkEnv(plen_env.PlenEnv):
     def _set_init_pose(self):
         """Sets the Robot in its init pose
         """
-        # TODO
+        self.joints.set_init_pose
 
     def _init_env_variables(self):
         """
@@ -163,19 +180,41 @@ class PlenWalkEnv(plen_env.PlenEnv):
         """
         # TODO
 
-
     def _set_action(self, action):
         """
         Move the robot based on the action variable given
         """
-        # TODO: Move robot
+        env_action = np.empty(18)
+        for i in range(len(action)):
+            # Convert action from [-1, 1] to real env values
+            env_action[i] = self.agent_to_env(self.env_ranges[i], action[i])
+
+        rospy.logdebug("Executing Action ==>" + str(env_action))
+
+        # Unpause
+        self.gazebo.unpauseSim()
+        # Move Joints
+        self.joints.move_joints(env_action)
+        # Let run for running_step seconds
+        # time.sleep(self.running_step)
+        # Pause
+        self.gazebo.pauseSim()
+
+        rospy.logdebug("Action Completed")
 
     def _get_obs(self):
         """
         Here we define what sensor data of our robots observations
-        To know which Variables we have acces to, we need to read the
-        MyRobotEnv API DOCS
-        :return: observations
+
+            - Twist
+            - Torso Height
+            - Torso Pitc
+            - Torso Roll
+            - Torso y position
+            - Joint Positions
+            - Joint efforts
+            - Right foot contact
+            - Left foot contact
         """
         # TODO
         return observations
@@ -183,6 +222,12 @@ class PlenWalkEnv(plen_env.PlenEnv):
     def _is_done(self, observations):
         """
         Decide if episode is done based on the observations
+
+            - Pitch is above or below pi/2
+            - Roll is above or below pi/2
+            - Height is below height thresh
+            - y position (abs) is above y thresh
+            - episode timesteps above limit
         """
         # TODO
         return done
@@ -193,5 +238,3 @@ class PlenWalkEnv(plen_env.PlenEnv):
         """
         # TODO
         return reward
-        
-    # Internal TaskEnv Methods

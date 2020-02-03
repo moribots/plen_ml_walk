@@ -266,7 +266,7 @@ class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
 
         # We move it to that pos
         self.gazebo.unpauseSim()
-        self.plen_joint_pubisher_object.move_joints(next_action_position)
+        self.joints.move_joints(next_action_position)
         # Then we send the command to the robot and let it go
         # for running_step seconds
         time.sleep(self.running_step)
