@@ -284,7 +284,7 @@ class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
         # Get the State Discrete Stringuified version of the observations
         state = self.get_state(observation)
 
-        return state, reward, done, {}
+        return state, reward, done
 
     def _get_obs(self):
         """Returns the observation.
