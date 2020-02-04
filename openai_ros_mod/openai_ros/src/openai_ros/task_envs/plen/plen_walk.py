@@ -3,7 +3,9 @@ import numpy as np
 from gym import spaces
 from openai_ros.robot_envs import plen_env
 from gym.envs.registration import register
-from geometry_msgs.msg import Point, Twist, Vector3
+from nav_msgs.msg import Odometry
+from gazebo_msgs.msg import ContactsState
+from sensor_msgs.msg import JointState
 from tf.transformations import euler_from_quaternion
 from openai_ros.task_envs.task_commons import LoadYamlFileParamsTest
 from openai_ros.openai_ros_common import ROSLauncher
@@ -71,9 +73,6 @@ class PlenWalkEnv(plen_env.PlenEnv):
             [-0.2, 0.5]
         ]
 
-        # Initial Joint States
-        self.init_joint_states = np.zeros(18)
-
         # Possible Rewards
         self.reward_range = (-np.inf, np.inf)
 
@@ -91,7 +90,7 @@ class PlenWalkEnv(plen_env.PlenEnv):
             self.joints_high.append(j_state[1])
 
         # JOINT EFFORT
-        self.joint_effort_low = [0] * 18
+        self.joint_effort_low = [-0.15] * 18
         self.joint_effort_high = [0.15] * 18
 
         # TORSO HEIGHT (0, 0.25)
@@ -103,11 +102,11 @@ class PlenWalkEnv(plen_env.PlenEnv):
         self.torso_vx_max = np.inf
 
         # TORSO ROLL (-pi, pi)
-        self.torso_roll_min = - np.pi
+        self.torso_roll_min = -np.pi
         self.torso_roll_max = np.pi
 
         # TORSO PITCH (-pi, pi)
-        self.torso_pitch_min = - np.pi
+        self.torso_pitch_min = -np.pi
         self.torso_pitch_max = np.pi
 
         # TORSO DEVIATION FROM X AXIS (-inf, inf)
@@ -140,10 +139,69 @@ class PlenWalkEnv(plen_env.PlenEnv):
         rospy.logdebug("OBSERVATION SPACES TYPE===>" +
                        str(self.observation_space))
 
+        # OBSERVATION SUBSCRIBERS
+
+        # Odometry (Pose and Twist)
+        self.torso = Odometry()
+        self.odom_subscriber = rospy.Subscriber('/plen/odom', Odometry,
+                                                self.odom_subscriber_callback)
+
+        # Joint Positions and Effort
+        # Init
+        self.joint_poses = np.zeros(18)
+        self.joint_efforts = np.zeros(18)
+        # Sub
+        self.joint_state_subscriber = rospy.Subscriber(
+            '/plen/joint_states', JointState,
+            self.joint_state_subscriber_callback)
+
+        # Right Foot Contact
+        # Init
+        self.right_contact = 1
+        # Sub
+        self.right_contact_subscriber = rospy.Subscriber(
+            '/plen/right_foot_contact', ContactsState,
+            self.right_contact_subscriber_callback)
+
+        # Left Foot Contact
+        self.left_contact = 1
+        # Sub
+        self.left_contact_subscriber = rospy.Subscriber(
+            '/plen/left_foot_contact', ContactsState,
+            self.left_contact_subscriber_callback)
+
         # Here we will add any init functions prior to starting the MyRobotEnv
         super(PlenWalkEnv, self).__init__(ros_ws_abspath)
 
         rospy.logdebug("END PlenWalkEnv INIT...")
+
+    def odom_subscriber_callback(self, msg):
+        """
+            Returns cartesian position and orientation of torso middle
+        """
+        # TODO
+        return 0
+
+    def joint_state_subscriber_callback(self, msg):
+        """
+            Returns joint positions and efforts
+        """
+        # TODO
+        return 0
+
+    def right_contact_subscriber_callback(self, msg):
+        """
+            Returns whether right foot has made contact
+        """
+        # TODO
+        return 0
+
+    def left_contact_subscriber_callback(self, msg):
+        """
+            Returns whether left foot has made contact
+        """
+        # TODO
+        return 0
 
     def env_to_agent(self, env_range, env_val):
         """ Convert an action from the Environment space

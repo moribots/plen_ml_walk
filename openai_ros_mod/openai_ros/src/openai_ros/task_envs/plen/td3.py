@@ -150,7 +150,7 @@ class ReplayBuffer(object):
         Args:
             batch_size (int): size of sample
         """
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
         ind = np.random.randint(0, len(self.storage), size=batch_size)
         states, actions, next_states, rewards, dones = [], [], [], [], []
@@ -198,7 +198,7 @@ class TD3Agent(object):
                  noise_clip=0.5,
                  policy_freq=2):
 
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
         self.actor = Actor(state_dim, action_dim, max_action).to(self.device)
         self.actor_target = copy.deepcopy(self.actor)
