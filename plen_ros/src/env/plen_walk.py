@@ -1,17 +1,16 @@
 import rospy
 import numpy as np
+# Gym
 from gym import spaces
-from openai_ros.robot_envs import plen_env
 from gym.envs.registration import register
+# PLEN Environment
+from .plen_env import PlenEnv
+# Gazebo/ROS
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Vector3
 from gazebo_msgs.msg import ContactsState
 from sensor_msgs.msg import JointState
 from tf.transformations import euler_from_quaternion
-from openai_ros.task_envs.task_commons import LoadYamlFileParamsTest
-from openai_ros.openai_ros_common import ROSLauncher
-import os
-import time
 
 register(
     id='PlenWalkEnv-v0',
@@ -20,29 +19,12 @@ register(
 )
 
 
-class PlenWalkEnv(plen_env.PlenEnv):
+class PlenWalkEnv(PlenEnv):
     def __init__(self):
         """
         Make PLEN learn how to Walk
         """
         rospy.logdebug("Start PlenWalkEnv INIT...")
-
-        # This is the path where the simulation files, the Task and the Robot gits will be downloaded if not there
-        # ros_ws_abspath = rospy.get_param("/plen/ros_ws_abspath", None)
-        # assert ros_ws_abspath is not None, "You forgot to set ros_ws_abspath in your yaml file of your main RL script. Set ros_ws_abspath: \'YOUR/SIM_WS/PATH\'"
-        # assert os.path.exists(ros_ws_abspath), "The Simulation ROS Workspace path " + ros_ws_abspath + \
-        #                                        " DOESNT exist, execute: mkdir -p " + ros_ws_abspath + \
-        #                                        "/src;cd " + ros_ws_abspath + ";catkin_make"
-
-        # ROSLauncher(rospackage_name="legged_robots_sims",
-        #             launch_file_name="start_world.launch",
-        #             ros_ws_abspath=ros_ws_abspath)
-
-        # Load Params from the desired Yaml file
-        # LoadYamlFileParamsTest(rospackage_name="openai_ros",
-        #                        rel_path_from_package_to_file=
-        #                        "src/openai_ros/task_envs/plen/config",
-        #                        yaml_file_name="plen_walk.yaml")
 
         # How long to step the simulation for (sec)
         self.running_step = 0.05

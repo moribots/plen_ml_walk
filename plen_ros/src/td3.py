@@ -7,7 +7,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import gym
 import os
-from time import sleep
 
 # Twin Delayed Deterministic Policy Gradient
 

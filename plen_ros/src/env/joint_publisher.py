@@ -3,8 +3,6 @@
 import rospy
 import numpy as np
 import time
-import math
-from std_msgs.msg import String
 from std_msgs.msg import Float64
 
 

@@ -3,8 +3,9 @@ import gym
 from gym.utils import seeding
 from .gazebo_connection import GazeboConnection
 from .controllers_connection import ControllersConnection
+
 #https://bitbucket.org/theconstructcore/theconstruct_msgs/src/master/msg/RLExperimentInfo.msg
-from openai_ros.msg import RLExperimentInfo
+# from openai_ros.msg import RLExperimentInfo - CHANGE THIS TO NORMAL MESSAGE IMPORT
 
 
 # https://github.com/openai/gym/blob/master/gym/core.py
@@ -28,7 +29,8 @@ class RobotGazeboEnv(gym.Env):
         # Set up ROS related variables
         self.episode_num = 0
         self.cumulated_episode_reward = 0
-        self.reward_pub = rospy.Publisher('/openai/reward',
+        self.reward_pub = rospy.Publisher('/' + self.robot_name_space +
+                                          '/reward',
                                           RLExperimentInfo,
                                           queue_size=1)
 

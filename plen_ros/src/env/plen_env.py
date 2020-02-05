@@ -1,19 +1,23 @@
 import numpy
 import rospy
 import time
-from openai_ros import robot_gazebo_env
+
+# Parent Robot Environment for Gym
+from .robot_gazebo_env import RobotGazeboEnv
+
+# Joint Publisher
+from .joint_publisher import JointPub
+
 from gazebo_msgs.msg import ContactsState
 from sensor_msgs.msg import Imu
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import JointState
-from openai_ros.openai_ros_common import ROSLauncher
-from openai_ros.task_envs.plen.joint_publisher import JointPub
 
 
-class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
+class PlenEnv(RobotGazeboEnv):
     """Superclass for all PlenEnv environments.
     """
-    def __init__(self, ros_ws_abspath):
+    def __init__(self):
         """
         Initializes a new PlenEnv environment.
 
@@ -63,13 +67,9 @@ class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
         """
         rospy.logdebug("Start PlenEnv INIT...")
 
-        # We launch the ROSlaunch that spawns the robot into the world
-        # ROSLauncher(rospackage_name="plen_ros",
-        #             launch_file_name="gazebo_plen.launch",
-        #             ros_ws_abspath=ros_ws_abspath)
-
         # Variables that we give through the constructor of the
         # Parent Class (RobotGazeboEnv).
+
         """ JOINT ACTUATORS (PUB)
         """
         self.joints = JointPub()
