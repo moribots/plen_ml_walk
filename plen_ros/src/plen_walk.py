@@ -28,21 +28,21 @@ class PlenWalkEnv(plen_env.PlenEnv):
         rospy.logdebug("Start PlenWalkEnv INIT...")
 
         # This is the path where the simulation files, the Task and the Robot gits will be downloaded if not there
-        ros_ws_abspath = rospy.get_param("/plen/ros_ws_abspath", None)
-        assert ros_ws_abspath is not None, "You forgot to set ros_ws_abspath in your yaml file of your main RL script. Set ros_ws_abspath: \'YOUR/SIM_WS/PATH\'"
-        assert os.path.exists(ros_ws_abspath), "The Simulation ROS Workspace path " + ros_ws_abspath + \
-                                               " DOESNT exist, execute: mkdir -p " + ros_ws_abspath + \
-                                               "/src;cd " + ros_ws_abspath + ";catkin_make"
+        # ros_ws_abspath = rospy.get_param("/plen/ros_ws_abspath", None)
+        # assert ros_ws_abspath is not None, "You forgot to set ros_ws_abspath in your yaml file of your main RL script. Set ros_ws_abspath: \'YOUR/SIM_WS/PATH\'"
+        # assert os.path.exists(ros_ws_abspath), "The Simulation ROS Workspace path " + ros_ws_abspath + \
+        #                                        " DOESNT exist, execute: mkdir -p " + ros_ws_abspath + \
+        #                                        "/src;cd " + ros_ws_abspath + ";catkin_make"
 
-        ROSLauncher(rospackage_name="legged_robots_sims",
-                    launch_file_name="start_world.launch",
-                    ros_ws_abspath=ros_ws_abspath)
+        # ROSLauncher(rospackage_name="legged_robots_sims",
+        #             launch_file_name="start_world.launch",
+        #             ros_ws_abspath=ros_ws_abspath)
 
         # Load Params from the desired Yaml file
-        LoadYamlFileParamsTest(rospackage_name="openai_ros",
-                               rel_path_from_package_to_file=
-                               "src/openai_ros/task_envs/plen/config",
-                               yaml_file_name="plen_walk.yaml")
+        # LoadYamlFileParamsTest(rospackage_name="openai_ros",
+        #                        rel_path_from_package_to_file=
+        #                        "src/openai_ros/task_envs/plen/config",
+        #                        yaml_file_name="plen_walk.yaml")
 
         # How long to step the simulation for (sec)
         self.running_step = 0.05

@@ -64,9 +64,9 @@ class PlenEnv(robot_gazebo_env.RobotGazeboEnv):
         rospy.logdebug("Start PlenEnv INIT...")
 
         # We launch the ROSlaunch that spawns the robot into the world
-        ROSLauncher(rospackage_name="plen_ros",
-                    launch_file_name="gazebo_plen.launch",
-                    ros_ws_abspath=ros_ws_abspath)
+        # ROSLauncher(rospackage_name="plen_ros",
+        #             launch_file_name="gazebo_plen.launch",
+        #             ros_ws_abspath=ros_ws_abspath)
 
         # Variables that we give through the constructor of the
         # Parent Class (RobotGazeboEnv).
