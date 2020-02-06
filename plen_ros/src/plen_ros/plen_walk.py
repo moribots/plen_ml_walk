@@ -424,7 +424,7 @@ class PlenWalkEnv(PlenEnv):
 
         return observations
 
-    def _is_done(self):
+    def _is_done(self, obs):
         """
         Decide if episode is done based on the observations
 
@@ -443,7 +443,7 @@ class PlenWalkEnv(PlenEnv):
             self.dead = False
         return done
 
-    def _compute_reward(self, done):
+    def _compute_reward(self, obs, done):
         """
         Return the reward based on the observations given
         """

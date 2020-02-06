@@ -78,14 +78,14 @@ class JointPub(object):
         self.init_pos = np.zeros(18)
 
         # Check Joint Publishers Ready
-        self.check_joints_connection
+        # self.check_joints_connection
 
     def set_init_pose(self):
         """
         Sets joints to initial position [0,0,0,...]
         :return:
         """
-        self.check_joints_connection()
+        # self.check_joints_connection()
         self.move_joints(self.init_pos)
 
     def check_joints_connection(self):
@@ -118,7 +118,7 @@ class JointPub(object):
                     epsilon=0.05,
                     update_rate=10,
                     time_sleep=0.05,
-                    check_position=True):
+                    check_position=False):
         """
         It will move the Plen Joints to the given Joint_Array values
         """
