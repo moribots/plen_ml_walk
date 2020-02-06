@@ -321,6 +321,10 @@ class PlenWalkEnv(PlenEnv):
         """
         Move the robot based on the action variable given
         """
+        # Pause
+        self.gazebo.pauseSim()
+
+        # Convert agent actions into real actions
         env_action = np.empty(18)
         for i in range(len(action)):
             # Convert action from [-1, 1] to real env values

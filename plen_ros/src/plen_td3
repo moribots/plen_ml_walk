@@ -1,0 +1,117 @@
+#!/usr/bin/env python
+
+import numpy as np
+import rospy
+import rospkg
+
+from .env import plen_walk
+from .td3 import Actor, Critic, ReplayBuffer, TD3Agent
+
+import gym
+import time
+import random
+from gym import wrappers
+import os
+
+
+def main():
+    """ The main() function. """
+
+    # YAML PARAMETERS
+    env_name = 0
+    seed = 0 
+    max_timesteps = 0 
+    start_timesteps = 0 
+    expl_noise = 0
+    batch_size = 0 
+    eval_freq = 0 
+    save_model = 0 
+    file_name="best_avg"
+
+    rospy.init_node('plen_gym', anonymous=True, log_level=rospy.INFO)
+
+    if not os.path.exists("./results"):
+        os.makedirs("./results")
+
+    if not os.path.exists("./models"):
+        os.makedirs("./models")
+
+    env = gym.make(env_name)
+
+    # Set seeds
+    env.seed(seed)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+
+    state_dim = env.observation_space.shape[0]
+    action_dim = env.action_space.shape[0]
+    max_action = float(env.action_space.high[0])
+
+    policy = TD3Agent(state_dim, action_dim, max_action)
+    replay_buffer = ReplayBuffer()
+
+    # Evaluate untrained policy and init list for storage
+    evaluations = [evaluate_policy(policy, env_name, seed, 1)]
+
+    state = env.reset()
+    done = False
+    episode_reward = 0
+    episode_timesteps = 0
+    episode_num = 0
+
+    for t in range(int(max_timesteps)):
+
+        episode_timesteps += 1
+
+        # Select action randomly or according to policy
+        # Random Action - no training yet, just storing in buffer
+        if t < start_timesteps:
+            action = env.action_space.sample()
+        else:
+            # According to policy + Exploraton Noise
+            action = (
+                policy.select_action(np.array(state))
+                + np.random.normal(0, max_action * expl_noise, size=action_dim)
+                ).clip(-max_action, max_action)
+
+        # Perform action
+        next_state, reward, done, _ = env.step(action)
+        done_bool = float(
+            done) if episode_timesteps < env._max_episode_steps else 0
+
+        # Store data in replay buffer
+        replay_buffer.add((state, action, next_state, reward, done_bool))
+
+        state = next_state
+        episode_reward += reward
+
+        # Train agent after collecting sufficient data for buffer
+        if t >= start_timesteps:
+            policy.train(replay_buffer, batch_size)
+
+        if done:
+            # +1 to account for 0 indexing.
+            # +0 on ep_timesteps since it will increment +1 even if done=True
+            print(
+                "Total T: {} Episode Num: {} Episode T: {} Reward: {}"
+                .format(t + 1, episode_num, episode_timesteps, episode_reward)
+            )
+            # Reset environment
+            state, done = env.reset(), False
+            episode_reward = 0
+            episode_timesteps = 0
+            episode_num += 1
+
+        # Evaluate episode
+        if (t + 1) % eval_freq == 0:
+            evaluations.append(evaluate_policy(policy, env_name, seed, 5, True))
+            np.save("./results/" + str(file_name), evaluations)
+            if save_model:
+                policy.save("./models/" + str(file_name))
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass

@@ -101,20 +101,6 @@ class PlenEnv(RobotGazeboEnv):
         # self.controllers_object.reset_controllers()
 
         self._check_all_systems_ready()
-        """ REPLACE BELOW WITH SENSORS
-        """
-        # We Start all the ROS related Subscribers and publishers
-        rospy.Subscriber("/odom", Odometry, self._odom_callback)
-        # We use the IMU for orientation and linearacceleration detection
-        rospy.Subscriber("/plen/imu/data", Imu, self._imu_callback)
-        # We use it to get the contact force, to know if its in the air or stumping too hard.
-        rospy.Subscriber("/plen/right_foot_contact", ContactsState,
-                         self._right_contact_callback)
-        rospy.Subscriber("/plen/left_foot_contact", ContactsState,
-                         self._left_contact_callback)
-        # We use it to get the joints positions and calculate the reward associated to it
-        rospy.Subscriber("/plen/joint_states", JointState,
-                         self._joints_state_callback)
 
         self.gazebo.pauseSim()
 
@@ -221,83 +207,10 @@ class PlenEnv(RobotGazeboEnv):
                 )
         return self.joint_states
 
-    def _odom_callback(self, data):
-        self.odom = data
-
-    def _imu_callback(self, data):
-        self.imu = data
-
-    def _right_contact_callback(self, data):
-        self.rightfoot_contactsensor_state = data
-
-    def _left_contact_callback(self, data):
-        self.leftfoot_contactsensor_state = data
-
-    def _joints_state_callback(self, data):
-        self.joint_states = data
-
     def _set_init_pose(self):
         """Sets the Robot in its init pose
         """
         self.joints.set_init_pose
-
-    def _init_env_variables(self):
-        """Inits variables needed to be initialised each time we reset at the start
-        of an episode. Gravity?
-        """
-        raise NotImplementedError()
-
-    def _compute_reward(self, observations, done):
-        """Calculates the reward to give based on the observations given.
-           Done in PLEN Task Env.
-        """
-        raise NotImplementedError()
-
-    def _set_action(self, action):
-        """Applies the given action to the simulation.
-        """
-        # Given the action selected by the learning algorithm,
-        # we perform the corresponding movement of the robot
-
-        # 1st, decide which action corresponsd to which joint is incremented
-        next_action_position = self.get_action_to_position(action)
-
-        # We move it to that pos
-        self.gazebo.unpauseSim()
-        self.joints.move_joints(next_action_position)
-        # Then we send the command to the robot and let it go
-        # for running_step seconds
-        time.sleep(self.running_step)
-        self.gazebo.pauseSim()
-
-        # We now process the latest data saved in the class state to calculate
-        # the state and the rewards. This way we guarantee that they work
-        # with the same exact data.
-        # Generate State based on observations
-        observation = self.plen_state_object.get_observations()
-
-        # finally we get an evaluation based on what happened in the sim
-        reward, done = self.plen_state_object.process_data()
-
-        # Get the State Discrete Stringuified version of the observations
-        state = self.get_state(observation)
-
-        return state, reward, done
-
-    def _get_obs(self):
-        """Returns the observation.
-           Done in Plen Task Env.
-        """
-        raise NotImplementedError()
-
-    def _is_done(self, observations):
-        """Checks if episode done based on observations given.
-           Done in Plen Task Env.
-        """
-        raise NotImplementedError()
-
-    # Methods that the TrainingEnvironment will need.
-    # ----------------------------
 
     def check_array_similar(self, ref_value_array, check_value_array, epsilon):
         """
@@ -306,22 +219,3 @@ class PlenEnv(RobotGazeboEnv):
         rospy.logdebug("ref_value_array=" + str(ref_value_array))
         rospy.logdebug("check_value_array=" + str(check_value_array))
         return numpy.allclose(ref_value_array, check_value_array, atol=epsilon)
-
-    def get_odom(self):
-        return self.odom
-
-    def get_imu(self):
-        return self.imu
-
-    def get_rightfoot_contactsensor_state(self):
-        return self.rightfoot_contactsensor_state
-
-    def get_leftfoot_contactsensor_state(self):
-        return self.leftfoot_contactsensor_state
-
-    def get_joint_states(self):
-        return self.joint_states
-
-
-if __name__ == "__main__":
-    rospy.logerr("THIS SCRIPT SHOULD NOT BE LAUNCHED AS MAIN")
