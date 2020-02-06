@@ -1,10 +1,12 @@
+#!/usr/bin/env python
+
 import rospy
 import numpy as np
 # Gym
 from gym import spaces
 from gym.envs.registration import register
 # PLEN Environment
-from .plen_env import PlenEnv
+from plen_ros.plen_env import PlenEnv
 # Gazebo/ROS
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Vector3
@@ -14,8 +16,8 @@ from tf.transformations import euler_from_quaternion
 
 register(
     id='PlenWalkEnv-v0',
-    entry_point='plen_walk:PlenWalkEnv',
-    timestep_limit=1000,  # Time Step Limit Per Episode
+    entry_point='plen_ros.plen_walk:PlenWalkEnv',
+    max_episode_steps=1000,  # Time Step Limit Per Episode
 )
 
 

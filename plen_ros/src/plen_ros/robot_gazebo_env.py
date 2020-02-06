@@ -1,9 +1,11 @@
+#!/usr/bin/env python
+
 import rospy
 import gym
 from gym.utils import seeding
-from .gazebo_connection import GazeboConnection
-from .controllers_connection import ControllersConnection
-from plen_ros.msg import RLExperimentInfo
+from plen_ros.gazebo_connection import GazeboConnection
+from plen_ros.controllers_connection import ControllersConnection
+from openai_ros.msg import RLExperimentInfo
 
 #https://bitbucket.org/theconstructcore/theconstruct_msgs/src/master/msg/RLExperimentInfo.msg
 # from openai_ros.msg import RLExperimentInfo - CHANGE THIS TO NORMAL MESSAGE IMPORT
@@ -106,24 +108,17 @@ class RobotGazeboEnv(gym.Env):
         increases the episode number by one.
         :return:
         """
-        rospy.loginfo("PUBLISHING REWARD...")
+        rospy.logwarn("PUBLISHING REWARD...")
         self._publish_reward_topic(self.cumulated_episode_reward,
-                                   self.cumulated_timesteps,
-                                   self.episode_timesteps,
                                    self.episode_num)
-        rospy.loginfo("PUBLISHING REWARD...DONE=" +
+        rospy.logwarn("PUBLISHING REWARD...DONE=" +
                       str(self.cumulated_episode_reward) + ",EP=" +
                       str(self.episode_num))
 
         self.episode_num += 1
         self.cumulated_episode_reward = 0
-        self.episodes_timesteps = 0
 
-    def _publish_reward_topic(self,
-                              reward,
-                              total_timesteps,
-                              episode_timesteps,
-                              episode_number=1):
+    def _publish_reward_topic(self, reward, episode_number=1):
         """
         This function publishes the given reward in the reward topic for
         easy access from ROS infrastructure.
@@ -132,8 +127,6 @@ class RobotGazeboEnv(gym.Env):
         :return:
         """
         reward_msg = RLExperimentInfo()
-        reward_msg.total_timesteps = total_timesteps
-        reward_msg.episode_timesteps = episode_timesteps
         reward_msg.episode_number = episode_number
         reward_msg.episode_reward = reward
         self.reward_pub.publish(reward_msg)

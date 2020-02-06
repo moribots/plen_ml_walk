@@ -2,39 +2,39 @@
 
 import numpy as np
 import rospy
-import rospkg
 
-from .env import plen_walk
-from .td3 import Actor, Critic, ReplayBuffer, TD3Agent
+from plen_ros.td3 import ReplayBuffer, TD3Agent, evaluate_policy
+
+from plen_ros import plen_walk
 
 import gym
-import time
-import random
-from gym import wrappers
+import torch
 import os
 
 
 def main():
     """ The main() function. """
 
+    rospy.loginfo("STARTING PLEN_TD3 NODE")
+
     # YAML PARAMETERS
-    env_name = 0
-    seed = 0 
-    max_timesteps = 0 
-    start_timesteps = 0 
-    expl_noise = 0
-    batch_size = 0 
-    eval_freq = 0 
-    save_model = 0 
-    file_name="best_avg"
+    env_name = "PlenWalkEnv-v0"
+    seed = 0
+    max_timesteps = 1e6
+    start_timesteps = 1e4
+    expl_noise = 0.1
+    batch_size = 100
+    eval_freq = 20e3
+    save_model = True
+    file_name = "plen_walk"
 
-    rospy.init_node('plen_gym', anonymous=True, log_level=rospy.INFO)
+    rospy.init_node('plen_td3', anonymous=True, log_level=rospy.INFO)
 
-    if not os.path.exists("./results"):
-        os.makedirs("./results")
+    if not os.path.exists("../results"):
+        os.makedirs("../results")
 
-    if not os.path.exists("./models"):
-        os.makedirs("./models")
+    if not os.path.exists("../models"):
+        os.makedirs("../models")
 
     env = gym.make(env_name)
 
@@ -59,6 +59,8 @@ def main():
     episode_timesteps = 0
     episode_num = 0
 
+    rospy.loginfo("STARTED PLEN_TD3 NODE")
+
     for t in range(int(max_timesteps)):
 
         episode_timesteps += 1
@@ -69,10 +71,9 @@ def main():
             action = env.action_space.sample()
         else:
             # According to policy + Exploraton Noise
-            action = (
-                policy.select_action(np.array(state))
-                + np.random.normal(0, max_action * expl_noise, size=action_dim)
-                ).clip(-max_action, max_action)
+            action = (policy.select_action(np.array(state)) + np.random.normal(
+                0, max_action * expl_noise, size=action_dim)).clip(
+                    -max_action, max_action)
 
         # Perform action
         next_state, reward, done, _ = env.step(action)
@@ -93,9 +94,8 @@ def main():
             # +1 to account for 0 indexing.
             # +0 on ep_timesteps since it will increment +1 even if done=True
             print(
-                "Total T: {} Episode Num: {} Episode T: {} Reward: {}"
-                .format(t + 1, episode_num, episode_timesteps, episode_reward)
-            )
+                "Total T: {} Episode Num: {} Episode T: {} Reward: {}".format(
+                    t + 1, episode_num, episode_timesteps, episode_reward))
             # Reset environment
             state, done = env.reset(), False
             episode_reward = 0
@@ -104,10 +104,10 @@ def main():
 
         # Evaluate episode
         if (t + 1) % eval_freq == 0:
-            evaluations.append(evaluate_policy(policy, env_name, seed, 5, True))
-            np.save("./results/" + str(file_name), evaluations)
+            evaluations.append(evaluate_policy(policy, env_name, seed, 1))
+            np.save("../results/" + str(file_name) + str(t), evaluations)
             if save_model:
-                policy.save("./models/" + str(file_name))
+                policy.save("../models/" + str(file_name) + str(t))
 
 
 if __name__ == '__main__':

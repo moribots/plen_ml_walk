@@ -1,0 +1,10 @@
+<launch>
+
+	<include file="$(find plen_ros)/launch/gazebo_plen.launch"/>
+	<include file="$(find plen_ros)/launch/controller.launch"/>
+
+	<!-- <rosparam command="load" file="$(find rigid2d)/config/odometer.yaml"/> -->
+
+	<!-- <node name="plen_td3" pkg="plen_ros" type="plen_td3"/> -->
+
+</launch>

@@ -395,11 +395,11 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
     """
     """
 
-    if not os.path.exists("./results"):
-        os.makedirs("./results")
+    if not os.path.exists("../results"):
+        os.makedirs("../results")
 
-    if not os.path.exists("./models"):
-        os.makedirs("./models")
+    if not os.path.exists("../models"):
+        os.makedirs("../models")
 
     env = gym.make(env_name)
 
@@ -434,10 +434,9 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
             action = env.action_space.sample()
         else:
             # According to policy + Exploraton Noise
-            action = (
-                policy.select_action(np.array(state))
-                + np.random.normal(0, max_action * expl_noise, size=action_dim)
-                ).clip(-max_action, max_action)
+            action = (policy.select_action(np.array(state)) + np.random.normal(
+                0, max_action * expl_noise, size=action_dim)).clip(
+                    -max_action, max_action)
 
         # Perform action
         next_state, reward, done, _ = env.step(action)
@@ -458,9 +457,8 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
             # +1 to account for 0 indexing.
             # +0 on ep_timesteps since it will increment +1 even if done=True
             print(
-                "Total T: {} Episode Num: {} Episode T: {} Reward: {}"
-                .format(t + 1, episode_num, episode_timesteps, episode_reward)
-            )
+                "Total T: {} Episode Num: {} Episode T: {} Reward: {}".format(
+                    t + 1, episode_num, episode_timesteps, episode_reward))
             # Reset environment
             state, done = env.reset(), False
             episode_reward = 0
@@ -469,10 +467,10 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
 
         # Evaluate episode
         if (t + 1) % eval_freq == 0:
-            evaluations.append(evaluate_policy(policy, env_name, seed, 5, True))
-            np.save("./results/" + str(file_name), evaluations)
+            evaluations.append(evaluate_policy(policy, env_name, seed, 1))
+            np.save("../results/" + str(file_name) + str(t), evaluations)
             if save_model:
-                policy.save("./models/" + str(file_name))
+                policy.save("../models/" + str(file_name) + str(t))
 
 
 if __name__ == "__main__":

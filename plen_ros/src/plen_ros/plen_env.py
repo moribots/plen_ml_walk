@@ -1,12 +1,14 @@
+#!/usr/bin/env python
+
 import numpy
 import rospy
 import time
 
 # Parent Robot Environment for Gym
-from .robot_gazebo_env import RobotGazeboEnv
+from plen_ros.robot_gazebo_env import RobotGazeboEnv
 
 # Joint Publisher
-from .joint_publisher import JointPub
+from plen_ros.joint_publisher import JointPub
 
 from gazebo_msgs.msg import ContactsState
 from sensor_msgs.msg import Imu
