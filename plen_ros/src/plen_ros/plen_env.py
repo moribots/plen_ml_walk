@@ -75,7 +75,7 @@ class PlenEnv(RobotGazeboEnv):
         """ JOINT ACTUATORS (PUB)
         """
         self.joints = JointPub()
-        self._check_all_publishers_ready()
+        # self._check_all_publishers_ready()
 
         # Namespace
         self.robot_name_space = "plen"
@@ -92,7 +92,7 @@ class PlenEnv(RobotGazeboEnv):
         # INTERFACE WITH PARENT CLASS USING SUPER
         # CHILD METHODS TAKE PRECEDENCE WITH DUPLICATES
         super(PlenEnv,
-              self).__init__(controllers_list=self.self.controllers_list,
+              self).__init__(controllers_list=self.controllers_list,
                              robot_name_space=self.robot_name_space,
                              reset_controls=False,
                              start_init_physics_parameters=False,
@@ -133,17 +133,17 @@ class PlenEnv(RobotGazeboEnv):
 
     def _check_odom_ready(self):
         self.odom = None
-        rospy.logdebug("Waiting for /odom to be READY...")
+        rospy.logdebug("Waiting for /plen/odom to be READY...")
         while self.odom is None and not rospy.is_shutdown():
             try:
-                self.odom = rospy.wait_for_message("/odom",
+                self.odom = rospy.wait_for_message("/plen/odom",
                                                    Odometry,
                                                    timeout=1.0)
-                rospy.logdebug("Current /odom READY=>")
+                rospy.logdebug("Current /plen/odom READY=>")
 
             except:
                 rospy.logerr(
-                    "Current /odom not ready yet, retrying for getting odom")
+                    "Current /plen/odom not ready yet, retrying for getting odom")
         return self.odom
 
     def _check_imu_ready(self):

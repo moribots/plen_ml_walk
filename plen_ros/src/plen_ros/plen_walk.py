@@ -124,17 +124,49 @@ class PlenWalkEnv(PlenEnv):
         self.lfs_min = 0
         self.lfs_max = 1
 
-        obs_low = np.array([
-            self.joints_low, self.joint_effort_low, self.torso_height_min,
-            self.torso_vx_min, self.torso_roll_min, self.torso_pitch_min,
-            self.torso_y_min, self.rfs_min, self.lfs_min
-        ])
+        # Getting creative with filling obs space due to specific format
+        obs_low = np.empty(43)
+        obs_high = np.empty(43)
 
-        obs_high = np.array([
-            self.joints_high, self.joint_effort_high, self.torso_height_max,
-            self.torso_vx_max, self.torso_roll_max, self.torso_pitch_max,
-            self.torso_y_max, self.rfs_max, self.lfs_max
-        ])
+        for i in range(18):
+            obs_low[i] = self.joints_low[i]
+            obs_low[i + 18] = self.joint_effort_low[i]
+            obs_high[i] = self.joints_high[i]
+            obs_high[i + 18] = self.joint_effort_high[i]
+
+        # Now fill the rest
+        obs_low[36] = self.torso_height_min
+        obs_high[36] = self.torso_height_max
+
+        obs_low[37] = self.torso_vx_min
+        obs_high[37] = self.torso_vx_max
+
+        obs_low[38] = self.torso_roll_min
+        obs_high[38] = self.torso_roll_max
+
+        obs_low[39] = self.torso_pitch_min
+        obs_high[39] = self.torso_pitch_max
+
+        obs_low[40] = self.torso_y_min
+        obs_high[40] = self.torso_y_max
+
+        obs_low[41] = self.rfs_min
+        obs_high[41] = self.rfs_max
+
+        obs_low[41] = self.lfs_min
+        obs_high[41] = self.lfs_max
+
+        # obs_low = np.array([
+        #     self.joints_low, self.joint_effort_low, self.torso_height_min,
+        #     self.torso_vx_min, self.torso_roll_min, self.torso_pitch_min,
+        #     self.torso_y_min, self.rfs_min, self.lfs_min
+        # ])
+
+        # obs_high = np.array([
+        #     self.joints_high, self.joint_effort_high, self.torso_height_max,
+        #     self.torso_vx_max, self.torso_roll_max, self.torso_pitch_max,
+        #     self.torso_y_max, self.rfs_max, self.lfs_max
+        # ])
 
         self.observation_space = spaces.Box(obs_low, obs_high)
 
@@ -178,7 +210,7 @@ class PlenWalkEnv(PlenEnv):
             self.left_contact_subscriber_callback)
 
         # Here we will add any init functions prior to starting the MyRobotEnv
-        super(PlenWalkEnv, self).__init__(ros_ws_abspath)
+        super(PlenWalkEnv, self).__init__()
 
         rospy.logdebug("END PlenWalkEnv INIT...")
 
@@ -186,12 +218,16 @@ class PlenWalkEnv(PlenEnv):
         """
             Returns cartesian position and orientation of torso middle
         """
-        self.torso_z = msg.pose.position.z
-        self.torso_y = msg.pose.position.y
-        roll, pitch, yaw = euler_from_quaternion(msg.pose.orientation)
+        self.torso_z = msg.pose.pose.position.z
+        self.torso_y = msg.pose.pose.position.y
+        quat = [
+            msg.pose.pose.orientation.x, msg.pose.pose.orientation.y,
+            msg.pose.pose.orientation.z, msg.pose.pose.orientation.w
+        ]
+        roll, pitch, yaw = euler_from_quaternion(quat)
         self.torso_roll = roll
         self.torso_pitch = pitch
-        self.torso_vx = msg.twist.linear.x
+        self.torso_vx = msg.twist.twist.linear.x
 
     def joint_state_subscriber_callback(self, msg):
         """
