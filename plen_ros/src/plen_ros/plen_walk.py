@@ -400,6 +400,28 @@ class PlenWalkEnv(PlenEnv):
             self.torso_roll, self.torso_pitch, self.torso_y,
             self.right_contact, self.left_contact
         ])
+
+        observations = np.empty(43)
+
+        for i in range(18):
+            observations[i] = self.joint_poses[i]
+            observations[i + 18] = self.joint_efforts[i]
+
+        # Now fill the rest
+        observations[36] = self.torso_z
+
+        observations[37] = self.torso_vx
+
+        observations[38] = self.torso_roll
+
+        observations[39] = self.torso_pitch
+
+        observations[40] = self.torso_y
+
+        observations[41] = self.right_contact
+
+        observations[41] = self.left_contact
+
         return observations
 
     def _is_done(self):

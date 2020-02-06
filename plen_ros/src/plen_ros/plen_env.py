@@ -94,8 +94,8 @@ class PlenEnv(RobotGazeboEnv):
         super(PlenEnv,
               self).__init__(controllers_list=self.controllers_list,
                              robot_name_space=self.robot_name_space,
-                             reset_controls=False,
-                             start_init_physics_parameters=False,
+                             reset_controls=True,
+                             start_init_physics_parameters=True,
                              reset_world_or_sim="WORLD")
 
         rospy.logdebug("PlenEnv unpause...")
