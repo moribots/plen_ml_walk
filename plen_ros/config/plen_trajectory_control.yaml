@@ -29,27 +29,28 @@ plen:
 
     gains:
       # RIGHT LEG:
-      rb_servo_r_hip: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      r_hip_r_thigh: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      r_thigh_r_knee: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      r_knee_r_shin: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      r_shin_r_ankle: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      r_ankle_r_foot: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      rb_servo_r_hip: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      r_hip_r_thigh: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      r_thigh_r_knee: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      r_knee_r_shin: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      r_shin_r_ankle: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      r_ankle_r_foot: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
       # LEFT LEG:
-      lb_servo_l_hip: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      l_hip_l_thigh: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      l_thigh_l_knee: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      l_knee_l_shin: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      l_shin_l_ankle: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      l_ankle_l_foot: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      lb_servo_l_hip: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      l_hip_l_thigh: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      l_thigh_l_knee: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      l_knee_l_shin: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      l_shin_l_ankle: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      l_ankle_l_foot: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
       # RIGHT ARM:
-      torso_r_shoulder: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      r_shoulder_rs_servo: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      re_servo_r_elbow: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      torso_r_shoulder: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      r_shoulder_rs_servo: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      re_servo_r_elbow: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
       # LEFT ARM:
-      torso_l_shoulder: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      l_shoulder_ls_servo: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
-      le_servo_l_elbow: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      torso_l_shoulder: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      l_shoulder_ls_servo: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+      le_servo_l_elbow: {p: 4.0, i: 0.002, d: 0.0023, i_clamp: 100}
+
 
     # RIGHT LEG:
     # Joint 1 name: rb_servo_r_hip
@@ -78,5 +79,3 @@ plen:
     # Joint 18 name: le_servo_l_elbow
 
     # TOTAL: 18
-    # {pro: 3.0, int: 0.001, der: 0.0022}
-    # Position Controllers ---------------------------------------
