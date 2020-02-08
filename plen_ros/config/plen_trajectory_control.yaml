@@ -1,0 +1,82 @@
+plen:
+  # Publish all joint states -----------------------------------
+  joint_trajectory_controller:
+    type: effort_controllers/JointTrajectoryController
+
+    joints:
+      # RIGHT LEG:
+      - rb_servo_r_hip
+      - r_hip_r_thigh
+      - r_thigh_r_knee
+      - r_knee_r_shin
+      - r_shin_r_ankle
+      - r_ankle_r_foot
+      # LEFT LEG:
+      - lb_servo_l_hip
+      - l_hip_l_thigh
+      - l_thigh_l_knee
+      - l_knee_l_shin
+      - l_shin_l_ankle
+      - l_ankle_l_foot
+      # RIGHT ARM:
+      - torso_r_shoulder
+      - r_shoulder_rs_servo
+      - re_servo_r_elbow
+      # LEFT ARM:
+      - torso_l_shoulder
+      - l_shoulder_ls_servo
+      - le_servo_l_elbow
+
+    gains:
+      # RIGHT LEG:
+      rb_servo_r_hip: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      r_hip_r_thigh: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      r_thigh_r_knee: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      r_knee_r_shin: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      r_shin_r_ankle: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      r_ankle_r_foot: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      # LEFT LEG:
+      lb_servo_l_hip: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      l_hip_l_thigh: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      l_thigh_l_knee: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      l_knee_l_shin: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      l_shin_l_ankle: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      l_ankle_l_foot: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      # RIGHT ARM:
+      torso_r_shoulder: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      r_shoulder_rs_servo: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      re_servo_r_elbow: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      # LEFT ARM:
+      torso_l_shoulder: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      l_shoulder_ls_servo: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+      le_servo_l_elbow: {p: 4.0, i: 0.001, d: 0.0023, i_clamp: 100}
+
+    # RIGHT LEG:
+    # Joint 1 name: rb_servo_r_hip
+    # Joint 2 name: r_hip_r_thigh
+    # Joint 3 name: r_thigh_r_knee
+    # Joint 4 name: r_knee_r_shin
+    # Joint 5 name: r_shin_r_ankle
+    # Joint 6 name: r_ankle_r_foot
+
+    # LEFT LEG:
+    # Joint 7 name: lb_servo_l_hip
+    # Joint 8 name: l_hip_l_thigh
+    # Joint 9 name: l_thigh_l_knee
+    # Joint 10 name: l_knee_l_shin
+    # Joint 11 name: l_shin_l_ankle
+    # Joint 12 name: l_ankle_l_foot
+
+    # RIGHT ARM:
+    # Joint 13 name: torso_r_shoulder
+    # Joint 14 name: r_shoulder_rs_servo
+    # Joint 15 name: re_servo_r_elbow
+
+    # LEFT ARM:
+    # Joint 16 name: torso_l_shoulder
+    # Joint 17 name: l_shoulder_ls_servo
+    # Joint 18 name: le_servo_l_elbow
+
+    # TOTAL: 18
+    # {pro: 3.0, int: 0.001, der: 0.0022}
+    # Position Controllers ---------------------------------------

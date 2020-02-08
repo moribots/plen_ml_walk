@@ -1,0 +1,20 @@
+<launch>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find plen_ros)/config/plen_trajectory_control.yaml" command="load"/>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam command="load" file="$(find plen_ros)/config/plen_trajectory_control.yaml"/>
+
+  <!-- load the controllers joint_trajectory_controller-->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/plen" args="joint_trajectory_controller"/>
+
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <remap from="/joint_states" to="/plen/joint_states" />
+    <param name="publish_frequency" type="double" value="60.0" />
+  </node>
+
+</launch>

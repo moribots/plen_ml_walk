@@ -1,9 +1,21 @@
 <launch>
 
-	<include file="$(find plen_ros)/launch/gazebo_plen.launch"/>
-	<include file="$(find plen_ros)/launch/controller.launch"/>
+	<arg name="paused" default="true"/>
+	<arg name="use_sim_time" default="true"/>
+	<arg name="gui" default="true"/>
+	<arg name="headless" default="false"/>
+	<arg name="debug" default="false"/>
 
-	<!-- <rosparam command="load" file="$(find rigid2d)/config/odometer.yaml"/> -->
+	<include file="$(find plen_ros)/launch/gazebo_plen.launch">
+		<arg name="debug" value="$(arg debug)" />
+	    <arg name="gui" value="$(arg gui)" />
+	    <arg name="paused" value="$(arg paused)"/>
+	    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+	    <arg name="headless" value="$(arg headless)"/>
+	</include>
+
+
+	<include file="$(find plen_ros)/launch/traj_controller.launch"/>
 
 	<!-- <node name="plen_td3" pkg="plen_ros" type="plen_td3"/> -->
 

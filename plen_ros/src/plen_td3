@@ -10,6 +10,7 @@ from plen_ros import plen_walk
 import gym
 import torch
 import os
+import time
 
 
 def main():
@@ -62,6 +63,8 @@ def main():
     rospy.loginfo("STARTED PLEN_TD3 NODE")
 
     for t in range(int(max_timesteps)):
+
+        # time.sleep(1)
 
         episode_timesteps += 1
 
