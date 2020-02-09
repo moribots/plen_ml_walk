@@ -366,7 +366,7 @@ def evaluate_policy(policy, eval_env, seed, eval_episodes=10, render=False):
 
     """
     # eval_env = gym.make(env_name)
-    eval_env.seed(seed + 100)
+    # eval_env.seed(seed + 100)
 
     avg_reward = 0.
     for _ in range(eval_episodes):
