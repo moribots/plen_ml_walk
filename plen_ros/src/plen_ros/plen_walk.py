@@ -291,10 +291,12 @@ class PlenWalkEnv(PlenEnv):
         # Contact Force Magnitude
         force_magnitude = np.linalg.norm(contact_force_np)
 
-        if force_magnitude > 4.8559 / 2.0:
+        if force_magnitude > 4.8559 / 3.0:
             self.right_contact = 1
+            rospy.logdebug("RIGHT FOOT CONTACT")
         else:
             self.right_contact = 0
+            # rospy.logdebug("RIGHT FOOT NO CONTACT")
 
     def left_contact_subscriber_callback(self, msg):
         """
@@ -315,10 +317,12 @@ class PlenWalkEnv(PlenEnv):
         # Contact Force Magnitude
         force_magnitude = np.linalg.norm(contact_force_np)
 
-        if force_magnitude > 4.8559 / 2.0:
+        if force_magnitude > 4.8559 / 3.0:
             self.left_contact = 1
+            rospy.logdebug("LEFT FOOT CONTACT")
         else:
             self.left_contact = 0
+            # rospy.logdebug("LEFT FOOT NO CONTACT")
 
     def env_to_agent(self, env_range, env_val):
         """ Convert an action from the Environment space
