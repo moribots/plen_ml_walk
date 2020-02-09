@@ -62,12 +62,12 @@ class PlenWalkEnv(PlenEnv):
         self.reward_range = (-np.inf, np.inf)
 
         # Reward for being alive
-        self.alive_reward = 2.
+        self.alive_reward = 10.
         # Reward for forward velocity
-        self.vel_weight = 2.
+        self.vel_weight = 10.
         # Reward for maintaining original height
         self.init_height = 0.158
-        self.height_weight = 50.
+        self.height_weight = 10.
         # Reward for staying on x axis
         self.straight_weight = 10
         # Reward staying upright
@@ -379,7 +379,7 @@ class PlenWalkEnv(PlenEnv):
         # Move Joints
         self.joints.move_joints(env_action)
         # Let run for running_step seconds
-        # time.sleep(self.running_step)
+        rospy.sleep(self.running_step)
         # Pause
         self.gazebo.pauseSim()
 
@@ -458,8 +458,8 @@ class PlenWalkEnv(PlenEnv):
         # Reward for forward velocity
         reward += np.exp(self.torso_vx) * self.vel_weight
         # Reward for maintaining original height
-        reward -= (np.abs(self.init_height -
-                          self.torso_z))**2 * self.height_weight
+        reward -= np.exp((np.abs(self.init_height -
+                          self.torso_z))**2) * self.height_weight
         # Reward for staying on x axis
         reward -= (np.abs(self.torso_y))**2 * self.straight_weight
         # Reward staying upright

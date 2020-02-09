@@ -15,6 +15,8 @@
 
 	<include file="$(find plen_ros)/launch/traj_controller.launch"/>
 
-	<!-- <node name="plen_td3" pkg="plen_ros" type="plen_td3"/> -->
-
+	<arg name="td3" default="False"/>
+	<group if="$(arg td3)">
+	  <node name="plen_td3" pkg="plen_ros" type="plen_td3"/>
+	</group>
 </launch>

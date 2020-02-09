@@ -352,7 +352,7 @@ class TD3Agent(object):
 
 # Runs policy for X episodes and returns average reward
 # A fixed seed is used for the eval environment
-def evaluate_policy(policy, env_name, seed, eval_episodes=10, render=False):
+def evaluate_policy(policy, eval_env, seed, eval_episodes=10, render=False):
     """run several episodes using the best agent policy
 
         Args:
@@ -365,7 +365,7 @@ def evaluate_policy(policy, env_name, seed, eval_episodes=10, render=False):
             avg_reward (float): average reward over the number of evaluations
 
     """
-    eval_env = gym.make(env_name)
+    # eval_env = gym.make(env_name)
     eval_env.seed(seed + 100)
 
     avg_reward = 0.
