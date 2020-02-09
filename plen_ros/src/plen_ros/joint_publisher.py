@@ -4,6 +4,7 @@ import rospy
 import numpy as np
 import time
 from std_msgs.msg import Float64
+from sensor_msgs.msg import JointState
 
 
 class JointPub(object):
@@ -200,7 +201,3 @@ class JointPub(object):
                     "Current /plen/joint_states not ready yet, retrying for getting joint_states"
                 )
         return self.joint_states
-
-
-if __name__ == "__main__":
-    rospy.logerr("THIS SCRIPT SHOULD NOT BE LAUNCHED AS MAIN")

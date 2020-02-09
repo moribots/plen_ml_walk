@@ -345,7 +345,7 @@ class PlenWalkEnv(PlenEnv):
     def _set_init_pose(self):
         """Sets the Robot in its init pose
         """
-        self.joints.set_init_pose
+        self.joints.set_init_pose(self.init_pose)
 
     def _init_env_variables(self):
         """

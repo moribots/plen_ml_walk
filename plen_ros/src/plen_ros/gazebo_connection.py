@@ -4,8 +4,10 @@ import rospy
 from std_srvs.srv import Empty
 from gazebo_msgs.msg import ODEPhysics
 from gazebo_msgs.srv import SetPhysicsProperties, SetPhysicsPropertiesRequest
+from gazebo_msgs.srv import SetModelConfiguration, SetModelConfigurationRequest
 from std_msgs.msg import Float64
 from geometry_msgs.msg import Vector3
+import numpy as np
 
 
 class GazeboConnection():
@@ -14,6 +16,8 @@ class GazeboConnection():
                  reset_world_or_sim,
                  max_retry=20):
 
+        self.model_config_proxy = rospy.ServiceProxy(
+            '/gazebo/set_model_configuration', SetModelConfiguration)
         self._max_retry = max_retry
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
@@ -35,6 +39,14 @@ class GazeboConnection():
         self.init_values()
         # We always pause the simulation, important for legged robots learning
         self.pauseSim()
+
+    def reset_joints(self, joints_list, model_name):
+        config = SetModelConfigurationRequest()
+        config.model_name = model_name
+        config.urdf_param_name = 'robot_description'
+        config.joint_names = joints_list
+        config.joint_positions = np.zeros(len(config.joint_names))
+        self.model_config_proxy(config)
 
     def pauseSim(self):
         rospy.logdebug("PAUSING service found...")

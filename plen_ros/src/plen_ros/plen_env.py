@@ -8,7 +8,7 @@ import time
 from plen_ros.robot_gazebo_env import RobotGazeboEnv
 
 # Joint Publisher
-from plen_ros.joint_publisher import JointPub
+from plen_ros.joint_traj_publisher import JointTrajPub
 
 from gazebo_msgs.msg import ContactsState
 from sensor_msgs.msg import Imu
@@ -72,31 +72,43 @@ class PlenEnv(RobotGazeboEnv):
         # Variables that we give through the constructor of the
         # Parent Class (RobotGazeboEnv).
 
-        """ JOINT ACTUATORS (PUB)
-        """
-        self.joints = JointPub()
         # self._check_all_publishers_ready()
 
         # Namespace
         self.robot_name_space = "plen"
         self.controllers_list = [
-            'joint_state_controller', '/plen/j1_pc', '/plen/j2_pc',
-            '/plen/j3_pc', '/plen/j4_pc', '/plen/j5_pc', '/plen/j6_pc',
-            '/plen/j7_pc', '/plen/j8_pc', '/plen/j9_pc', '/plen/j10_pc',
-            '/plen/j11_pc', '/plen/j12_pc', '/plen/j13_pc', '/plen/j14_pc',
-            '/plen/j15_pc', '/plen/j16_pc', '/plen/j17_pc', '/plen/j18_pc'
+            'rb_servo_r_hip', 'r_hip_r_thigh', 'r_thigh_r_knee',
+            'r_knee_r_shin', 'r_shin_r_ankle', 'r_ankle_r_foot',
+            'lb_servo_l_hip', 'l_hip_l_thigh', 'l_thigh_l_knee',
+            'l_knee_l_shin', 'l_shin_l_ankle', 'l_ankle_l_foot',
+            'torso_r_shoulder', 'r_shoulder_rs_servo', 're_servo_r_elbow',
+            'torso_l_shoulder', 'l_shoulder_ls_servo', 'le_servo_l_elbow'
         ]
+        self.controllers_string = "rb_servo_r_hip r_hip_r_thigh" + \
+                                  "r_thigh_r_knee r_knee_r_shin" + \
+                                  "r_shin_r_ankle r_ankle_r_foot" + \
+                                  "lb_servo_l_hip l_hip_l_thigh" + \
+                                  "l_thigh_l_knee l_knee_l_shin" + \
+                                  "l_shin_l_ankle l_ankle_l_foot" + \
+                                  "torso_r_shoulder" + \
+                                  "r_shoulder_rs_servo" + \
+                                  "re_servo_r_elbow torso_l_shoulder" + \
+                                  "l_shoulder_ls_servo le_servo_l_elbow"
+        """ JOINT ACTUATORS (PUB)
+        """
+        self.joints = JointTrajPub(self.controllers_list,
+                                   self.controllers_string)
+        self.init_pose = self.joints.jtp_zeros
 
         # We launch the init function of the
         # Parent Class robot_gazebo_env.RobotGazeboEnv
         # INTERFACE WITH PARENT CLASS USING SUPER
         # CHILD METHODS TAKE PRECEDENCE WITH DUPLICATES
-        super(PlenEnv,
-              self).__init__(controllers_list=self.controllers_list,
-                             robot_name_space=self.robot_name_space,
-                             reset_controls=True,
-                             start_init_physics_parameters=True,
-                             reset_world_or_sim="WORLD")
+        super(PlenEnv, self).__init__(controllers_list=self.controllers_list,
+                                      robot_name_space=self.robot_name_space,
+                                      reset_controls=True,
+                                      start_init_physics_parameters=True,
+                                      reset_world_or_sim="WORLD")
 
         rospy.logdebug("PlenEnv unpause...")
         self.gazebo.unpauseSim()
@@ -110,6 +122,11 @@ class PlenEnv(RobotGazeboEnv):
 
     # Methods needed by the RobotGazeboEnv
     # ----------------------------
+
+    def _set_init_pose(self):
+        """Sets the Robot in its init pose
+        """
+        self.joints.set_init_pose(self.init_pose)
 
     def _check_all_systems_ready(self):
         """
@@ -142,8 +159,8 @@ class PlenEnv(RobotGazeboEnv):
                 rospy.logdebug("Current /plen/odom READY=>")
 
             except:
-                rospy.logerr(
-                    "Current /plen/odom not ready yet, retrying for getting odom")
+                rospy.logerr("Current /plen/odom not ready yet, " +
+                             "retrying for getting odom")
         return self.odom
 
     def _check_imu_ready(self):
@@ -157,9 +174,8 @@ class PlenEnv(RobotGazeboEnv):
                 rospy.logdebug("Current /plen/imu/data READY=>")
 
             except:
-                rospy.logerr(
-                    "Current /plen/imu/data not ready yet, retrying for getting imu"
-                )
+                rospy.logerr("Current /plen/imu/data not ready yet," +
+                             "retrying for getting imu")
         return self.imu
 
     def _check_rightfoot_contactsensor_state_ready(self):
@@ -174,8 +190,8 @@ class PlenEnv(RobotGazeboEnv):
 
             except:
                 rospy.logerr(
-                    "Current /plen/right_foot_contact not ready yet, retrying for getting /plen/right_foot_contact"
-                )
+                    "Current /plen/right_foot_contact not ready yet," +
+                    "retrying for getting /plen/right_foot_contact")
         return self.rightfoot_contactsensor_state
 
     def _check_leftfoot_contactsensor_state_ready(self):
@@ -189,9 +205,8 @@ class PlenEnv(RobotGazeboEnv):
                 rospy.logdebug("Current /plen/left_foot_contact READY=>")
 
             except:
-                rospy.logerr(
-                    "Current /plen/left_foot_contact not ready yet, retrying for getting /plen/left_foot_contact"
-                )
+                rospy.logerr("Current /plen/left_foot_contact not ready yet," +
+                             "retrying for getting /plen/left_foot_contact")
         return self.rightfoot_contactsensor_state
 
     def _check_joint_states_ready(self):
@@ -204,20 +219,6 @@ class PlenEnv(RobotGazeboEnv):
                 rospy.logdebug("Current /plen/joint_states READY=>")
 
             except:
-                rospy.logerr(
-                    "Current /plen/joint_states not ready yet, retrying for getting joint_states"
-                )
+                rospy.logerr("Current /plen/joint_states not ready yet," +
+                             "retrying for getting joint_states")
         return self.joint_states
-
-    def _set_init_pose(self):
-        """Sets the Robot in its init pose
-        """
-        self.joints.set_init_pose
-
-    def check_array_similar(self, ref_value_array, check_value_array, epsilon):
-        """
-        It checks if the check_value id similar to the ref_value
-        """
-        rospy.logdebug("ref_value_array=" + str(ref_value_array))
-        rospy.logdebug("check_value_array=" + str(check_value_array))
-        return numpy.allclose(ref_value_array, check_value_array, atol=epsilon)

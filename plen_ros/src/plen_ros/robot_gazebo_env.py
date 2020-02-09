@@ -137,19 +137,42 @@ class RobotGazeboEnv(gym.Env):
     def _reset_sim(self):
         """Resets a simulation
         """
-        rospy.logdebug("RESET SIM START")
+        rospy.logerr("RESETTING")
         if self.reset_controls:
             rospy.logdebug("RESET CONTROLLERS")
             self.gazebo.unpauseSim()
             self.controllers_object.reset_controllers()
             self._check_all_systems_ready()
             self._set_init_pose()
+            rospy.sleep(1)
             self.gazebo.pauseSim()
             self.gazebo.resetSim()
             self.gazebo.unpauseSim()
             self.controllers_object.reset_controllers()
             self._check_all_systems_ready()
             self.gazebo.pauseSim()
+
+            """
+            rospy.logdebug("RESET CONTROLLERS")
+            self.gazebo.unpauseSim()
+            self.controllers_object.switch_controllers(
+                controllers_on=[],
+                controllers_off=self.controllers_object.controllers_list)
+            self.gazebo.pauseSim()
+            self.gazebo.reset_joints(self.controllers_object.controllers_list,
+                                     self.robot_name_space)
+            self.gazebo.unpauseSim()
+            self._check_all_systems_ready()
+            self.gazebo.pauseSim()
+            self.gazebo.resetSim()
+            self.gazebo.unpauseSim()
+            self.controllers_object.switch_controllers(
+                controllers_on=self.controllers_object.controllers_list,
+                controllers_off=[])
+            self._check_all_systems_ready()
+            self._set_init_pose()
+            self.gazebo.pauseSim()
+            """
 
         else:
             rospy.logwarn("DONT RESET CONTROLLERS")

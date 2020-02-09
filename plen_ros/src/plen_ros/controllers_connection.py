@@ -78,7 +78,3 @@ class ControllersConnection():
             rospy.logdebug("result_off_ok==>" + str(result_off_ok))
 
         return reset_result
-
-    def update_controllers_list(self, new_controllers_list):
-
-        self.controllers_list = new_controllers_list
