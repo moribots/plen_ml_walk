@@ -416,7 +416,7 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
     replay_buffer = ReplayBuffer()
 
     # Evaluate untrained policy and init list for storage
-    evaluations = [evaluate_policy(policy, env_name, seed, 1)]
+    evaluations = [evaluate_policy(policy, env, seed, 1)]
 
     state = env.reset()
     done = False
@@ -467,8 +467,8 @@ def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
 
         # Evaluate episode
         if (t + 1) % eval_freq == 0:
-            evaluations.append(evaluate_policy(policy, env_name, seed, 1))
-            np.save("../results/" + str(file_name) + str(t), evaluations)
+            evaluations.append(evaluate_policy(policy, env, seed, 1))
+            np.save("../results/" + str(file_name), evaluations)
             if save_model:
                 policy.save("../models/" + str(file_name) + str(t))
 
