@@ -108,11 +108,11 @@ class RobotGazeboEnv(gym.Env):
         increases the episode number by one.
         :return:
         """
-        rospy.logwarn("PUBLISHING REWARD...")
+        rospy.logdebug("PUBLISHING REWARD...")
         self._publish_reward_topic(self.cumulated_episode_reward,
                                    self.episode_num)
-        rospy.logwarn("PUBLISHING REWARD...DONE=" +
-                      str(self.cumulated_episode_reward) + ",EP=" +
+        rospy.logwarn("EPISODE REWARD = " +
+                      str(self.cumulated_episode_reward) + ", EP = " +
                       str(self.episode_num))
 
         self.episode_num += 1
@@ -137,6 +137,7 @@ class RobotGazeboEnv(gym.Env):
     def _reset_sim(self):
         """Resets a simulation
         """
+        rospy.loginfo("---------------------------------------")
         rospy.logerr("RESETTING")
         if self.reset_controls:
             rospy.logdebug("RESET CONTROLLERS")
@@ -144,7 +145,7 @@ class RobotGazeboEnv(gym.Env):
             self.controllers_object.reset_controllers()
             self._check_all_systems_ready()
             self._set_init_pose()
-            rospy.sleep(1)
+            rospy.sleep(0.2)
             self.gazebo.pauseSim()
             self.gazebo.resetSim()
             self.gazebo.unpauseSim()

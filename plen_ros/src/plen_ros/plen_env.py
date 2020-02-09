@@ -143,7 +143,7 @@ class PlenEnv(RobotGazeboEnv):
     def _check_all_sensors_ready(self):
         rospy.logdebug("START ALL SENSORS READY")
         self._check_odom_ready()
-        self._check_imu_ready()
+        # self._check_imu_ready()
         self._check_rightfoot_contactsensor_state_ready()
         self._check_joint_states_ready()
         rospy.logdebug("ALL SENSORS READY")

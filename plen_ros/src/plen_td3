@@ -10,7 +10,6 @@ from plen_ros import plen_walk
 import gym
 import torch
 import os
-import time
 
 
 def main():
@@ -18,24 +17,24 @@ def main():
 
     rospy.loginfo("STARTING PLEN_TD3 NODE")
 
-    # YAML PARAMETERS
+    # TRAINING PARAMETERS
     env_name = "PlenWalkEnv-v0"
     seed = 0
     max_timesteps = 1e6
     start_timesteps = 1e4
     expl_noise = 0.1
     batch_size = 100
-    eval_freq = 20e3
+    eval_freq = 5e3
     save_model = True
     file_name = "plen_walk"
 
     rospy.init_node('plen_td3', anonymous=True, log_level=rospy.INFO)
 
-    if not os.path.exists("../results"):
-        os.makedirs("../results")
+    if not os.path.exists("./results"):
+        os.makedirs("./results")
 
-    if not os.path.exists("../models"):
-        os.makedirs("../models")
+    if not os.path.exists("./models"):
+        os.makedirs("./models")
 
     env = gym.make(env_name)
 
@@ -107,10 +106,10 @@ def main():
 
         # Evaluate episode
         if (t + 1) % eval_freq == 0:
-            evaluations.append(evaluate_policy(policy, env_name, seed, 1))
-            np.save("../results/" + str(file_name) + str(t), evaluations)
+            evaluations.append(evaluate_policy(policy, env_name, seed, 5))
+            np.save("./results/" + str(file_name) + str(t), evaluations)
             if save_model:
-                policy.save("../models/" + str(file_name) + str(t))
+                policy.save("./models/" + str(file_name) + str(t))
 
 
 if __name__ == '__main__':

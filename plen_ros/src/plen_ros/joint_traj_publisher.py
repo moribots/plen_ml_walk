@@ -33,7 +33,7 @@ class JointTrajPub(object):
             0.0001)  # rospy.Duration(1.0 / 60.0)
         jtp_msg.points.append(point)
         self.jtp.publish(jtp_msg)
-        rospy.sleep(15.0 / 60.0)
+        rospy.sleep(0.05)
 
     def set_init_pose(self, pos):
         for name in self.joint_name_list:
@@ -50,7 +50,7 @@ class JointTrajPub(object):
         point.time_from_start = rospy.Duration(0.0001)
         jtp_msg.points.append(point)
         self.jtp.publish(jtp_msg)
-        rospy.sleep(15.0 / 60.0)
+        rospy.sleep(0.05)
 
     def check_joints_connection(self):
         """
