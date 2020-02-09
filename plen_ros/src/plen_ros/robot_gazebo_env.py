@@ -145,7 +145,7 @@ class RobotGazeboEnv(gym.Env):
             self.controllers_object.reset_controllers()
             self._check_all_systems_ready()
             self._set_init_pose()
-            rospy.sleep(0.2)
+            rospy.sleep(0.5)
             self.gazebo.pauseSim()
             self.gazebo.resetSim()
             self.gazebo.unpauseSim()

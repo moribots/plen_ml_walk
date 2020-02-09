@@ -11,6 +11,8 @@ import gym
 import torch
 import os
 
+import time
+
 
 def main():
     """ The main() function. """
