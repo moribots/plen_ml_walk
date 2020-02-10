@@ -138,7 +138,22 @@ class RobotGazeboEnv(gym.Env):
         # Sometimes after 9999+ resets, gazebo has problems.
         # so we try a simulation reset
         if np.isnan(reward):
-            self.gazebo_sim.resetSim()
+            rospy.logerr("---------------------------------------")
+            rospy.logerr("RESETTING SIM")
+            if self.reset_controls:
+                rospy.logdebug("RESET CONTROLLERS")
+                self.gazebo.unpauseSim()
+                self.controllers_object.reset_controllers()
+                self._check_all_systems_ready()
+                self._set_init_pose()
+                rospy.sleep(0.5)
+                self.gazebo.pauseSim()
+                # Reset Sim to try and remove nan
+                self.gazebo_sim.resetSim()
+                self.gazebo.unpauseSim()
+                self.controllers_object.reset_controllers()
+                self._check_all_systems_ready()
+                self.gazebo.pauseSim()
 
 
     # Extension methods
@@ -193,6 +208,7 @@ class RobotGazeboEnv(gym.Env):
             self._check_all_systems_ready()
             # Set Joints to Init
             self._set_init_pose()
+            rospy.sleep(0.5)
             # Pause
             self.gazebo.pauseSim()
             # Reset Pose or Sim (see input to GazeboConnection)
