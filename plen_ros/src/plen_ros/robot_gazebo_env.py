@@ -6,6 +6,7 @@ from gym.utils import seeding
 from plen_ros.gazebo_connection import GazeboConnection
 from plen_ros.controllers_connection import ControllersConnection
 from openai_ros.msg import RLExperimentInfo
+import numpy as np
 
 #https://bitbucket.org/theconstructcore/theconstruct_msgs/src/master/msg/RLExperimentInfo.msg
 # from openai_ros.msg import RLExperimentInfo - CHANGE THIS TO NORMAL MESSAGE IMPORT
@@ -24,6 +25,9 @@ class RobotGazeboEnv(gym.Env):
         rospy.logdebug("START init RobotGazeboEnv")
         self.gazebo = GazeboConnection(start_init_physics_parameters,
                                        reset_world_or_sim)
+
+        self.gazebo_sim = GazeboConnection(start_init_physics_parameters,
+                                           "SIMULATION")
         self.controllers_object = ControllersConnection(
             namespace=robot_name_space, controllers_list=controllers_list)
         self.reset_controls = reset_controls
@@ -130,6 +134,12 @@ class RobotGazeboEnv(gym.Env):
         reward_msg.episode_number = episode_number
         reward_msg.episode_reward = reward
         self.reward_pub.publish(reward_msg)
+
+        # Sometimes after 9999+ resets, gazebo has problems.
+        # so we try a simulation reset
+        if np.isnan(reward):
+            self.gazebo_sim.resetSim()
+
 
     # Extension methods
     # ----------------------------

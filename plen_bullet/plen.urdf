@@ -505,7 +505,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/torso.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/torso.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
         <color rgba="1 0 0 1"/>
@@ -529,7 +529,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/battery.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/battery.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
         <color rgba="0 1 0 1"/>
@@ -552,7 +552,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/head.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/head.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
         <color rgba="0 1 0 1"/>
@@ -575,7 +575,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/servo.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -598,7 +598,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/servo.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -621,7 +621,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/servo.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -644,7 +644,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/servo.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -667,7 +667,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/shoulder.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/shoulder.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
         <color rgba="0 1 0 1"/>
@@ -690,7 +690,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/servo.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -713,7 +713,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/arm.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/arm.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
         <color rgba="1 0 0 1"/>
@@ -736,7 +736,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/servo.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -759,7 +759,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="-0.0135 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/elbow.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/elbow.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
         <color rgba="0 1 0 1"/>
@@ -782,7 +782,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/hand.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/hand.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
         <color rgba="1 0 0 1"/>
@@ -805,7 +805,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/shoulder.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/shoulder.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
         <color rgba="0 1 0 1"/>
@@ -828,7 +828,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/servo.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -851,7 +851,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/arm.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/arm.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
         <color rgba="1 0 0 1"/>
@@ -874,7 +874,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/servo.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -897,7 +897,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="-0.0135 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/elbow.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/elbow.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
         <color rgba="0 1 0 1"/>
@@ -920,7 +920,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/hand.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/hand.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
         <color rgba="1 0 0 1"/>
@@ -943,7 +943,7 @@
     <visual>
       <origin rpy="3.14159265359 0 3.14159265359" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/rhip.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/rhip.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -966,7 +966,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="-0.0075 0 -0.0075"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/rthigh.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/rthigh.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
         <color rgba="0 1 0 1"/>
@@ -990,7 +990,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/rknee.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/rknee.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
         <color rgba="1 0 0 1"/>
@@ -1013,7 +1013,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/servo.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -1036,7 +1036,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0.0168 0 -0.0091"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/rshin.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/rshin.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -1059,7 +1059,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/rankle.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/rankle.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
         <color rgba="0 1 0 1"/>
@@ -1082,7 +1082,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="-0.0085 0 -0.0198"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/rfoot.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/rfoot.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
         <color rgba="1 0 0 1"/>
@@ -1105,7 +1105,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0.0 0.0 0.001"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/lhip.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/lhip.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -1128,7 +1128,7 @@
     <visual>
       <origin rpy="0 1.57079632679 0" xyz="0.0 0 0.0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/rankle.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/rankle.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
         <color rgba="0 1 0 1"/>
@@ -1151,7 +1151,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/lknee.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/lknee.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
         <color rgba="1 0 0 1"/>
@@ -1174,7 +1174,7 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/servo.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -1197,7 +1197,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="-0.0169 0 -0.0091"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/rshin.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/rshin.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
         <color rgba="0 0 1 1"/>
@@ -1220,7 +1220,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="-0.0075 0.0 -0.0075"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/rthigh.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/rthigh.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
         <color rgba="0 1 0 1"/>
@@ -1243,7 +1243,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0.00885 0 -0.0142"/>
       <geometry>
-        <mesh filename="package://plen_ros/meshes/lfoot.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://plen_ros/meshes_bin/lfoot.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
         <color rgba="1 0 0 1"/>

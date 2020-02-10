@@ -55,6 +55,10 @@ def main():
     max_action = float(env.action_space.high[0])
 
     policy = TD3Agent(state_dim, action_dim, max_action)
+    # Optionally load existing policy, replace 9999 with num
+    if os.path.exists(models_path + "/" + "plen_walk_gazebo_9999"):
+        policy.load(models_path + "/" + "plen_walk_gazebo_9999")
+
     replay_buffer = ReplayBuffer()
 
     # Evaluate untrained policy and init list for storage
