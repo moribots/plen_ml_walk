@@ -22,21 +22,26 @@ def main():
     # TRAINING PARAMETERS
     env_name = "PlenWalkEnv-v0"
     seed = 0
-    max_timesteps = 1e6
+    max_timesteps = 4e6
     start_timesteps = 1e4
     expl_noise = 0.1
     batch_size = 100
-    eval_freq = 1e3
+    eval_freq = 5e3
     save_model = True
     file_name = "plen_walk_gazebo_"
 
     rospy.init_node('plen_td3', anonymous=True, log_level=rospy.INFO)
 
-    if not os.path.exists("./results"):
-        os.makedirs("./results")
+    # Find abs path to this file
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    results_path = os.path.join(my_path, "../results")
+    models_path = os.path.join(my_path, "../models")
 
-    if not os.path.exists("./models"):
-        os.makedirs("./models")
+    if not os.path.exists(results_path):
+        os.makedirs(results_path)
+
+    if not os.path.exists(models_path):
+        os.makedirs(models_path)
 
     env = gym.make(env_name)
 
@@ -108,7 +113,7 @@ def main():
             episode_num += 1
 
         # Evaluate episode
-        elif (t + 1) % eval_freq == 0:
+        if (t + 1) % eval_freq == 0:
             # THIS BREAKS THE ENVIRONMENT FOR SOME REASON...
             # # Reset environment
             # state, done = env.reset(), False
@@ -125,9 +130,9 @@ def main():
             # rospy.loginfo("---------------------------------------")
             # rospy.loginfo("Evaluation Reward: {}".format(reward))
             # rospy.loginfo("---------------------------------------")
-            np.save("./results/" + str(file_name), evaluations)
+            np.save(results_path + "/" + str(file_name), evaluations)
             if save_model:
-                policy.save("./models/" + str(file_name) + str(t))
+                policy.save(models_path + "/" + str(file_name) + str(t))
 
 
 if __name__ == '__main__':
