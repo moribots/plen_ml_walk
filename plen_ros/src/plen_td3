@@ -82,8 +82,10 @@ def main():
         # Random Action - no training yet, just storing in buffer
         if t < start_timesteps:
             action = env.action_space.sample()
+            rospy.loginfo("Sampled Action")
         else:
             # According to policy + Exploraton Noise
+            rospy.loginfo("POLICY Action")
             """ Note we clip at +-0.99.... because Gazebo
                 has problems executing actions at the
                 position limit (breaks model)
@@ -91,8 +93,8 @@ def main():
             action = np.clip(
                 (policy.select_action(np.array(state)) + np.random.normal(
                     0, max_action * expl_noise, size=action_dim)),
-                0.9999999 * -max_action, 0.9999999 * max_action)
-            # rospy.loginfo("Selected Acton: {}".format(action))
+                0.99 * -max_action, 0.99 * max_action)
+            rospy.logdebug("Selected Acton: {}".format(action))
 
         # Perform action
         next_state, reward, done, _ = env.step(action)

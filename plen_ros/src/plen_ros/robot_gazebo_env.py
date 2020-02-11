@@ -138,7 +138,7 @@ class RobotGazeboEnv(gym.Env):
         # Sometimes after 9999+ resets, gazebo has problems.
         # so we try a simulation reset
         if np.isnan(reward):
-            rospy.logerr("---------------------------------------")
+            rospy.logerr("---------------------------------------------------")
             rospy.logerr("RESETTING SIM")
             if self.reset_controls:
                 rospy.logdebug("RESET CONTROLLERS")
@@ -162,7 +162,7 @@ class RobotGazeboEnv(gym.Env):
     def _reset_sim(self):
         """Resets a simulation
         """
-        rospy.loginfo("---------------------------------------")
+        rospy.loginfo("------------------------------------------------------")
         rospy.logerr("RESETTING")
         if self.reset_controls:
             rospy.logdebug("RESET CONTROLLERS")

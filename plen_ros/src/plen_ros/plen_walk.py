@@ -344,6 +344,13 @@ class PlenWalkEnv(PlenEnv):
         m = (env_range[1] - env_range[0]) / (agent_range[1] - agent_range[0])
         b = env_range[1] - (m * agent_range[1])
         env_val = m * agent_val + b
+
+        # Make sure no out of bounds
+        if env_val >= agent_range[1]:
+            env_val = agent_range[1] - 0.001
+        elif env_val <= agent_range[0]:
+            env_val = agent_range[0] + 0.001
+
         return env_val
 
     def _set_init_pose(self):
