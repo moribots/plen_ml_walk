@@ -19,6 +19,8 @@ class JointTrajPub(object):
         self.joint_name_string = joint_name_string
 
     def move_joints(self, pos):
+        self.check_joints_connection()
+        rospy.wait_for_service("/gazebo/clear_joint_forces")
         for name in self.joint_name_list:
             self.clear_forces(joint_name=name)
         # self.clear_forces(joint_name=self.joint_name_string)
@@ -35,6 +37,8 @@ class JointTrajPub(object):
         rospy.sleep(0.05)
 
     def set_init_pose(self, pos):
+        self.check_joints_connection()
+        rospy.wait_for_service("/gazebo/clear_joint_forces")
         for name in self.joint_name_list:
             self.clear_forces(joint_name=name)
         jtp_msg = JointTrajectory()
@@ -46,7 +50,7 @@ class JointTrajPub(object):
         point.velocities = self.jtp_zeros
         point.accelerations = self.jtp_zeros
         point.effort = self.jtp_zeros
-        point.time_from_start = rospy.Duration(0.0001)
+        point.time_from_start = rospy.Duration(1.0 / 60.0)
         jtp_msg.points.append(point)
         self.jtp.publish(jtp_msg)
         rospy.sleep(0.05)

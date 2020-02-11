@@ -28,6 +28,8 @@ class PlenWalkEnv(PlenEnv):
         """
         rospy.logdebug("Start PlenWalkEnv INIT...")
 
+        self.init_pose = np.zeros(18)
+
         # How long to step the simulation for (sec)
         self.running_step = 0.05
 
@@ -360,7 +362,15 @@ class PlenWalkEnv(PlenEnv):
     def _set_init_pose(self):
         """Sets the Robot in its init pose
         """
-        self.joints.set_init_pose(self.init_pose)
+        joints_initialized = False
+        while not joints_initialized:
+            self.joints.set_init_pose(self.init_pose)
+            joints_initialized = self.check_joints_init
+
+    def check_joints_init(self):
+        joints_initialized = np.allclose(self.joint_poses, self.init_pose)
+        if not joints_initialized:
+            rospy.logwarn("Joints not all zero, try again")
 
     def _init_env_variables(self):
         """

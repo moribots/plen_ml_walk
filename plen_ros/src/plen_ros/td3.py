@@ -130,6 +130,8 @@ class ReplayBuffer(object):
         self.storage = []
         self.max_size = max_size
         self.ptr = 0
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        self.buffer_path = os.path.join(my_path, "../../replay_buffer")
 
     def add(self, data):
         """Add experience tuples to buffer
@@ -145,25 +147,20 @@ class ReplayBuffer(object):
             self.storage.append(data)
 
     def save(self, iterations):
-        # Find abs path to this file
-        my_path = os.path.abspath(os.path.dirname(__file__))
-        results_path = os.path.join(my_path, "../replay_buffer")
 
-        if not os.path.exists(results_path):
-            os.makedirs(results_path)
+        if not os.path.exists(self.buffer_path):
+            os.makedirs(self.buffer_path)
 
         with open(
-                results_path + '/' + 'replay_buffer' + str(iterations) +
+                self.buffer_path + '/' + 'replay_buffer_' + str(iterations) +
                 '.data', 'wb') as filehandle:
             pickle.dump(self.storage, filehandle)
 
     def load(self, iterations):
-        my_path = os.path.abspath(os.path.dirname(__file__))
-        results_path = os.path.join(my_path, "../replay_buffer")
 
         with open(
-                results_path + '/' + 'replay_buffer' + str(iterations) +
-                '.data', 'wb') as filehandle:
+                self.buffer_path + '/' + 'replay_buffer_' + str(iterations) +
+                '.data', 'rb') as filehandle:
             self.storage = pickle.load(filehandle)
 
     def sample(self, batch_size):

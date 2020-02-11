@@ -23,10 +23,10 @@ def main():
     env_name = "PlenWalkEnv-v0"
     seed = 0
     max_timesteps = 4e6
-    start_timesteps = 1e3  # 1e3 for testing purposes, use 1e4 for real
+    start_timesteps = 1e4  # 1e3 for testing purposes, use 1e4 for real
     expl_noise = 0.1
     batch_size = 100
-    eval_freq = 1e4
+    eval_freq = 1e1
     save_model = True
     file_name = "plen_walk_gazebo_"
 
@@ -57,11 +57,18 @@ def main():
     rospy.logwarn("RECORDED MAX ACTION: {}".format(max_action))
 
     policy = TD3Agent(state_dim, action_dim, max_action)
-    # Optionally load existing policy, replace 9999 with num
+    # # Optionally load existing policy, replace 9999 with num
     # if os.path.exists(models_path + "/" + "plen_walk_gazebo_9999"):
     #     policy.load(models_path + "/" + "plen_walk_gazebo_9999")
 
     replay_buffer = ReplayBuffer()
+    # Optionally load existing policy, replace 9999 with num
+    buffer_number = 0  # BY DEFAULT WILL LOAD NOTHING, CHANGE THIS
+    if os.path.exists(replay_buffer.results_path + "/" + "replay_buffer_" +
+                      str(buffer_number) + '.data'):
+        rospy.loginfo("Loading Replay Buffer " + str(buffer_number))
+        replay_buffer.load(buffer_number)
+        rospy.loginfo(replay_buffer.storage)
 
     # Evaluate untrained policy and init list for storage
     evaluations = []
@@ -147,6 +154,7 @@ def main():
             np.save(results_path + "/" + str(file_name), evaluations)
             if save_model:
                 policy.save(models_path + "/" + str(file_name) + str(t))
+                replay_buffer.save(t)
 
 
 if __name__ == '__main__':
