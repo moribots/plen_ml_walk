@@ -84,7 +84,7 @@ def main():
             action = env.action_space.sample()
         else:
             # According to policy + Exploraton Noise
-            """ Note we clip at 0.99.... because Gazebo
+            """ Note we clip at +-0.99.... because Gazebo
                 has problems executing actions at the
                 position limit (breaks model)
             """
