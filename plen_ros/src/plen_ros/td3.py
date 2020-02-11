@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import copy
+import pickle
 import numpy as np
 import torch
 import torch.nn as nn
@@ -143,8 +144,31 @@ class ReplayBuffer(object):
         else:
             self.storage.append(data)
 
+    def save(self, iterations):
+        # Find abs path to this file
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        results_path = os.path.join(my_path, "../replay_buffer")
+
+        if not os.path.exists(results_path):
+            os.makedirs(results_path)
+
+        with open(
+                results_path + '/' + 'replay_buffer' + str(iterations) +
+                '.data', 'wb') as filehandle:
+            pickle.dump(self.storage, filehandle)
+
+    def load(self, iterations):
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        results_path = os.path.join(my_path, "../replay_buffer")
+
+        with open(
+                results_path + '/' + 'replay_buffer' + str(iterations) +
+                '.data', 'wb') as filehandle:
+            self.storage = pickle.load(filehandle)
+
     def sample(self, batch_size):
         """Samples a random amount of experiences from buffer of batch size
+           NOTE: We don't delete samples here, only overwrite when max_size
 
         Args:
             batch_size (int): size of sample
@@ -197,7 +221,8 @@ class TD3Agent(object):
                  noise_clip=0.5,
                  policy_freq=2):
 
-        self.device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device(
+            "cuda:1" if torch.cuda.is_available() else "cpu")
 
         self.actor = Actor(state_dim, action_dim, max_action).to(self.device)
         self.actor_target = copy.deepcopy(self.actor)
@@ -382,16 +407,22 @@ def evaluate_policy(policy, env_name, seed, eval_episodes=10, render=False):
     avg_reward /= eval_episodes
 
     print("---------------------------------------")
-    print("Evaluation over {} episodes: {}"
-          .format(eval_episodes, avg_reward))
+    print("Evaluation over {} episodes: {}".format(eval_episodes, avg_reward))
     print("---------------------------------------")
     if render:
         eval_env.close()
     return avg_reward
 
 
-def trainer(env_name, seed, max_timesteps, start_timesteps, expl_noise,
-            batch_size, eval_freq, save_model, file_name="best_avg"):
+def trainer(env_name,
+            seed,
+            max_timesteps,
+            start_timesteps,
+            expl_noise,
+            batch_size,
+            eval_freq,
+            save_model,
+            file_name="best_avg"):
     """
     """
 

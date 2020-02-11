@@ -139,21 +139,22 @@ class RobotGazeboEnv(gym.Env):
         # so we try a simulation reset
         if np.isnan(reward):
             rospy.logerr("---------------------------------------------------")
-            rospy.logerr("RESETTING SIM")
-            if self.reset_controls:
-                rospy.logdebug("RESET CONTROLLERS")
-                self.gazebo.unpauseSim()
-                self.controllers_object.reset_controllers()
-                self._check_all_systems_ready()
-                self._set_init_pose()
-                rospy.sleep(0.5)
-                self.gazebo.pauseSim()
-                # Reset Sim to try and remove nan
-                self.gazebo_sim.resetSim()
-                self.gazebo.unpauseSim()
-                self.controllers_object.reset_controllers()
-                self._check_all_systems_ready()
-                self.gazebo.pauseSim()
+            rospy.logerr("CLOSING SIM")
+            self.close()
+            # if self.reset_controls:
+            #     rospy.logdebug("RESET CONTROLLERS")
+            #     self.gazebo.unpauseSim()
+            #     self.controllers_object.reset_controllers()
+            #     self._check_all_systems_ready()
+            #     self._set_init_pose()
+            #     rospy.sleep(0.5)
+            #     self.gazebo.pauseSim()
+            #     # Reset Sim to try and remove nan
+            #     self.gazebo_sim.resetSim()
+            #     self.gazebo.unpauseSim()
+            #     self.controllers_object.reset_controllers()
+            #     self._check_all_systems_ready()
+            #     self.gazebo.pauseSim()
 
 
     # Extension methods

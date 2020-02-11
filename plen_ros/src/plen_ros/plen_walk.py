@@ -153,8 +153,8 @@ class PlenWalkEnv(PlenEnv):
         obs_low[41] = self.rfs_min
         obs_high[41] = self.rfs_max
 
-        obs_low[41] = self.lfs_min
-        obs_high[41] = self.lfs_max
+        obs_low[42] = self.lfs_min
+        obs_high[42] = self.lfs_max
 
         # obs_low = np.array([
         #     self.joints_low, self.joint_effort_low, self.torso_height_min,
@@ -341,15 +341,19 @@ class PlenWalkEnv(PlenEnv):
         """
         # Convert using y = mx + b
         agent_range = [-1, 1]
+        # m = (y1 - y2) / (x1 - x2)
         m = (env_range[1] - env_range[0]) / (agent_range[1] - agent_range[0])
+        # b = y1 - mx1
         b = env_range[1] - (m * agent_range[1])
         env_val = m * agent_val + b
 
         # Make sure no out of bounds
-        if env_val >= agent_range[1]:
-            env_val = agent_range[1] - 0.001
-        elif env_val <= agent_range[0]:
-            env_val = agent_range[0] + 0.001
+        if env_val >= env_range[1]:
+            env_val = env_range[1] - 0.001
+            rospy.logwarn("Sampled Too High!")
+        elif env_val <= env_range[0]:
+            env_val = env_range[0] + 0.001
+            rospy.logwarn("Sampled Too High!")
 
         return env_val
 
@@ -431,7 +435,7 @@ class PlenWalkEnv(PlenEnv):
 
         observations[41] = self.right_contact
 
-        observations[41] = self.left_contact
+        observations[42] = self.left_contact
 
         return observations
 
