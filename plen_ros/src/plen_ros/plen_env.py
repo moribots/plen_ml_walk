@@ -14,6 +14,7 @@ from gazebo_msgs.msg import ContactsState
 from sensor_msgs.msg import Imu
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import JointState
+from geometry_msgs.msg import Pose
 
 
 class PlenEnv(RobotGazeboEnv):
@@ -100,23 +101,35 @@ class PlenEnv(RobotGazeboEnv):
                                    self.controllers_string)
         self.init_pose = self.joints.jtp_zeros
 
+        """ Initial Pose for Spawn
+        """
+        self.init_config = Pose()
+        self.init_config.position.x = 0
+        self.init_config.position.y = 0
+        self.init_config.position.z = 0.158
+        self.init_config.orientation.x = 0
+        self.init_config.orientation.y = 0
+        self.init_config.orientation.z = 0
+        self.init_config.orientation.w = 1
+
         # We launch the init function of the
         # Parent Class robot_gazebo_env.RobotGazeboEnv
         # INTERFACE WITH PARENT CLASS USING SUPER
         # CHILD METHODS TAKE PRECEDENCE WITH DUPLICATES
         super(PlenEnv, self).__init__(controllers_list=self.controllers_list,
                                       robot_name_space=self.robot_name_space,
+                                      init_config=self.init_config,
                                       reset_controls=True,
                                       start_init_physics_parameters=True,
                                       reset_world_or_sim="WORLD")
 
         rospy.logdebug("PlenEnv unpause...")
-        self.gazebo.unpauseSim()
-        self.controllers_object.reset_controllers()
+        # self.gazebo.unpauseSim()
+        # self.controllers_object.reset_controllers()
 
-        self._check_all_systems_ready()
+        # self._check_all_systems_ready()
 
-        self.gazebo.pauseSim()
+        # self.gazebo.pauseSim()
 
         rospy.logdebug("Finished PlenEnv INIT...")
 

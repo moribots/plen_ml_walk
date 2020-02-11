@@ -7,6 +7,7 @@ from plen_ros.gazebo_connection import GazeboConnection
 from plen_ros.controllers_connection import ControllersConnection
 from openai_ros.msg import RLExperimentInfo
 import numpy as np
+import os
 
 #https://bitbucket.org/theconstructcore/theconstruct_msgs/src/master/msg/RLExperimentInfo.msg
 # from openai_ros.msg import RLExperimentInfo - CHANGE THIS TO NORMAL MESSAGE IMPORT
@@ -15,8 +16,9 @@ import numpy as np
 # https://github.com/openai/gym/blob/master/gym/core.py
 class RobotGazeboEnv(gym.Env):
     def __init__(self,
-                 robot_name_space,
                  controllers_list,
+                 robot_name_space,
+                 init_config,
                  reset_controls,
                  start_init_physics_parameters=True,
                  reset_world_or_sim="SIMULATION"):
@@ -24,10 +26,15 @@ class RobotGazeboEnv(gym.Env):
         # To reset Simulations
         rospy.logdebug("START init RobotGazeboEnv")
         self.gazebo = GazeboConnection(start_init_physics_parameters,
-                                       reset_world_or_sim)
+                                       reset_world_or_sim, robot_name_space,
+                                       controllers_list, init_config)
+        # self.gazebo.pauseSim()
 
         self.gazebo_sim = GazeboConnection(start_init_physics_parameters,
-                                           "SIMULATION")
+                                           "SIMULATION", robot_name_space,
+                                           controllers_list, init_config)
+        # controllers_list.append("joint_trajectory_controller")
+        # controllers_list.append("joint_state_controller")
         self.controllers_object = ControllersConnection(
             namespace=robot_name_space, controllers_list=controllers_list)
         self.reset_controls = reset_controls
@@ -41,6 +48,21 @@ class RobotGazeboEnv(gym.Env):
                                           RLExperimentInfo,
                                           queue_size=1)
 
+        # Set up init robot pose for spawn
+        self.init_config = init_config
+
+        # Set up robot URDF for spawn
+        # Find abs path to this file
+        dir_path = os.path.abspath(os.path.dirname(__file__))
+        xacro_path = os.path.join(
+            dir_path, "../../urdf/" + self.robot_name_space + ".urdf.xacro")
+        result = os.popen("rosrun xacro xacro " + xacro_path)
+        self.xml = result.read()
+
+        # rospy.logwarn("RESPAWNING")
+        # self.gazebo.unpauseSim()
+        # self.respawn()
+
         # We Unpause the simulation and reset the controllers if needed
         """
         To check any topic we need to have the simulations running, we need to do two things:
@@ -50,13 +72,40 @@ class RobotGazeboEnv(gym.Env):
         This has to do with the fact that some plugins with tf, dont understand the reset of the simulation
         and need to be reseted to work properly.
         """
-        self.gazebo.unpauseSim()
-        if self.reset_controls:
-            self.controllers_object.reset_controllers()
+        # self.gazebo.unpauseSim()
+        # if self.reset_controls:
+        #     self.controllers_object.reset_controllers()
 
         rospy.logdebug("END init RobotGazeboEnv")
 
     # Env methods
+    def respawn(self):
+
+        # Unpause Sim
+        self.gazebo.unpauseSim()
+
+        # Unload Ctrl
+        rospy.logwarn("UNLOADING CTRL")
+        self.controllers_object.unload_controllers()
+
+        # Delete Model
+        rospy.logwarn("DELETING MODEL")
+        self.gazebo.delete_model(self.robot_name_space)
+
+        # Spawn Model
+        rospy.logwarn("SPAWNING MODEL")
+        self.gazebo.spawn_model(self.robot_name_space, self.xml, "",
+                                self.init_config, "world")
+        # Stop Gravity
+        self.gazebo.change_gravity(0, 0, 0)
+
+        # Load Ctrl
+        rospy.logwarn("LOADING CTRL")
+        self.controllers_object.load_controllers()
+
+        # Start Gravity
+        self.gazebo.change_gravity(0, 0, -9.81)
+
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
@@ -137,24 +186,22 @@ class RobotGazeboEnv(gym.Env):
 
         # Sometimes after 9999+ resets, gazebo has problems.
         # so we try a simulation reset
-        if np.isnan(reward):
-            rospy.logerr("---------------------------------------")
-            rospy.logerr("RESETTING SIM")
-            if self.reset_controls:
-                rospy.logdebug("RESET CONTROLLERS")
-                self.gazebo.unpauseSim()
-                self.controllers_object.reset_controllers()
-                self._check_all_systems_ready()
-                self._set_init_pose()
-                rospy.sleep(0.5)
-                self.gazebo.pauseSim()
-                # Reset Sim to try and remove nan
-                self.gazebo_sim.resetSim()
-                self.gazebo.unpauseSim()
-                self.controllers_object.reset_controllers()
-                self._check_all_systems_ready()
-                self.gazebo.pauseSim()
-
+        # if np.isnan(reward):
+        #     rospy.logerr("---------------------------------------")
+        #     rospy.logerr("nan DETECTED, RESPAWNING!")
+        #     self.gazebo.pauseSim()
+        #     self.respawn()
+        #     self._check_all_systems_ready()
+        #     self.gazebo.unpauseSim()
+        #     self._set_init_pose()
+        #     rospy.sleep(0.5)
+        #     self.gazebo.pauseSim()
+        #     # Reset Sim to try and remove nan
+        #     self.gazebo.resetSim()
+        #     self.gazebo.unpauseSim()
+        #     self.controllers_object.reset_controllers()
+        #     self._check_all_systems_ready()
+        #     self.gazebo.pauseSim()
 
     # Extension methods
     # ----------------------------
@@ -168,16 +215,13 @@ class RobotGazeboEnv(gym.Env):
             rospy.logdebug("RESET CONTROLLERS")
             self.gazebo.unpauseSim()
             self.controllers_object.reset_controllers()
-            self._check_all_systems_ready()
+            # self._check_all_systems_ready()
             self._set_init_pose()
             rospy.sleep(0.5)
-            self.gazebo.pauseSim()
             self.gazebo.resetSim()
-            self.gazebo.unpauseSim()
             self.controllers_object.reset_controllers()
             self._check_all_systems_ready()
             self.gazebo.pauseSim()
-
             """
             rospy.logdebug("RESET CONTROLLERS")
             self.gazebo.unpauseSim()
@@ -212,7 +256,8 @@ class RobotGazeboEnv(gym.Env):
             # Pause
             self.gazebo.pauseSim()
             # Reset Pose or Sim (see input to GazeboConnection)
-            self.gazebo.resetSim()
+            self.gazebo.reset_pose()
+            # self.gazebo.resetSim()
             # Unpause
             self.gazebo.unpauseSim()
             # Check Controllers/Sensors

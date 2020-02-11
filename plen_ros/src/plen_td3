@@ -23,7 +23,7 @@ def main():
     env_name = "PlenWalkEnv-v0"
     seed = 0
     max_timesteps = 4e6
-    start_timesteps = 1e4
+    start_timesteps = 1
     expl_noise = 0.1
     batch_size = 100
     eval_freq = 5e3
@@ -83,6 +83,7 @@ def main():
         if t < start_timesteps:
             action = env.action_space.sample()
         else:
+            rospy.loginfo("Sampling Action + Noise")
             # According to policy + Exploraton Noise
             action = (policy.select_action(np.array(state)) + np.random.normal(
                 0, max_action * expl_noise, size=action_dim)).clip(
@@ -106,7 +107,7 @@ def main():
         if done:
             # +1 to account for 0 indexing.
             # +0 on ep_timesteps since it will increment +1 even if done=True
-            print(
+            rospy.loginfo(
                 "Total T: {} Episode Num: {} Episode T: {} Reward: {}".format(
                     t + 1, episode_num, episode_timesteps, episode_reward))
             # Reset environment

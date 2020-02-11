@@ -2,7 +2,8 @@
 
 import rospy
 import time
-from controller_manager_msgs.srv import SwitchController, SwitchControllerRequest, SwitchControllerResponse
+from controller_manager_msgs.srv import SwitchController, SwitchControllerRequest
+from controller_manager_msgs.srv import LoadController, UnloadController
 
 
 class ControllersConnection():
@@ -10,10 +11,50 @@ class ControllersConnection():
 
         rospy.logwarn("Start Init ControllersConnection")
         self.controllers_list = controllers_list
+        self.controller_list = [
+            "joint_state_controller", "joint_trajectory_controller"
+        ]
         self.switch_service_name = '/' + namespace + '/controller_manager/switch_controller'
         self.switch_service = rospy.ServiceProxy(self.switch_service_name,
                                                  SwitchController)
+        self.unload_service = rospy.ServiceProxy(
+            '/' + namespace + '/controller_manager/unload_controller',
+            UnloadController)
+        self.load_service = rospy.ServiceProxy(
+            '/' + namespace + '/controller_manager/load_controller',
+            LoadController)
         rospy.logwarn("END Init ControllersConnection")
+        self.namespace = namespace
+
+    def unload_controllers(self):
+        rospy.logwarn('waiting for /' + self.namespace +
+                      '/controller_manager/unload_controller')
+        rospy.wait_for_service('/' + self.namespace +
+                               '/controller_manager/unload_controller')
+
+        rospy.logwarn("SWITCHING OFF, THEN UNLOADING")
+        for controller in self.controller_list:
+            # Switch Controllers Off
+            self.switch_controllers(controllers_on=[],
+                                    controllers_off=controller)
+            # Unload Controllers
+            self.unload_service(controller)
+
+    def load_controllers(self):
+        rospy.wait_for_service('/' + self.namespace +
+                               '/controller_manager/load_controller')
+
+        rospy.logwarn("LOADING, THEN SWITCHING ON")
+        for controller in self.controller_list:
+            # Load Controllers
+            self.load_service(controller)
+            # Switch Controllers On
+            self.switch_controllers(controllers_on=controller,
+                                    controllers_off=[])
+
+    def reload_controllers(self):
+        self.unload_controllers()
+        self.load_controllers()
 
     def switch_controllers(self, controllers_on, controllers_off,
                            strictness=1):
@@ -30,6 +71,7 @@ class ControllersConnection():
             switch_request_object.start_controllers = controllers_on
             switch_request_object.start_controllers = controllers_off
             switch_request_object.strictness = strictness
+            switch_request_object.start_asap = False
 
             switch_result = self.switch_service(switch_request_object)
             """
@@ -42,7 +84,7 @@ class ControllersConnection():
             ---
             bool ok
             """
-            rospy.logdebug("Switch Result==>" + str(switch_result.ok))
+            rospy.loginfo("Switch Result==>" + str(switch_result.ok))
 
             return switch_result.ok
 

@@ -5,6 +5,9 @@ from std_srvs.srv import Empty
 from gazebo_msgs.msg import ODEPhysics
 from gazebo_msgs.srv import SetPhysicsProperties, SetPhysicsPropertiesRequest
 from gazebo_msgs.srv import SetModelConfiguration, SetModelConfigurationRequest
+from gazebo_msgs.srv import SetModelState, SetModelStateRequest
+from gazebo_msgs.msg import ModelState
+from gazebo_msgs.srv import DeleteModel, SpawnModel
 from std_msgs.msg import Float64
 from geometry_msgs.msg import Vector3
 import numpy as np
@@ -14,6 +17,9 @@ class GazeboConnection():
     def __init__(self,
                  start_init_physics_parameters,
                  reset_world_or_sim,
+                 robot_name,
+                 joint_name_list,
+                 init_pose,
                  max_retry=20):
 
         self.model_config_proxy = rospy.ServiceProxy(
@@ -39,6 +45,63 @@ class GazeboConnection():
         self.init_values()
         # We always pause the simulation, important for legged robots learning
         self.pauseSim()
+
+        self.delete = rospy.ServiceProxy("gazebo/delete_model", DeleteModel)
+        self.spawn = rospy.ServiceProxy("gazebo/spawn_urdf_model", SpawnModel)
+        """ SET MODEL STATE METHODS
+        """
+
+        self.model_config_proxy = rospy.ServiceProxy(
+            '/gazebo/set_model_configuration', SetModelConfiguration)
+        self.model_config_req = SetModelConfigurationRequest()
+        self.model_config_req.model_name = robot_name
+        self.model_config_req.urdf_param_name = 'robot_description'
+        self.model_config_req.joint_names = joint_name_list
+        self.model_config_req.joint_positions = np.zeros(len(joint_name_list))
+        self.model_state_proxy = rospy.ServiceProxy('/gazebo/set_model_state',
+                                                    SetModelState)
+        self.model_state_req = SetModelStateRequest()
+        self.model_state_req.model_state = ModelState()
+        self.model_state_req.model_state.model_name = robot_name
+        self.model_state_req.model_state.pose = init_pose
+        self.model_state_req.model_state.twist.linear.x = 0.0
+        self.model_state_req.model_state.twist.linear.y = 0.0
+        self.model_state_req.model_state.twist.linear.z = 0.0
+        self.model_state_req.model_state.twist.angular.x = 0.0
+        self.model_state_req.model_state.twist.angular.y = 0.0
+        self.model_state_req.model_state.twist.angular.z = 0.0
+        self.model_state_req.model_state.reference_frame = 'world'
+
+    def reset_pose(self):
+        # Set Model Pos
+        rospy.wait_for_service('/gazebo/set_model_state')
+        try:
+            self.model_state_proxy(self.model_state_req)
+        except rospy.ServiceException as e:
+            rospy.logerr('/gazebo/set_model_state call failed')
+        # Set Joint Config
+        rospy.wait_for_service('/gazebo/set_model_configuration')
+        try:
+            self.model_config_proxy(self.model_config_req)
+        except rospy.ServiceException as e:
+            rospy.logerr('/gazebo/set_model_configuration call failed')
+
+    def delete_model(self, model_name):
+        rospy.wait_for_service("gazebo/delete_model")
+        try:
+            self.delete(model_name)
+        except rospy.ServiceException as e:
+            rospy.logerr("gazebo/delete_model service call failed...Retrying")
+
+    def spawn_model(self, model_name, model_xml, robot_namespace, init_pose,
+                    ref_frame):
+        rospy.wait_for_service("gazebo/spawn_urdf_model")
+        try:
+            self.spawn(model_name, model_xml, robot_namespace, init_pose,
+                       ref_frame)
+        except rospy.ServiceException as e:
+            rospy.logerr(
+                "gazebo/spawn_urdf_model service call failed...Retrying")
 
     def reset_joints(self, joints_list, model_name):
         config = SetModelConfigurationRequest()
