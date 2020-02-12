@@ -108,6 +108,15 @@ class PlenWalkEnv(PlenEnv):
         self.torso_vx_min = -np.inf
         self.torso_vx_max = np.inf
 
+        self.torso_w_roll_min = -np.inf
+        self.torso_w_roll_max = np.inf
+
+        self.torso_w_pitch_min = -np.inf
+        self.torso_w_pitch_max = np.inf
+
+        self.torso_w_yaw_min = -np.inf
+        self.torso_w_yaw_max = np.inf
+
         # TORSO ROLL (-pi, pi)
         self.torso_roll_min = -np.pi
         self.torso_roll_max = np.pi
@@ -115,6 +124,10 @@ class PlenWalkEnv(PlenEnv):
         # TORSO PITCH (-pi, pi)
         self.torso_pitch_min = -np.pi
         self.torso_pitch_max = np.pi
+
+        # TORSO YAW (-pi, pi)
+        self.torso_yaw_min = -np.pi
+        self.torso_yaw_max = np.pi
 
         # TORSO DEVIATION FROM X AXIS (-inf, inf)
         self.torso_y_min = -np.inf
@@ -151,14 +164,17 @@ class PlenWalkEnv(PlenEnv):
         obs_low[39] = self.torso_pitch_min
         obs_high[39] = self.torso_pitch_max
 
-        obs_low[40] = self.torso_y_min
-        obs_high[40] = self.torso_y_max
+        obs_low[40] = self.torso_yaw_min
+        obs_high[40] = self.torso_yaw_max
 
-        obs_low[41] = self.rfs_min
-        obs_high[41] = self.rfs_max
+        obs_low[41] = self.torso_y_min
+        obs_high[41] = self.torso_y_max
 
-        obs_low[42] = self.lfs_min
-        obs_high[42] = self.lfs_max
+        obs_low[42] = self.rfs_min
+        obs_high[42] = self.rfs_max
+
+        obs_low[43] = self.lfs_min
+        obs_high[43] = self.lfs_max
 
         # obs_low = np.array([
         #     self.joints_low, self.joint_effort_low, self.torso_height_min,
@@ -185,7 +201,11 @@ class PlenWalkEnv(PlenEnv):
         self.torso_y = 0
         self.torso_roll = 0
         self.torso_pitch = 0
+        self.torso_yaw = 0
         self.torso_vx = 0
+        self.torso_w_roll = 0
+        self.torso_w_pitch = 0
+        self.torso_w_yaw = 0
         self.odom_subscriber = rospy.Subscriber('/plen/odom', Odometry,
                                                 self.odom_subscriber_callback)
 
@@ -231,7 +251,12 @@ class PlenWalkEnv(PlenEnv):
         roll, pitch, yaw = euler_from_quaternion(quat)
         self.torso_roll = roll
         self.torso_pitch = pitch
+        self.torso_yaw = yaw
         self.torso_vx = msg.twist.twist.linear.x
+        # Angular Velocities
+        self.torso_w_roll = msg.twist.twist.angular.x
+        self.torso_w_pitch = msg.twist.twist.angular.y
+        self.torso_w_yaw = msg.twist.twist.angular.z
 
     def joint_state_subscriber_callback(self, msg):
         """
@@ -430,13 +455,13 @@ class PlenWalkEnv(PlenEnv):
             - Right foot contact
             - Left foot contact
         """
-        observations = np.array([
-            self.joint_poses, self.joint_efforts, self.torso_z, self.torso_vx,
-            self.torso_roll, self.torso_pitch, self.torso_y,
-            self.right_contact, self.left_contact
-        ])
+        # observations = np.array([
+        #     self.joint_poses, self.joint_efforts, self.torso_z, self.torso_vx,
+        #     self.torso_roll, self.torso_pitch, self.torso_yaw, self.torso_y,
+        #     self.right_contact, self.left_contact
+        # ])
 
-        observations = np.empty(43)
+        observations = np.empty(44)
 
         for i in range(18):
             observations[i] = self.joint_poses[i]
@@ -451,11 +476,13 @@ class PlenWalkEnv(PlenEnv):
 
         observations[39] = self.torso_pitch
 
-        observations[40] = self.torso_y
+        observations[40] = self.torso_yaw
 
-        observations[41] = self.right_contact
+        observations[41] = self.torso_y
 
-        observations[42] = self.left_contact
+        observations[42] = self.right_contact
+
+        observations[43] = self.left_contact
 
         return observations
 
@@ -470,7 +497,7 @@ class PlenWalkEnv(PlenEnv):
             - episode timesteps above limit
         """
         if self.torso_roll > np.abs(np.pi / 3.) or self.torso_pitch > np.abs(
-                np.pi / 3.) or self.torso_z < 0.07 or self.torso_y > 0.5:
+                np.pi / 3.) or self.torso_z < 0.07 or self.torso_y > 1:
             done = True
             self.dead = True
         else:
@@ -489,14 +516,16 @@ class PlenWalkEnv(PlenEnv):
         # Reward for forward velocity
         reward += np.exp(self.torso_vx) * self.vel_weight
         # Reward for maintaining original height
-        reward -= np.exp(
-            (np.abs(self.init_height - self.torso_z))**2) * self.height_weight
+        reward -= (np.abs(self.init_height - self.torso_z) *
+                   self.height_weight)**2
         # Reward for staying on x axis
         reward -= (np.abs(self.torso_y))**2 * self.straight_weight
         # Reward staying upright
         reward -= (np.abs(self.torso_roll))**2 * self.roll_weight
         # Reward for staying upright
         reward -= (np.abs(self.torso_pitch))**2 * self.pitch_weight
+        # Reward for facing forward
+        reward -= (np.abs(self.torso_yaw))**2 * self.yaw_weight
         # Reward for minimal joint actuation
         for effort in self.joint_efforts:
             reward -= effort**2 * self.joint_effort_weight

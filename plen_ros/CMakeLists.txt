@@ -161,6 +161,7 @@ install(PROGRAMS
   src/joint_test
   src/joint_trajectory_test
   src/plen_td3
+  src/walk_eval
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
