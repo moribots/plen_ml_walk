@@ -2,6 +2,7 @@
 
 import rospy
 import numpy as np
+import copy
 # Gym
 from gym import spaces
 from gym.envs.registration import register
@@ -17,7 +18,7 @@ from tf.transformations import euler_from_quaternion
 register(
     id='PlenWalkEnv-v0',
     entry_point='plen_ros.plen_walk:PlenWalkEnv',
-    max_episode_steps=1000,  # Time Step Limit Per Episode
+    max_episode_steps=500,  # Time Step Limit Per Episode
 )
 
 
@@ -64,20 +65,20 @@ class PlenWalkEnv(PlenEnv):
         self.reward_range = (-np.inf, np.inf)
 
         # Reward for being alive
-        self.alive_reward = 10.
+        self.alive_reward = 2.
         # Reward for forward velocity
-        self.vel_weight = 10.
+        self.vel_weight = 20.
         # Reward for maintaining original height
         self.init_height = 0.158
-        self.height_weight = 10.
+        self.height_weight = 50.
         # Reward for staying on x axis
-        self.straight_weight = 10
+        self.straight_weight = 50
         # Reward staying upright
-        self.roll_weight = 10.
+        self.roll_weight = 50.
         # Reward for staying upright
-        self.pitch_weight = 10.
+        self.pitch_weight = 50.
         # reward for facing forward
-        self.yaw_weight = 10.
+        self.yaw_weight = 50.
         # Reward for minimal joint actuation
         self.joint_effort_weight = 0.035
         # Whether the episode is done due to failure
@@ -96,7 +97,7 @@ class PlenWalkEnv(PlenEnv):
             self.joints_low.append(j_state[0])
             self.joints_high.append(j_state[1])
 
-        # JOINT EFFORT
+        # JOINT EFFORT - NOTE: UNUSED SINCE SERVO CANNOT MEASURE
         self.joint_effort_low = [-0.15] * 18
         self.joint_effort_high = [0.15] * 18
 
@@ -142,39 +143,55 @@ class PlenWalkEnv(PlenEnv):
         self.lfs_max = 1
 
         # Getting creative with filling obs space due to specific format
-        obs_low = np.empty(43)
-        obs_high = np.empty(43)
 
-        for i in range(18):
-            obs_low[i] = self.joints_low[i]
-            obs_low[i + 18] = self.joint_effort_low[i]
-            obs_high[i] = self.joints_high[i]
-            obs_high[i + 18] = self.joint_effort_high[i]
+        obs_low = np.append(
+            self.joints_low,
+            np.array([
+                self.torso_height_min, self.torso_vx_min, self.torso_roll_min,
+                self.torso_pitch_min, self.torso_yaw_min, self.torso_y_min,
+                self.rfs_min, self.lfs_min
+            ]))
 
-        # Now fill the rest
-        obs_low[36] = self.torso_height_min
-        obs_high[36] = self.torso_height_max
+        obs_high = np.append(
+            self.joints_high,
+            np.array([
+                self.torso_height_max, self.torso_vx_max, self.torso_roll_max,
+                self.torso_pitch_max, self.torso_yaw_max, self.torso_y_max,
+                self.rfs_max, self.lfs_max
+            ]))
+        # obs_low = np.empty(43)
+        # obs_high = np.empty(43)
 
-        obs_low[37] = self.torso_vx_min
-        obs_high[37] = self.torso_vx_max
+        # for i in range(18):
+        #     obs_low[i] = self.joints_low[i]
+        #     obs_low[i + 18] = self.joint_effort_low[i]
+        #     obs_high[i] = self.joints_high[i]
+        #     obs_high[i + 18] = self.joint_effort_high[i]
 
-        obs_low[38] = self.torso_roll_min
-        obs_high[38] = self.torso_roll_max
+        # # Now fill the rest
+        # obs_low[36] = self.torso_height_min
+        # obs_high[36] = self.torso_height_max
 
-        obs_low[39] = self.torso_pitch_min
-        obs_high[39] = self.torso_pitch_max
+        # obs_low[37] = self.torso_vx_min
+        # obs_high[37] = self.torso_vx_max
 
-        obs_low[40] = self.torso_yaw_min
-        obs_high[40] = self.torso_yaw_max
+        # obs_low[38] = self.torso_roll_min
+        # obs_high[38] = self.torso_roll_max
 
-        obs_low[41] = self.torso_y_min
-        obs_high[41] = self.torso_y_max
+        # obs_low[39] = self.torso_pitch_min
+        # obs_high[39] = self.torso_pitch_max
 
-        obs_low[42] = self.rfs_min
-        obs_high[42] = self.rfs_max
+        # obs_low[40] = self.torso_yaw_min
+        # obs_high[40] = self.torso_yaw_max
 
-        obs_low[43] = self.lfs_min
-        obs_high[43] = self.lfs_max
+        # obs_low[41] = self.torso_y_min
+        # obs_high[41] = self.torso_y_max
+
+        # obs_low[42] = self.rfs_min
+        # obs_high[42] = self.rfs_max
+
+        # obs_low[43] = self.lfs_min
+        # obs_high[43] = self.lfs_max
 
         # obs_low = np.array([
         #     self.joints_low, self.joint_effort_low, self.torso_height_min,
@@ -390,16 +407,19 @@ class PlenWalkEnv(PlenEnv):
         """Sets the Robot in its init pose
         """
         joints_initialized = False
+        self.joints.set_init_pose(self.init_pose)
+        self.gazebo.reset_joints(self.controllers_list, "plen")
+        # Keep checking, but don't keep publishing
+        # to avoid overloading the controller
         while joints_initialized is False:
-            self.joints.set_init_pose(self.init_pose)
-            rospy.sleep(0.2)
+            rospy.sleep(0.5)
             joints_initialized = self.check_joints_init()
 
     def check_joints_init(self):
         # absolute(arr1 - arr2) <= (atol + rtol * absolute(arr2))
         joints_initialized = np.allclose(self.joint_poses,
                                          self.init_pose,
-                                         atol=0.035,
+                                         atol=0.06,
                                          rtol=0)
         if not joints_initialized:
             rospy.logwarn("Joints not all zero, trying again")
@@ -461,28 +481,36 @@ class PlenWalkEnv(PlenEnv):
         #     self.right_contact, self.left_contact
         # ])
 
-        observations = np.empty(44)
+        # observations = np.empty(44)
 
-        for i in range(18):
-            observations[i] = self.joint_poses[i]
-            observations[i + 18] = self.joint_efforts[i]
+        # for i in range(18):
+        #     observations[i] = self.joint_poses[i]
+        #     observations[i + 18] = self.joint_efforts[i]
 
-        # Now fill the rest
-        observations[36] = self.torso_z
+        # # Now fill the rest
+        # observations[36] = self.torso_z
 
-        observations[37] = self.torso_vx
+        # observations[37] = self.torso_vx
 
-        observations[38] = self.torso_roll
+        # observations[38] = self.torso_roll
 
-        observations[39] = self.torso_pitch
+        # observations[39] = self.torso_pitch
 
-        observations[40] = self.torso_yaw
+        # observations[40] = self.torso_yaw
 
-        observations[41] = self.torso_y
+        # observations[41] = self.torso_y
 
-        observations[42] = self.right_contact
+        # observations[42] = self.right_contact
 
-        observations[43] = self.left_contact
+        # observations[43] = self.left_contact
+
+        observations = np.append(
+            self.joint_poses,
+            np.array([
+                self.torso_z, self.torso_vx, self.torso_roll, self.torso_pitch,
+                self.torso_yaw, self.torso_y, self.right_contact,
+                self.left_contact
+            ]))
 
         return observations
 
@@ -527,8 +555,9 @@ class PlenWalkEnv(PlenEnv):
         # Reward for facing forward
         reward -= (np.abs(self.torso_yaw))**2 * self.yaw_weight
         # Reward for minimal joint actuation
-        for effort in self.joint_efforts:
-            reward -= effort**2 * self.joint_effort_weight
+        # NOTE: UNUSED SINCE CANNOT MEASURE ON REAL PLEN
+        # for effort in self.joint_efforts:
+        #     reward -= effort**2 * self.joint_effort_weight
         # Whether the episode is done due to failure
         if self.dead:
             reward -= 100

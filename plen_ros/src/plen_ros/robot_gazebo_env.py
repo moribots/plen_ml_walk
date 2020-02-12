@@ -31,7 +31,9 @@ class RobotGazeboEnv(gym.Env):
         self.controllers_object = ControllersConnection(
             namespace=robot_name_space, controllers_list=controllers_list)
         self.reset_controls = reset_controls
+        self.controllers_list = controllers_list
         self.seed()
+        self.robot_name_space = robot_name_space
 
         # Set up ROS related variables
         self.episode_num = 0
@@ -156,7 +158,6 @@ class RobotGazeboEnv(gym.Env):
             #     self._check_all_systems_ready()
             #     self.gazebo.pauseSim()
 
-
     # Extension methods
     # ----------------------------
 
@@ -170,7 +171,10 @@ class RobotGazeboEnv(gym.Env):
             self.gazebo.unpauseSim()
             self.controllers_object.reset_controllers()
             self._check_all_systems_ready()
+            # self.gazebo.resetSim()
+            # self.gazebo.change_gravity(0, 0, 0)
             self._set_init_pose()
+            # self.gazebo.change_gravity(0, 0, -9.81)
             # rospy.sleep(0.5)
             self.gazebo.pauseSim()
             self.gazebo.resetSim()
@@ -178,7 +182,6 @@ class RobotGazeboEnv(gym.Env):
             self.controllers_object.reset_controllers()
             self._check_all_systems_ready()
             self.gazebo.pauseSim()
-
             """
             rospy.logdebug("RESET CONTROLLERS")
             self.gazebo.unpauseSim()
