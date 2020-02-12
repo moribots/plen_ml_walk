@@ -123,11 +123,6 @@ class PlenEnv(RobotGazeboEnv):
     # Methods needed by the RobotGazeboEnv
     # ----------------------------
 
-    def _set_init_pose(self):
-        """Sets the Robot in its init pose
-        """
-        self.joints.set_init_pose(self.init_pose)
-
     def _check_all_systems_ready(self):
         """
         Checks that all the sensors, publishers and other simulation systems are

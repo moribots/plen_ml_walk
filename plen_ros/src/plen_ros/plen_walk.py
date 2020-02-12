@@ -76,6 +76,8 @@ class PlenWalkEnv(PlenEnv):
         self.roll_weight = 10.
         # Reward for staying upright
         self.pitch_weight = 10.
+        # reward for facing forward
+        self.yaw_weight = 10.
         # Reward for minimal joint actuation
         self.joint_effort_weight = 0.035
         # Whether the episode is done due to failure
@@ -301,7 +303,7 @@ class PlenWalkEnv(PlenEnv):
             # rospy.logdebug("RIGHT FOOT NO CONTACT")
 
     def left_contact_subscriber_callback(self, msg):
-        """
+        """https://www.google.com/search?client=ubuntu&channel=fs&q=convert+radian+to+degree&ie=utf-8&oe=utf-8
             Returns whether right foot has made contact
 
             For a Robot of total mas of 0.495Kg, a gravity of 9.81 m/sec**2
@@ -363,14 +365,22 @@ class PlenWalkEnv(PlenEnv):
         """Sets the Robot in its init pose
         """
         joints_initialized = False
-        while not joints_initialized:
+        while joints_initialized is False:
             self.joints.set_init_pose(self.init_pose)
-            joints_initialized = self.check_joints_init
+            rospy.sleep(0.2)
+            joints_initialized = self.check_joints_init()
 
     def check_joints_init(self):
-        joints_initialized = np.allclose(self.joint_poses, self.init_pose)
+        # absolute(arr1 - arr2) <= (atol + rtol * absolute(arr2))
+        joints_initialized = np.allclose(self.joint_poses,
+                                         self.init_pose,
+                                         atol=0.035,
+                                         rtol=0)
         if not joints_initialized:
-            rospy.logwarn("Joints not all zero, try again")
+            rospy.logwarn("Joints not all zero, trying again")
+        else:
+            rospy.loginfo("All Joints Zeroed")
+        return joints_initialized
 
     def _init_env_variables(self):
         """
@@ -479,8 +489,8 @@ class PlenWalkEnv(PlenEnv):
         # Reward for forward velocity
         reward += np.exp(self.torso_vx) * self.vel_weight
         # Reward for maintaining original height
-        reward -= np.exp((np.abs(self.init_height -
-                          self.torso_z))**2) * self.height_weight
+        reward -= np.exp(
+            (np.abs(self.init_height - self.torso_z))**2) * self.height_weight
         # Reward for staying on x axis
         reward -= (np.abs(self.torso_y))**2 * self.straight_weight
         # Reward staying upright
