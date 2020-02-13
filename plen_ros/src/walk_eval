@@ -52,9 +52,9 @@ def main():
 
     policy = TD3Agent(state_dim, action_dim, max_action)
     # Optionally load existing policy, replace 9999 with num
-    if os.path.exists(models_path + "/" + "plen_walk_gazebo_199999_critic"):
+    if os.path.exists(models_path + "/" + "plen_walk_gazebo_29999_critic"):
         rospy.loginfo("Loading Existing Policy")
-        policy.load(models_path + "/" + "plen_walk_gazebo_199999")
+        policy.load(models_path + "/" + "plen_walk_gazebo_29999")
 
     replay_buffer = ReplayBuffer()
     # Optionally load existing policy, replace 9999 with num

@@ -364,12 +364,16 @@ class TD3Agent(object):
                    filename + "_actor_optimizer")
 
     def load(self, filename):
-        self.critic.load_state_dict(torch.load(filename + "_critic"))
+        self.critic.load_state_dict(
+            torch.load(filename + "_critic", map_location=self.device))
         self.critic_optimizer.load_state_dict(
-            torch.load(filename + "_critic_optimizer"))
-        self.actor.load_state_dict(torch.load(filename + "_actor"))
+            torch.load(filename + "_critic_optimizer",
+                       map_location=self.device))
+        self.actor.load_state_dict(
+            torch.load(filename + "_actor", map_location=self.device))
         self.actor_optimizer.load_state_dict(
-            torch.load(filename + "_actor_optimizer"))
+            torch.load(filename + "_actor_optimizer",
+                       map_location=self.device))
 
 
 # Runs policy for X episodes and returns average reward

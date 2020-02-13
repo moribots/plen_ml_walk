@@ -70,7 +70,7 @@ class PlenWalkEnv(PlenEnv):
         self.dead_penalty = 100.
         self.alive_reward = self.dead_penalty / self.max_episode_steps
         # Reward for forward velocity
-        self.vel_weight = 100.
+        self.vel_weight = 50.
         # Reward for maintaining original height
         self.init_height = 0.158
         self.height_weight = 50.
@@ -531,6 +531,7 @@ class PlenWalkEnv(PlenEnv):
             done = True
             self.dead = True
         elif self.episode_timestep > self.max_episode_steps and self.torso_x < 1:
+            # Terminate episode if plen hasn't moved significantly
             done = True
             self.dead = True
         else:
@@ -547,7 +548,7 @@ class PlenWalkEnv(PlenEnv):
         # Reward for being alive
         reward += self.alive_reward
         # Reward for forward velocity
-        reward += np.exp(self.torso_vx) * self.vel_weight
+        reward += np.sign(self.torso_vx) * (self.torso_vx * self.vel_weight)**2
         # Reward for maintaining original height
         reward -= (np.abs(self.init_height - self.torso_z) *
                    self.height_weight)**2
