@@ -142,7 +142,10 @@ class GazeboConnection():
         friction coeficients and so on.
         """
         self._time_step = Float64(0.001)
-        self._max_update_rate = Float64(1000.0)
+        # Setting this to zero will force gazebo to update
+        # as fast as it can while keeping realism
+        # default is 1000
+        self._max_update_rate = Float64(0.)
 
         self._gravity = Vector3()
         self._gravity.x = 0.0

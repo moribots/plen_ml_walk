@@ -29,6 +29,8 @@ class PlenWalkEnv(PlenEnv):
         """
         rospy.logdebug("Start PlenWalkEnv INIT...")
 
+        self.max_episode_steps = 500
+
         self.init_pose = np.zeros(18)
 
         # How long to step the simulation for (sec)
@@ -65,9 +67,10 @@ class PlenWalkEnv(PlenEnv):
         self.reward_range = (-np.inf, np.inf)
 
         # Reward for being alive
-        self.alive_reward = 2.
+        self.dead_penalty = 100.
+        self.alive_reward = self.dead_penalty / self.max_episode_steps
         # Reward for forward velocity
-        self.vel_weight = 20.
+        self.vel_weight = 100.
         # Reward for maintaining original height
         self.init_height = 0.158
         self.height_weight = 50.
@@ -76,7 +79,7 @@ class PlenWalkEnv(PlenEnv):
         # Reward staying upright
         self.roll_weight = 50.
         # Reward for staying upright
-        self.pitch_weight = 50.
+        self.pitch_weight = 10.
         # reward for facing forward
         self.yaw_weight = 50.
         # Reward for minimal joint actuation
@@ -261,6 +264,7 @@ class PlenWalkEnv(PlenEnv):
         """
         self.torso_z = msg.pose.pose.position.z
         self.torso_y = msg.pose.pose.position.y
+        self.torso_x = msg.pose.pose.position.x
         quat = [
             msg.pose.pose.orientation.x, msg.pose.pose.orientation.y,
             msg.pose.pose.orientation.z, msg.pose.pose.orientation.w
@@ -406,20 +410,18 @@ class PlenWalkEnv(PlenEnv):
     def _set_init_pose(self):
         """Sets the Robot in its init pose
         """
-        joints_initialized = False
+        # joints_initialized = False
         self.joints.set_init_pose(self.init_pose)
-        self.gazebo.reset_joints(self.controllers_list, "plen")
-        # Keep checking, but don't keep publishing
-        # to avoid overloading the controller
-        while joints_initialized is False:
-            rospy.sleep(0.5)
-            joints_initialized = self.check_joints_init()
+        # self.gazebo.reset_joints(self.controllers_list, "plen")
+        rospy.sleep(0.25)
+        self.joints.set_init_pose(self.init_pose)
+        rospy.sleep(0.25)
 
     def check_joints_init(self):
         # absolute(arr1 - arr2) <= (atol + rtol * absolute(arr2))
         joints_initialized = np.allclose(self.joint_poses,
                                          self.init_pose,
-                                         atol=0.06,
+                                         atol=0.1,
                                          rtol=0)
         if not joints_initialized:
             rospy.logwarn("Joints not all zero, trying again")
@@ -525,7 +527,10 @@ class PlenWalkEnv(PlenEnv):
             - episode timesteps above limit
         """
         if self.torso_roll > np.abs(np.pi / 3.) or self.torso_pitch > np.abs(
-                np.pi / 3.) or self.torso_z < 0.07 or self.torso_y > 1:
+                np.pi / 3.) or self.torso_z < 0.095 or self.torso_y > 1:
+            done = True
+            self.dead = True
+        elif self.episode_timestep > self.max_episode_steps and self.torso_x < 1:
             done = True
             self.dead = True
         else:
@@ -560,5 +565,5 @@ class PlenWalkEnv(PlenEnv):
         #     reward -= effort**2 * self.joint_effort_weight
         # Whether the episode is done due to failure
         if self.dead:
-            reward -= 100
+            reward -= self.dead_penalty
         return reward

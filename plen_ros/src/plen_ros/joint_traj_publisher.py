@@ -31,7 +31,7 @@ class JointTrajPub(object):
         point.velocities = self.jtp_zeros
         point.accelerations = self.jtp_zeros
         point.effort = self.jtp_zeros
-        point.time_from_start = rospy.Duration(1.0 / 60.0)
+        point.time_from_start = rospy.Duration(1 / 50.)
         jtp_msg.points.append(point)
         self.jtp.publish(jtp_msg)
         rospy.sleep(0.05)
@@ -50,7 +50,7 @@ class JointTrajPub(object):
         point.velocities = self.jtp_zeros
         point.accelerations = self.jtp_zeros
         point.effort = self.jtp_zeros
-        point.time_from_start = rospy.Duration(1.0 / 60.0)
+        point.time_from_start = rospy.Duration(0.001)
         jtp_msg.points.append(point)
         self.jtp.publish(jtp_msg)
         rospy.sleep(0.05)

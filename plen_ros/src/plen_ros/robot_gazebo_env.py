@@ -38,6 +38,12 @@ class RobotGazeboEnv(gym.Env):
         # Set up ROS related variables
         self.episode_num = 0
         self.cumulated_episode_reward = 0
+        self.episode_timestep = 0
+        self.total_timesteps = 0
+        # Set up values for moving average pub
+        self.moving_avg_buffer_size = 1000
+        self.moving_avg_buffer = np.zeros(self.moving_avg_buffer_size)
+        self.moving_avg_counter = 0
         self.reward_pub = rospy.Publisher('/' + self.robot_name_space +
                                           '/reward',
                                           RLExperimentInfo,
@@ -85,6 +91,8 @@ class RobotGazeboEnv(gym.Env):
         info = {}
         reward = self._compute_reward(obs, done)
         self.cumulated_episode_reward += reward
+        self.episode_timestep += 1
+        self.total_timesteps += 1
 
         rospy.logdebug("END STEP OpenAIROS")
 
@@ -122,7 +130,10 @@ class RobotGazeboEnv(gym.Env):
                       str(self.episode_num))
 
         self.episode_num += 1
+        self.moving_avg_counter += 1
+
         self.cumulated_episode_reward = 0
+        self.episode_timestep = 0
 
     def _publish_reward_topic(self, reward, episode_number=1):
         """
@@ -134,7 +145,15 @@ class RobotGazeboEnv(gym.Env):
         """
         reward_msg = RLExperimentInfo()
         reward_msg.episode_number = episode_number
+        reward_msg.total_timesteps = self.total_timesteps
         reward_msg.episode_reward = reward
+
+        # Now Calculate Moving Avg
+        if self.moving_avg_counter >= self.moving_avg_buffer_size:
+            self.moving_avg_counter = 0
+        self.moving_avg_buffer[
+            self.moving_avg_counter] = self.cumulated_episode_reward
+        reward_msg.moving_avg_reward = np.average(self.moving_avg_buffer)
         self.reward_pub.publish(reward_msg)
 
         # Sometimes after 9999+ resets, gazebo has problems.
