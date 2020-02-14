@@ -153,7 +153,10 @@ class RobotGazeboEnv(gym.Env):
             self.moving_avg_counter = 0
         self.moving_avg_buffer[
             self.moving_avg_counter] = self.cumulated_episode_reward
-        reward_msg.moving_avg_reward = np.average(self.moving_avg_buffer)
+        if self.total_timesteps > 1000:
+            reward_msg.moving_avg_reward = np.average(self.moving_avg_buffer)
+        else:
+            reward_msg.moving_avg_reward = np.nan
         self.reward_pub.publish(reward_msg)
 
         # Sometimes after 9999+ resets, gazebo has problems.

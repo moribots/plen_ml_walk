@@ -73,13 +73,13 @@ class PlenWalkEnv(PlenEnv):
         self.vel_weight = 50.
         # Reward for maintaining original height
         self.init_height = 0.158
-        self.height_weight = 50.
+        self.height_weight = 70.
         # Reward for staying on x axis
         self.straight_weight = 50
         # Reward staying upright
         self.roll_weight = 50.
         # Reward for staying upright
-        self.pitch_weight = 10.
+        self.pitch_weight = 30.
         # reward for facing forward
         self.yaw_weight = 50.
         # Reward for minimal joint actuation
@@ -533,7 +533,7 @@ class PlenWalkEnv(PlenEnv):
         elif self.episode_timestep > self.max_episode_steps and self.torso_x < 1:
             # Terminate episode if plen hasn't moved significantly
             done = True
-            self.dead = True
+            self.dead = False
         else:
             done = False
             self.dead = False
@@ -567,4 +567,5 @@ class PlenWalkEnv(PlenEnv):
         # Whether the episode is done due to failure
         if self.dead:
             reward -= self.dead_penalty
+            self.dead = False
         return reward
