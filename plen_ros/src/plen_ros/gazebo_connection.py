@@ -5,6 +5,8 @@ from std_srvs.srv import Empty
 from gazebo_msgs.msg import ODEPhysics
 from gazebo_msgs.srv import SetPhysicsProperties, SetPhysicsPropertiesRequest
 from gazebo_msgs.srv import SetModelConfiguration, SetModelConfigurationRequest
+from gazebo_msgs.srv import SetModelState, SetModelStateRequest
+from gazebo_msgs.msg import ModelState
 from std_msgs.msg import Float64
 from geometry_msgs.msg import Vector3
 import numpy as np
@@ -36,9 +38,27 @@ class GazeboConnection():
                                               SetPhysicsProperties)
         self.start_init_physics_parameters = start_init_physics_parameters
         self.reset_world_or_sim = reset_world_or_sim
+
+        # Set Model State Service
+        self.model_state_proxy = rospy.ServiceProxy('/gazebo/set_model_state',
+                                                    SetModelState)
         self.init_values()
         # We always pause the simulation, important for legged robots learning
         self.pauseSim()
+
+    def teleport(self, pose, robot_name):
+        model_state_req = SetModelStateRequest()
+        model_state_req.model_state = ModelState()
+        model_state_req.model_state.model_name = robot_name
+        model_state_req.model_state.pose = pose
+        model_state_req.model_state.twist.linear.x = 0.0
+        model_state_req.model_state.twist.linear.y = 0.0
+        model_state_req.model_state.twist.linear.z = 0.0
+        model_state_req.model_state.twist.angular.x = 0.0
+        model_state_req.model_state.twist.angular.y = 0.0
+        model_state_req.model_state.twist.angular.z = 0.0
+        model_state_req.model_state.reference_frame = 'world'
+        self.model_state_proxy(model_state_req)
 
     def reset_joints(self, joints_list, model_name):
         config = SetModelConfigurationRequest()
@@ -55,10 +75,10 @@ class GazeboConnection():
         while not paused_done and not rospy.is_shutdown():
             if counter < self._max_retry:
                 try:
-                    rospy.logdebug("PAUSING service calling...")
+                    # rospy.logdebug("PAUSING service calling...")
                     self.pause()
                     paused_done = True
-                    rospy.logdebug("PAUSING service calling...DONE")
+                    # rospy.logdebug("PAUSING service calling...DONE")
                 except rospy.ServiceException as e:
                     counter += 1
                     rospy.logerr("/gazebo/pause_physics service call failed")
@@ -68,19 +88,19 @@ class GazeboConnection():
                 rospy.logerr(error_message)
                 assert False, error_message
 
-        rospy.logdebug("PAUSING FINISH")
+        # rospy.logdebug("PAUSING FINISH")
 
     def unpauseSim(self):
-        rospy.logdebug("UNPAUSING service found...")
+        # rospy.logdebug("UNPAUSING service found...")
         unpaused_done = False
         counter = 0
         while not unpaused_done and not rospy.is_shutdown():
             if counter < self._max_retry:
                 try:
-                    rospy.logdebug("UNPAUSING service calling...")
+                    # rospy.logdebug("UNPAUSING service calling...")
                     self.unpause()
                     unpaused_done = True
-                    rospy.logdebug("UNPAUSING service calling...DONE")
+                    # rospy.logdebug("UNPAUSING service calling...DONE")
                 except rospy.ServiceException as e:
                     counter += 1
                     rospy.logerr(
@@ -92,7 +112,7 @@ class GazeboConnection():
                 rospy.logerr(error_message)
                 assert False, error_message
 
-        rospy.logdebug("UNPAUSING FiNISH")
+        # rospy.logdebug("UNPAUSING FiNISH")
 
     def resetSim(self):
         """
@@ -102,10 +122,10 @@ class GazeboConnection():
         systems.
         """
         if self.reset_world_or_sim == "SIMULATION":
-            rospy.logdebug("SIMULATION RESET")
+            # rospy.logdebug("SIMULATION RESET")
             self.resetSimulation()
         elif self.reset_world_or_sim == "WORLD":
-            rospy.logdebug("WORLD RESET")
+            # rospy.logdebug("WORLD RESET")
             self.resetWorld()
         elif self.reset_world_or_sim == "NO_RESET_SIM":
             rospy.logerr("NO RESET SIMULATION SELECTED")
@@ -131,7 +151,7 @@ class GazeboConnection():
         self.resetSim()
 
         if self.start_init_physics_parameters:
-            rospy.logdebug("Initialising Simulation Physics Parameters")
+            # rospy.logdebug("Initialising Simulation Physics Parameters")
             self.init_physics_parameters()
         else:
             rospy.logerr("NOT Initialising Simulation Physics Parameters")
@@ -179,8 +199,8 @@ class GazeboConnection():
         rospy.logdebug(str(set_physics_request.gravity))
 
         result = self.set_physics(set_physics_request)
-        rospy.logdebug("Gravity Update Result==" + str(result.success) +
-                       ",message==" + str(result.status_message))
+        # rospy.logdebug("Gravity Update Result==" + str(result.success) +
+        #                ",message==" + str(result.status_message))
 
         self.unpauseSim()
 

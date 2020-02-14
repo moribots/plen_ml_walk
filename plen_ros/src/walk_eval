@@ -84,7 +84,7 @@ def main():
         # Deterministic Policy Action
         action = np.clip(policy.select_action(np.array(state)),
                          0.99 * -max_action, 0.99 * max_action)
-        rospy.logdebug("Selected Acton: {}".format(action))
+        # rospy.logdebug("Selected Acton: {}".format(action))
 
         # Perform action
         next_state, reward, done, _ = env.step(action)

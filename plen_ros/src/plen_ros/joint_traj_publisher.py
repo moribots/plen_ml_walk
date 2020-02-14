@@ -8,7 +8,7 @@ from gazebo_msgs.srv import JointRequest
 
 class JointTrajPub(object):
     def __init__(self, joint_name_list, joint_name_string):
-        rospy.loginfo('Waiting for joint trajectory Publisher')
+        # rospy.loginfo('Waiting for joint trajectory Publisher')
         self.jtp = rospy.Publisher('/plen/joint_trajectory_controller/command',
                                    JointTrajectory,
                                    queue_size=1)
@@ -69,4 +69,4 @@ class JointTrajPub(object):
             except rospy.ROSInterruptException:
                 # Avoid error when world is rested, time when backwards.
                 pass
-        rospy.logdebug("All Publishers READY")
+        # rospy.logdebug("All Publishers READY")

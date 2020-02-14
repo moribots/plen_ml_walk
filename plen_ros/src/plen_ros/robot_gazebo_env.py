@@ -125,9 +125,9 @@ class RobotGazeboEnv(gym.Env):
         rospy.logdebug("PUBLISHING REWARD...")
         self._publish_reward_topic(self.cumulated_episode_reward,
                                    self.episode_num)
-        rospy.logwarn("EPISODE REWARD = " +
-                      str(self.cumulated_episode_reward) + ", EP = " +
-                      str(self.episode_num))
+        rospy.logdebug("EPISODE REWARD = " +
+                       str(self.cumulated_episode_reward) + ", EP = " +
+                       str(self.episode_num))
 
         self.episode_num += 1
         self.moving_avg_counter += 1
@@ -154,7 +154,7 @@ class RobotGazeboEnv(gym.Env):
         self.moving_avg_buffer[
             self.moving_avg_counter] = self.cumulated_episode_reward
         # Only publish moving avg if enough samples
-        if self.self.episode_num >= self.moving_avg_buffer_size:
+        if self.episode_num >= self.moving_avg_buffer_size:
             reward_msg.moving_avg_reward = np.average(self.moving_avg_buffer)
         else:
             reward_msg.moving_avg_reward = np.nan
@@ -187,8 +187,9 @@ class RobotGazeboEnv(gym.Env):
     def _reset_sim(self):
         """Resets a simulation
         """
-        rospy.loginfo("------------------------------------------------------")
-        rospy.logerr("RESETTING")
+        rospy.logdebug(
+            "------------------------------------------------------")
+        rospy.logdebug("RESETTING")
         if self.reset_controls:
             rospy.logdebug("RESET CONTROLLERS")
             self.gazebo.unpauseSim()
@@ -228,7 +229,7 @@ class RobotGazeboEnv(gym.Env):
             """
 
         else:
-            rospy.logwarn("DONT RESET CONTROLLERS")
+            rospy.logdebug("DONT RESET CONTROLLERS")
             # Unpause
             self.gazebo.unpauseSim()
             # Check Controllers/Sensors

@@ -128,30 +128,30 @@ class PlenEnv(RobotGazeboEnv):
         Checks that all the sensors, publishers and other simulation systems are
         operational.
         """
-        rospy.logdebug("PlenEnv check_all_systems_ready...")
+        # rospy.logdebug("PlenEnv check_all_systems_ready...")
         self._check_all_sensors_ready()
-        rospy.logdebug("END PlenEnv _check_all_systems_ready...")
+        # rospy.logdebug("END PlenEnv _check_all_systems_ready...")
         return True
 
     """ CHECK ALL SUBSCRIBERS AND PUBLISHERS READY
     """
     def _check_all_sensors_ready(self):
-        rospy.logdebug("START ALL SENSORS READY")
+        # rospy.logdebug("START ALL SENSORS READY")
         self._check_odom_ready()
         # self._check_imu_ready()
         self._check_rightfoot_contactsensor_state_ready()
         self._check_joint_states_ready()
-        rospy.logdebug("ALL SENSORS READY")
+        # rospy.logdebug("ALL SENSORS READY")
 
     def _check_odom_ready(self):
         self.odom = None
-        rospy.logdebug("Waiting for /plen/odom to be READY...")
+        # rospy.logdebug("Waiting for /plen/odom to be READY...")
         while self.odom is None and not rospy.is_shutdown():
             try:
                 self.odom = rospy.wait_for_message("/plen/odom",
                                                    Odometry,
                                                    timeout=1.0)
-                rospy.logdebug("Current /plen/odom READY=>")
+                # rospy.logdebug("Current /plen/odom READY=>")
 
             except:
                 rospy.logerr("Current /plen/odom not ready yet, " +
@@ -160,13 +160,13 @@ class PlenEnv(RobotGazeboEnv):
 
     def _check_imu_ready(self):
         self.imu = None
-        rospy.logdebug("Waiting for /plen/imu/data to be READY...")
+        # rospy.logdebug("Waiting for /plen/imu/data to be READY...")
         while self.imu is None and not rospy.is_shutdown():
             try:
                 self.imu = rospy.wait_for_message("/plen/imu/data",
                                                   Imu,
                                                   timeout=1.0)
-                rospy.logdebug("Current /plen/imu/data READY=>")
+                # rospy.logdebug("Current /plen/imu/data READY=>")
 
             except:
                 rospy.logerr("Current /plen/imu/data not ready yet," +
@@ -175,13 +175,13 @@ class PlenEnv(RobotGazeboEnv):
 
     def _check_rightfoot_contactsensor_state_ready(self):
         self.rightfoot_contactsensor_state = None
-        rospy.logdebug("Waiting for /plen/right_foot_contact to be READY...")
+        # rospy.logdebug("Waiting for /plen/right_foot_contact to be READY...")
         while self.rightfoot_contactsensor_state is None and not rospy.is_shutdown(
         ):
             try:
                 self.rightfoot_contactsensor_state = rospy.wait_for_message(
                     "/plen/right_foot_contact", ContactsState, timeout=1.0)
-                rospy.logdebug("Current /plen/right_foot_contact READY=>")
+                # rospy.logdebug("Current /plen/right_foot_contact READY=>")
 
             except:
                 rospy.logerr(
@@ -191,13 +191,13 @@ class PlenEnv(RobotGazeboEnv):
 
     def _check_leftfoot_contactsensor_state_ready(self):
         self.leftfoot_contactsensor_state = None
-        rospy.logdebug("Waiting for /plen/left_foot_contact to be READY...")
+        # rospy.logdebug("Waiting for /plen/left_foot_contact to be READY...")
         while self.leftfoot_contactsensor_state is None and not rospy.is_shutdown(
         ):
             try:
                 self.leftfoot_contactsensor_state = rospy.wait_for_message(
                     "/plen/left_foot_contact", ContactsState, timeout=1.0)
-                rospy.logdebug("Current /plen/left_foot_contact READY=>")
+                # rospy.logdebug("Current /plen/left_foot_contact READY=>")
 
             except:
                 rospy.logerr("Current /plen/left_foot_contact not ready yet," +
@@ -206,12 +206,12 @@ class PlenEnv(RobotGazeboEnv):
 
     def _check_joint_states_ready(self):
         self.joint_states = None
-        rospy.logdebug("Waiting for /plen/joint_states to be READY...")
+        # rospy.logdebug("Waiting for /plen/joint_states to be READY...")
         while self.joint_states is None and not rospy.is_shutdown():
             try:
                 self.joint_states = rospy.wait_for_message(
                     "/plen/joint_states", JointState, timeout=1.0)
-                rospy.logdebug("Current /plen/joint_states READY=>")
+                # rospy.logdebug("Current /plen/joint_states READY=>")
 
             except:
                 rospy.logerr("Current /plen/joint_states not ready yet," +

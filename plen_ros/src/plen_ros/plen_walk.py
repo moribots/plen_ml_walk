@@ -343,7 +343,7 @@ class PlenWalkEnv(PlenEnv):
 
         if force_magnitude > 4.8559 / 3.0:
             self.right_contact = 1
-            rospy.logdebug("RIGHT FOOT CONTACT")
+            # rospy.logdebug("RIGHT FOOT CONTACT")
         else:
             self.right_contact = 0
             # rospy.logdebug("RIGHT FOOT NO CONTACT")
@@ -369,7 +369,7 @@ class PlenWalkEnv(PlenEnv):
 
         if force_magnitude > 4.8559 / 3.0:
             self.left_contact = 1
-            rospy.logdebug("LEFT FOOT CONTACT")
+            # rospy.logdebug("LEFT FOOT CONTACT")
         else:
             self.left_contact = 0
             # rospy.logdebug("LEFT FOOT NO CONTACT")
@@ -411,11 +411,12 @@ class PlenWalkEnv(PlenEnv):
         """Sets the Robot in its init pose
         """
         # joints_initialized = False
+        # self.gazebo.change_gravity(0, 0, 0)
         self.joints.set_init_pose(self.init_pose)
-        # self.gazebo.reset_joints(self.controllers_list, "plen")
-        rospy.sleep(0.25)
-        self.joints.set_init_pose(self.init_pose)
-        rospy.sleep(0.25)
+        self.gazebo.reset_joints(self.controllers_list, "plen")
+        # self.gazebo.change_gravity(0, 0, -9.81)
+        # rospy.sleep(0.1)
+        # self.joints.set_init_pose(self.init_pose)
 
     def check_joints_init(self):
         # absolute(arr1 - arr2) <= (atol + rtol * absolute(arr2))
@@ -426,7 +427,7 @@ class PlenWalkEnv(PlenEnv):
         if not joints_initialized:
             rospy.logwarn("Joints not all zero, trying again")
         else:
-            rospy.loginfo("All Joints Zeroed")
+            rospy.logdebug("All Joints Zeroed")
         return joints_initialized
 
     def _init_env_variables(self):
@@ -450,7 +451,7 @@ class PlenWalkEnv(PlenEnv):
             # Convert action from [-1, 1] to real env values
             env_action[i] = self.agent_to_env(self.env_ranges[i], action[i])
 
-        rospy.logdebug("Executing Action ==>" + str(env_action))
+        # rospy.logdebug("Executing Action ==>" + str(env_action))
 
         # Unpause
         self.gazebo.unpauseSim()
@@ -461,7 +462,7 @@ class PlenWalkEnv(PlenEnv):
         # Pause
         self.gazebo.pauseSim()
 
-        rospy.logdebug("Action Completed")
+        # rospy.logdebug("Action Completed")
 
     def _get_obs(self):
         """

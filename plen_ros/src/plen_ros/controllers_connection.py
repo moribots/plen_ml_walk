@@ -15,7 +15,7 @@ class ControllersConnection():
         self.switch_service_name = '/' + namespace + '/controller_manager/switch_controller'
         self.switch_service = rospy.ServiceProxy(self.switch_service_name,
                                                  SwitchController)
-        rospy.logwarn("END Init ControllersConnection")
+        # rospy.logwarn("END Init ControllersConnection")
 
     def switch_controllers(self, controllers_on, controllers_off,
                            strictness=1):
@@ -44,7 +44,7 @@ class ControllersConnection():
             ---
             bool ok
             """
-            rospy.logdebug("Switch Result==>" + str(switch_result.ok))
+            # rospy.logdebug("Switch Result==>" + str(switch_result.ok))
 
             return switch_result.ok
 
@@ -64,19 +64,21 @@ class ControllersConnection():
         result_off_ok = self.switch_controllers(
             controllers_on=[], controllers_off=self.controllers_list)
 
-        rospy.logdebug("Deactivated Controlers")
+        # rospy.logdebug("Deactivated Controlers")
 
         if result_off_ok:
-            rospy.logdebug("Activating Controlers")
+            # rospy.logdebug("Activating Controlers")
             result_on_ok = self.switch_controllers(
                 controllers_on=self.controllers_list, controllers_off=[])
             if result_on_ok:
-                rospy.logdebug("Controllers Reseted==>" +
-                               str(self.controllers_list))
+                # rospy.logdebug("Controllers Reseted==>" +
+                               # str(self.controllers_list))
                 reset_result = True
             else:
-                rospy.logdebug("result_on_ok==>" + str(result_on_ok))
+                pass
+                # rospy.logdebug("result_on_ok==>" + str(result_on_ok))
         else:
-            rospy.logdebug("result_off_ok==>" + str(result_off_ok))
+            pass
+            # rospy.logdebug("result_off_ok==>" + str(result_off_ok))
 
         return reset_result
