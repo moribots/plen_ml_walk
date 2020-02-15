@@ -1,13 +1,13 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rev_joint" params="name number type axis_xyz origin_rpy origin_xyz parent child effort velocity damping friction">
+  <xacro:macro name="rev_joint" params="name number type axis_xyz origin_rpy origin_xyz parent child effort velocity damping friction upper lower">
     <joint name="${name}" type="${type}">
       <axis xyz="${axis_xyz}" />
       <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
       <parent link="${parent}" />
       <child link="${child}" />
-      <limit effort="${effort}" velocity="${velocity}" lower="-1.7" upper="1.7"/>
+      <limit effort="${effort}" velocity="${velocity}" lower="${lower}" upper="${upper}"/>
       <joint_properties damping="${damping}" friction="${friction}" />
     </joint>
 

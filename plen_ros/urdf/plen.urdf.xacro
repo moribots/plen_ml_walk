@@ -557,7 +557,9 @@
                     parent="torso" child="r_shoulder"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-1.7"
+                    upper="1.7"/>
      
   <xacro:rev_joint name="r_shoulder_rs_servo" number="14" type="revolute"
                     axis_xyz="0 0 1"
@@ -565,7 +567,9 @@
                     parent="r_shoulder" child="rs_servo"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-0.15"
+                    upper="1.7"/>
 
   <xacro:frame_joint name="rs_servo_r_arm" type="fixed"
                     origin_rpy="${-pi/2} 0 ${0}" origin_xyz="${0/1000} ${19.5/1000} ${-2/1000}"
@@ -581,7 +585,9 @@
                     parent="re_servo" child="r_elbow"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-0.2"
+                    upper="0.5"/>
 
   <xacro:frame_joint name="r_elbow_r_hand" type="fixed"
                     origin_rpy="${pi} ${pi/2} ${0}" origin_xyz="${-30/1000} ${0/1000} ${0/1000}"
@@ -594,7 +600,9 @@
                     parent="torso" child="l_shoulder"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-1.7"
+                    upper="1.7"/>
      
   <xacro:rev_joint name="l_shoulder_ls_servo" number="17" type="revolute"
                     axis_xyz="0 0 1"
@@ -602,7 +610,9 @@
                     parent="l_shoulder" child="ls_servo"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-0.15"
+                    upper="1.7"/>
 
   <xacro:frame_joint name="ls_servo_l_arm" type="fixed"
                     origin_rpy="${-pi/2} 0 ${0}" origin_xyz="${0/1000} ${19.5/1000} ${-2/1000}"
@@ -618,7 +628,9 @@
                     parent="le_servo" child="l_elbow"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-0.2"
+                    upper="0.5"/>
 
   <xacro:frame_joint name="l_elbow_l_hand" type="fixed"
                     origin_rpy="${pi} ${pi/2} ${0}" origin_xyz="${-30/1000} ${0/1000} ${0/1000}"
@@ -631,7 +643,9 @@
                     parent="rb_servo" child="r_hip"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-1.7"
+                    upper="1.7"/>
 
   <xacro:rev_joint name="r_hip_r_thigh" number="2" type="revolute"
                     axis_xyz="0 1 0"
@@ -639,7 +653,9 @@
                     parent="r_hip" child="r_thigh"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-1.54"
+                    upper="0.12"/>
 
   <xacro:rev_joint name="r_thigh_r_knee" number="3" type="revolute"
                     axis_xyz="0 1 0"
@@ -647,7 +663,9 @@
                     parent="r_thigh" child="r_knee"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-1.7"
+                    upper="0.75"/>
 
   <xacro:frame_joint name="r_knee_knee_servo" type="fixed"
                     origin_rpy="${-pi/2} 0 0" origin_xyz="${28/1000} ${-12.8/1000} ${0.5/1000}"
@@ -659,7 +677,9 @@
                     parent="r_knee" child="r_shin"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-0.2"
+                    upper="0.95"/>
 
   <xacro:rev_joint name="r_shin_r_ankle" number="5" type="revolute"
                     axis_xyz="0 0 1"
@@ -667,7 +687,9 @@
                     parent="r_shin" child="r_ankle"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-0.95"
+                    upper="1.54"/>
 
   <xacro:rev_joint name="r_ankle_r_foot" number="6" type="revolute"
                     axis_xyz="0 1 0"
@@ -675,7 +697,9 @@
                     parent="r_ankle" child="r_foot"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-0.45"
+                    upper="0.8"/>
 
   <joint name="r_foot_r_sensor" type="fixed">
         <parent link="r_foot"/>
@@ -690,7 +714,9 @@
                     parent="lb_servo" child="l_hip"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-1.7"
+                    upper="1.7"/>
 
   <xacro:rev_joint name="l_hip_l_thigh" number="8" type="revolute"
                     axis_xyz="1 0 0"
@@ -698,7 +724,9 @@
                     parent="l_hip" child="l_thigh"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-0.12"
+                    upper="1.54"/>
 
   <xacro:rev_joint name="l_thigh_l_knee" number="9" type="revolute"
                     axis_xyz="0 1 0"
@@ -706,7 +734,9 @@
                     parent="l_thigh" child="l_knee"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-0.75"
+                    upper="1.7"/>
 
   <xacro:frame_joint name="l_knee_knee_servo" type="fixed"
                     origin_rpy="${-pi/2} ${pi} 0" origin_xyz="${28/1000} ${1.45/1000} ${0/1000}"
@@ -718,7 +748,9 @@
                     parent="l_knee" child="l_shin"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-0.95"
+                    upper="0.2"/>
 
   <xacro:rev_joint name="l_shin_l_ankle" number="11" type="revolute"
                     axis_xyz="0 1 0"
@@ -726,7 +758,9 @@
                     parent="l_shin" child="l_ankle"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/>
+                    friction="1"
+                    lower="-1.54"
+                    upper="0.95"/>
 
   <xacro:rev_joint name="l_ankle_l_foot" number="12" type="revolute"
                     axis_xyz="0 1 0"
@@ -734,7 +768,9 @@
                     parent="l_ankle" child="l_foot"
                     effort="0.15" velocity="8"
                     damping="1"
-                    friction="1"/> <!-- effort and velocity taken from FEETECH FS90-FB datasheet -->
+                    friction="1"
+                    lower="-0.8"
+                    upper="0.45"/> <!-- effort and velocity taken from FEETECH FS90-FB datasheet -->
 
   <joint name="l_foot_l_sensor" type="fixed">
         <parent link="l_foot"/>
