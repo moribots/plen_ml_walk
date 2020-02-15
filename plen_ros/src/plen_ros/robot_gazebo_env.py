@@ -203,9 +203,9 @@ class RobotGazeboEnv(gym.Env):
             self.gazebo.pauseSim()
             self.gazebo.resetSim()
             self.gazebo.unpauseSim()
-            self.gazebo.reset_joints(self.controllers_list, "plen")
-            # self.controllers_object.reset_controllers()
+            self.controllers_object.reset_controllers()
             self._check_all_systems_ready()
+            self.gazebo.reset_joints(self.controllers_list, "plen")
             self.gazebo.pauseSim()
             """
             rospy.logdebug("RESET CONTROLLERS")

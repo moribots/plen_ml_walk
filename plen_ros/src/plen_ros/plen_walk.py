@@ -413,6 +413,7 @@ class PlenWalkEnv(PlenEnv):
         # joints_initialized = False
         # self.gazebo.change_gravity(0, 0, 0)
         self.joints.set_init_pose(self.init_pose)
+        rospy.sleep(0.05)
         self.gazebo.reset_joints(self.controllers_list, "plen")
         # self.gazebo.change_gravity(0, 0, -9.81)
         # rospy.sleep(0.1)
@@ -528,7 +529,7 @@ class PlenWalkEnv(PlenEnv):
             - episode timesteps above limit
         """
         if self.torso_roll > np.abs(np.pi / 3.) or self.torso_pitch > np.abs(
-                np.pi / 3.) or self.torso_z < 0.095 or self.torso_y > 1:
+                np.pi / 3.) or self.torso_z < 0.08 or self.torso_y > 1:
             done = True
             self.dead = True
         elif self.episode_timestep > self.max_episode_steps and self.torso_x < 1:
