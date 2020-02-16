@@ -28,13 +28,17 @@ class JointTrajPub(object):
         jtp_msg.joint_names = self.joint_name_list
         point = JointTrajectoryPoint()
         point.positions = pos
-        point.velocities = self.jtp_zeros
+        # See urdf for vel (FEETECH FS-90 Servo)
+        point.velocities = self.jtp_zeros  # np.ones(18) * 8.0
+        # No Acc Data
         point.accelerations = self.jtp_zeros
-        point.effort = self.jtp_zeros
-        point.time_from_start = rospy.Duration(1 / 50.)
+        # See urdf for effort (FEETECH FS-90 Servo)
+        point.effort = np.ones(18) * 0.15
+        # one ns, the minimum time
+        point.time_from_start = rospy.Duration(1e-9)
         jtp_msg.points.append(point)
         self.jtp.publish(jtp_msg)
-        rospy.sleep(0.05)
+        # rospy.sleep(0.05)
 
     def set_init_pose(self, pos):
         self.check_joints_connection()
@@ -47,13 +51,17 @@ class JointTrajPub(object):
         jtp_msg.joint_names = self.joint_name_list
         point = JointTrajectoryPoint()
         point.positions = pos
-        point.velocities = self.jtp_zeros
-        point.accelerations = self.jtp_zeros
-        point.effort = self.jtp_zeros
-        point.time_from_start = rospy.Duration(0.001)
+        # See urdf for vel (FEETECH FS-90 Servo)
+        point.velocities = self.jtp_zeros  # np.ones(18) * 8.0
+        # No Acc Data
+        point.accelerations = self.jtp_zeros  # np.ones(18) * 8.0
+        # See urdf for effort (FEETECH FS-90 Servo)
+        point.effort = np.ones(18) * 0.15
+        # one ns, the minimum time
+        point.time_from_start = rospy.Duration(1e-9)
         jtp_msg.points.append(point)
         self.jtp.publish(jtp_msg)
-        rospy.sleep(0.05)
+        # rospy.sleep(0.05)
 
     def check_joints_connection(self):
         """

@@ -145,8 +145,6 @@ class PlenWalkEnv(PlenEnv):
         self.lfs_min = 0
         self.lfs_max = 1
 
-        # Getting creative with filling obs space due to specific format
-
         obs_low = np.append(
             self.joints_low,
             np.array([
@@ -403,7 +401,7 @@ class PlenWalkEnv(PlenEnv):
             rospy.logwarn("Sampled Too High!")
         elif env_val <= env_range[0]:
             env_val = env_range[0] + 0.001
-            rospy.logwarn("Sampled Too High!")
+            rospy.logwarn("Sampled Too Low!")
 
         return env_val
 
@@ -413,10 +411,10 @@ class PlenWalkEnv(PlenEnv):
         # joints_initialized = False
         # self.gazebo.change_gravity(0, 0, 0)
         self.joints.set_init_pose(self.init_pose)
-        rospy.sleep(0.05)
+        # rospy.sleep(0.05)
         self.gazebo.reset_joints(self.controllers_list, "plen")
         # self.gazebo.change_gravity(0, 0, -9.81)
-        # rospy.sleep(0.1)
+        rospy.sleep(self.running_step)
         # self.joints.set_init_pose(self.init_pose)
 
     def check_joints_init(self):

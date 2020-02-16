@@ -162,6 +162,7 @@ install(PROGRAMS
   src/joint_trajectory_test
   src/plen_td3
   src/walk_eval
+  src/gazebo_tools_test
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
