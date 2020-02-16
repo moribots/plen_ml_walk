@@ -1,10 +1,19 @@
 import gym
 from gym import spaces
 from gym.utils import seeding
+from gym.envs.registration import register
 
 import pybullet as p
 import pybullet_data
 import numpy as np
+
+from plen_bullet.scene import Scene
+
+register(
+    id="PlenWalkEnv-v1",
+    entry_point='plen_bullet.plen_env:PlenWalkEnv',
+    max_episode_steps=500,
+)
 
 
 class PlenWalkEnv(gym.Env):
@@ -17,8 +26,15 @@ class PlenWalkEnv(gym.Env):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def __init__(self, render=True):
+    def __init__(self, render=False):
         super(PlenWalkEnv, self).__init__()
+
+        self.scene = Scene()
+
+        self.running_step = 0.5
+        self.sim_step = 1. / 240.
+        self.sim_stepsize = int(self.running_step / self.sim_step)
+        print("SIM STEP SIZE: {}".format(self.sim_stepsize))
 
         # Learning Info Loggers
         self.episode_num = 0
@@ -32,6 +48,8 @@ class PlenWalkEnv(gym.Env):
 
         # Possible Rewards
         self.reward_range = (-np.inf, np.inf)
+
+        self.max_episode_steps = 500
 
         # Reward for being alive
         self.dead_penalty = 100.
@@ -174,7 +192,7 @@ class PlenWalkEnv(gym.Env):
                                      cameraPitch=-30,
                                      cameraTargetPosition=[0, 0, 0])
         self._seed()
-
+        p.setRealTimeSimulation(0)
         p.resetSimulation()
         p.setGravity(0, 0, -9.81)  # m/s^2
         # p.setTimeStep(1./60.)   # sec
@@ -191,8 +209,8 @@ class PlenWalkEnv(gym.Env):
 
     def reset(self):
         p.resetBasePositionAndOrientation(self.robotId,
-                                          posObj=self.cubeStartPos,
-                                          ornObj=self.cubeStartOrientation)
+                                          posObj=self.StartPos,
+                                          ornObj=self.StartOrientation)
         observation = self.compute_observation()
         self._publish_reward(self.cumulated_episode_reward, self.episode_num)
         self.episode_num += 1
@@ -227,6 +245,7 @@ class PlenWalkEnv(gym.Env):
                    moving_avg_reward))
 
     def step(self, action):
+        p.setRealTimeSimulation(0)
         # Convert agent actions into real actions
         env_action = np.empty(18)
         for i in range(len(action)):
@@ -234,7 +253,12 @@ class PlenWalkEnv(gym.Env):
             env_action[i] = self.agent_to_env(self.env_ranges[i], action[i])
 
         self.move_joints(action)
-        p.stepSimulation()
+
+        # Now Step Sim
+        # for i in range(self.sim_stepsize):
+        #     p.stepSimulation()
+        self.scene.global_step()
+
         observation = self.compute_observation()
         done = self.compute_done()
         reward = self.compute_reward()
@@ -304,16 +328,21 @@ class PlenWalkEnv(gym.Env):
         baseOri = np.array(p.getBasePositionAndOrientation(self.robotId))
         JointStates = p.getJointStates(self.robotId, self.movingJoints)
         BaseAngVel = p.getBaseVelocity(self.robotId)
-        self.left_contact = p.getContactPoints(self.robotId, self.plane, 19)[0]
-        self.right_contact = p.getContactPoints(self.robotId, self.plane,
-                                                11)[0]
+        left_contact = p.getContactPoints(self.robotId, self.plane, 19)
+        if left_contact is not None:
+            self.left_contact = 1
+        else:
+            self.left_contact = 0
+        right_contact = p.getContactPoints(self.robotId, self.plane, 11)
+        if right_contact is not None:
+            self.right_contact = 1
+        else:
+            self.right_contact = 0
 
         self.torso_z = baseOri[0][2]
         self.torso_y = baseOri[0][1]
-        roll, pitch, yaw = p.getEulerFromQuaternion(baseOri[1][0],
-                                                    baseOri[1][1],
-                                                    baseOri[1][2],
-                                                    baseOri[1][3])
+        roll, pitch, yaw = p.getEulerFromQuaternion(
+            [baseOri[1][0], baseOri[1][1], baseOri[1][2], baseOri[1][3]])
         self.torso_roll = roll
         self.torso_pitch = pitch
         self.torso_yaw = yaw
@@ -321,13 +350,14 @@ class PlenWalkEnv(gym.Env):
         self.torso_w_roll = BaseAngVel[1][0]
         self.torso_w_pitch = BaseAngVel[1][1]
         self.torso_w_yaw = BaseAngVel[1][2]
-        self.joint_poses = np.array(
+        self.joint_poses = np.array([
             JointStates[0][0], JointStates[1][0], JointStates[2][0],
             JointStates[3][0], JointStates[4][0], JointStates[5][0],
             JointStates[6][0], JointStates[7][0], JointStates[8][0],
             JointStates[9][0], JointStates[10][0], JointStates[11][0],
             JointStates[12][0], JointStates[13][0], JointStates[14][0],
-            JointStates[15][0], JointStates[16][0], JointStates[17][0])
+            JointStates[15][0], JointStates[16][0], JointStates[17][0]
+        ])
 
         observations = np.append(
             self.joint_poses,
