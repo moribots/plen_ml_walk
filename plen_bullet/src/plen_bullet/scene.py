@@ -6,7 +6,7 @@ import gym
 
 class Scene:
     """A base class for single- and multiplayer scenes"""
-    def __init__(self, bullet_client=bullet_client.BulletClient(connection_mode=pybullet.GUI), gravity=9.81, timestep=0.0165 / 4, frame_skip=4):
+    def __init__(self, bullet_client=bullet_client.BulletClient(connection_mode=pybullet.GUI), gravity=9.81, timestep=0.0165, frame_skip=4):
         self._p = bullet_client
         self.np_random, seed = gym.utils.seeding.np_random(None)
         self.timestep = timestep
