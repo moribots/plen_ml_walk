@@ -29,7 +29,7 @@ class PlenWalkEnv(gym.Env):
     def __init__(self, render=True):
         super(PlenWalkEnv, self).__init__()
 
-        self.running_step = 0.01
+        self.running_step = 0.0165
         self.sim_step = 1. / 240.
         self.sim_stepsize = int(self.running_step / self.sim_step)
         print("SIM STEP SIZE: {}".format(self.sim_stepsize))
@@ -53,18 +53,18 @@ class PlenWalkEnv(gym.Env):
         self.dead_penalty = 100.
         self.alive_reward = self.dead_penalty / self.max_episode_steps
         # Reward for forward velocity
-        self.vel_weight = 50.
+        self.vel_weight = 1.
         # Reward for maintaining original height
         self.init_height = 0.158
-        self.height_weight = 70.
+        self.height_weight = 2.
         # Reward for staying on x axis
-        self.straight_weight = 50
+        self.straight_weight = 1
         # Reward staying upright
-        self.roll_weight = 50.
+        self.roll_weight = 1.
         # Reward for staying upright
-        self.pitch_weight = 30.
+        self.pitch_weight = 0.5
         # reward for facing forward
-        self.yaw_weight = 50.
+        self.yaw_weight = 1.
         # Reward for minimal joint actuation
         self.joint_effort_weight = 0.035
         # Whether the episode is done due to failure
@@ -221,8 +221,10 @@ class PlenWalkEnv(gym.Env):
 
         # time.sleep(2)
         self.move_joints(np.zeros(18))
-        # for i in range(self.sim_stepsize):
-        p.stepSimulation()
+        for i in range(self.sim_stepsize):
+            p.stepSimulation()
+
+        # time.sleep(0.1)
 
         observation = self.compute_observation()
         self._publish_reward(self.cumulated_episode_reward, self.episode_num)
@@ -340,7 +342,7 @@ class PlenWalkEnv(gym.Env):
                                     jointIndices=self.movingJoints,
                                     controlMode=p.POSITION_CONTROL,
                                     targetPositions=action,
-                                    targetVelocities=np.zeros(18),
+                                    # targetVelocities=np.zeros(18),
                                     forces=np.ones(18) * 0.15)
 
         # for i, key in enumerate(self.movingJoints):

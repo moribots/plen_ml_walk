@@ -34,7 +34,8 @@ class PlenWalkEnv(PlenEnv):
         self.init_pose = np.zeros(18)
 
         # How long to step the simulation for (sec)
-        self.running_step = 0.05
+        self.update_rate = 3.0  # Make sure this matches update rate in gazebo cnx
+        self.running_step = 0.0165 / self.update_rate
 
         # Agent Action Space
         low_act = np.ones(18) * -1

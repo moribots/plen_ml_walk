@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import numpy as np
-import rospy
 
 from plen_ros.td3 import ReplayBuffer, TD3Agent
 
@@ -17,7 +16,7 @@ import time
 def main():
     """ The main() function. """
 
-    rospy.loginfo("STARTING PLEN_TD3 NODE")
+    print("STARTING PLEN_TD3 NODE")
 
     # TRAINING PARAMETERS
     env_name = "PlenWalkEnv-v1"
@@ -66,7 +65,7 @@ def main():
                       str(buffer_number) + '.data'):
         print("Loading Replay Buffer " + str(buffer_number))
         replay_buffer.load(buffer_number)
-        # rospy.loginfo(replay_buffer.storage)
+        # print(replay_buffer.storage)
 
     # Evaluate untrained policy and init list for storage
     evaluations = []
@@ -77,7 +76,7 @@ def main():
     episode_timesteps = 0
     episode_num = 0
 
-    rospy.loginfo("STARTED PLEN_TD3 NODE")
+    print("STARTED PLEN_TD3 NODE")
 
     for t in range(int(max_timesteps)):
 
@@ -92,7 +91,7 @@ def main():
             # rospy.logdebug("Sampled Action")
         else:
             # According to policy + Exploraton Noise
-            # rospy.loginfo("POLICY Action")
+            # print("POLICY Action")
             """ Note we clip at +-0.99.... because Gazebo
                 has problems executing actions at the
                 position limit (breaks model)
@@ -121,7 +120,7 @@ def main():
         if done:
             # +1 to account for 0 indexing.
             # +0 on ep_timesteps since it will increment +1 even if done=True
-            # rospy.loginfo(
+            # print(
             #     "Total T: {} Episode Num: {} Episode T: {} Reward: {}".format(
             #         t + 1, episode_num, episode_timesteps, episode_reward))
             # Reset environment
@@ -146,9 +145,9 @@ def main():
             #     state, reward, done, _ = env.step(action)
             #     eval_reward += reward
             # evaluations.append(eval_reward)
-            # rospy.loginfo("---------------------------------------")
-            # rospy.loginfo("Evaluation Reward: {}".format(reward))
-            # rospy.loginfo("---------------------------------------")
+            # print("---------------------------------------")
+            # print("Evaluation Reward: {}".format(reward))
+            # print("---------------------------------------")
             np.save(results_path + "/" + str(file_name), evaluations)
             if save_model:
                 policy.save(models_path + "/" + str(file_name) + str(t))
