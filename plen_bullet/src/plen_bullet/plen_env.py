@@ -29,7 +29,7 @@ class PlenWalkEnv(gym.Env):
     def __init__(self, render=True):
         super(PlenWalkEnv, self).__init__()
 
-        self.running_step = 0.05
+        self.running_step = 0.01
         self.sim_step = 1. / 240.
         self.sim_stepsize = int(self.running_step / self.sim_step)
         print("SIM STEP SIZE: {}".format(self.sim_stepsize))

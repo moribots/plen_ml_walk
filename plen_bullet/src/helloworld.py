@@ -37,7 +37,7 @@ for i in range(100000000):
                                 jointIndices=movingJoints,
                                 controlMode=p.POSITION_CONTROL,
                                 targetPositions=np.ones(18),
-                                targetVelocities=np.zeros(18) * 1.,
+                                targetVelocities=np.zeros(18),
                                 forces=np.ones(18) * 0.15)
     # joint = p.getJointState(boxId, 21)
     # if printer == 0:
