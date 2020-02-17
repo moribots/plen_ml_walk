@@ -7,7 +7,7 @@ import pybullet as p
 import pybullet_data
 import numpy as np
 
-from plen_bullet.scene import Scene
+import time
 
 register(
     id="PlenWalkEnv-v1",
@@ -26,12 +26,10 @@ class PlenWalkEnv(gym.Env):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def __init__(self, render=False):
+    def __init__(self, render=True):
         super(PlenWalkEnv, self).__init__()
 
-        self.scene = Scene()
-
-        self.running_step = 0.5
+        self.running_step = 0.2
         self.sim_step = 1. / 240.
         self.sim_stepsize = int(self.running_step / self.sim_step)
         print("SIM STEP SIZE: {}".format(self.sim_stepsize))
@@ -195,10 +193,17 @@ class PlenWalkEnv(gym.Env):
         p.setRealTimeSimulation(0)
         p.resetSimulation()
         p.setGravity(0, 0, -9.81)  # m/s^2
-        # p.setTimeStep(1./60.)   # sec
+        self.timestep = 1. / 240.
+        self.frame_skip = 4
+        self.numSolverIterations = 5
+        # p.setPhysicsEngineParameter(
+        #     fixedTimeStep=self.timestep * self.frame_skip,
+        #     numSolverIterations=self.numSolverIterations,
+        #     numSubSteps=self.frame_skip)
+        # p.setTimeStep(0.01)   # sec
         # p.setTimeStep(0.001)  # sec
         self.plane = p.loadURDF("plane.urdf")
-        self.StartPos = [0, 0, 0.157]
+        self.StartPos = [0, 0, 0.16]
         self.StartOrientation = p.getQuaternionFromEuler([0, 0, 0])
         self.robotId = p.loadURDF("plen.urdf", self.StartPos,
                                   self.StartOrientation)
@@ -211,6 +216,12 @@ class PlenWalkEnv(gym.Env):
         p.resetBasePositionAndOrientation(self.robotId,
                                           posObj=self.StartPos,
                                           ornObj=self.StartOrientation)
+        for joint in self.movingJoints:
+            p.resetJointState(self.robotId, joint, 0)
+
+        # for i in range(self.sim_stepsize):
+        #     p.stepSimulation()
+
         observation = self.compute_observation()
         self._publish_reward(self.cumulated_episode_reward, self.episode_num)
         self.episode_num += 1
@@ -245,19 +256,23 @@ class PlenWalkEnv(gym.Env):
                    moving_avg_reward))
 
     def step(self, action):
-        p.setRealTimeSimulation(0)
         # Convert agent actions into real actions
-        env_action = np.empty(18)
+        env_action = np.zeros(18)
+        # print("MESS {}".format(env_action))
+
         for i in range(len(action)):
             # Convert action from [-1, 1] to real env values
             env_action[i] = self.agent_to_env(self.env_ranges[i], action[i])
 
-        self.move_joints(action)
+        # print("ENV ACTION {}".format(env_action))
+        # p.stepSimulation()
+        # self.move_joints(np.ones(18))
+        self.move_joints(env_action)
+        # p.stepSimulation()
+        for i in range(self.sim_stepsize):
+                p.stepSimulation()
 
-        # Now Step Sim
-        # for i in range(self.sim_stepsize):
-        #     p.stepSimulation()
-        self.scene.global_step()
+        time.sleep(2)
 
         observation = self.compute_observation()
         done = self.compute_done()
@@ -319,10 +334,23 @@ class PlenWalkEnv(gym.Env):
 
         TOTAL: 18
         """
-        p.setJointMotorControlArray(bodyUniqueId=self.robotId,
-                                    jointIndices=self.movingJoints,
+        # p.setJointMotorControlArray(bodyUniqueId=self.robotId,
+        #                             jointIndices=self.movingJoints,
+        #                             controlMode=p.POSITION_CONTROL,
+        #                             targetPositions=action)
+
+        # for i, key in enumerate(self.movingJoints):
+        #     p.setJointMotorControl2(bodyUniqueId=self.robotId,
+        #                             jointIndex=key,
+        #                             controlMode=p.POSITION_CONTROL,
+        #                             targetPosition=action[i])
+        for i in range(len(self.movingJoints)):
+            p.setJointMotorControl2(bodyUniqueId=self.robotId,
+                                    jointIndex=self.movingJoints[i],
                                     controlMode=p.POSITION_CONTROL,
-                                    targetPositions=action)
+                                    targetPosition=action[i])
+        # print("INDEX: {}".format(i))
+        # print("KEY: {}".format(key))
 
     def compute_observation(self):
         baseOri = np.array(p.getBasePositionAndOrientation(self.robotId))
