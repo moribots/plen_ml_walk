@@ -12,15 +12,19 @@ planeId = p.loadURDF("plane.urdf")
 StartPos = [0, 0, 0.158]
 StartOrientation = p.getQuaternionFromEuler([0, 0, 0])
 p.resetDebugVisualizerCamera(cameraDistance=0.8,
-                             cameraYaw=90,
+                             cameraYaw=0,
                              cameraPitch=-30,
                              cameraTargetPosition=[0, 0, 0])
-boxId = p.loadURDF("plen.urdf", StartPos, StartOrientation)
+boxId = p.loadURDF("plen.urdf", StartPos,
+                   StartOrientation)  # , flags=p.URDF_USE_SELF_COLLISION
 numj = p.getNumJoints(boxId)
 Pos, Orn = p.getBasePositionAndOrientation(boxId)
 print(Pos, Orn)
 # print("Number of joints {}".format(numj))
 joint = []
+movingJoints = [
+    5, 6, 7, 9, 10, 11, 13, 14, 15, 17, 18, 19, 20, 21, 24, 26, 27, 30
+]
 # for i in range(32):
 #     joint = p.getJointInfo(boxId, i)
 #     print("Joint {} name: {}".format(i, joint[1]))
@@ -29,19 +33,20 @@ for i in range(100000000):
     # Control Motors
     maxVelocity = 100
     mode = p.POSITION_CONTROL
+    p.setJointMotorControlArray(bodyUniqueId=boxId,
+                                jointIndices=movingJoints,
+                                controlMode=p.POSITION_CONTROL,
+                                targetPositions=np.ones(18),
+                                targetVelocities=np.zeros(18) * 1.,
+                                forces=np.ones(18) * 0.15)
+    # joint = p.getJointState(boxId, 21)
+    # if printer == 0:
+    #     # print("Joint Pos: {}".format(joint[0]))
+    #     if joint[0] >= abs(np.pi / 3 - 0.00001):
+    #         print("Time Elapsed: {}(s)".format((1. / 240.) * (i)))
+    #         print("Timestep: {}".format(i))
+    #         printer = 1
     p.stepSimulation()
-    if i == 0:
-        p.setJointMotorControl2(boxId,
-                                5,
-                                controlMode=mode,
-                                targetPosition=np.pi / 3)
-    joint = p.getJointState(boxId, 5)
-    if printer == 0:
-        # print("Joint Pos: {}".format(joint[0]))
-        if joint[0] >= abs(np.pi / 3 - 0.00001):
-            print("Time Elapsed: {}(s)".format((1. / 240.) * (i)))
-            print("Timestep: {}".format(i))
-            printer = 1
 p.disconnect()
 """
 RIGHT LEG:

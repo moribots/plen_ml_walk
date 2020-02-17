@@ -1,0 +1,2556 @@
+<sdf version='1.6'>
+  <model name='plen'>
+      <link name='base_footprint'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.013291 0 0.003152 0 -0 0</pose>
+          <mass>0.165968</mass>
+          <inertia>
+            <ixx>0.000122786</ixx>
+            <ixy>-2.56651e-19</ixy>
+            <ixz>-4.25728e-06</ixz>
+            <iyy>0.000129777</iyy>
+            <iyz>0</iyz>
+            <izz>7.94923e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='base_footprint_fixed_joint_lump__torso_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.045 0.048 0.075</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='base_footprint_fixed_joint_lump__battery_collision_1'>
+          <pose frame=''>-0.0285 0 -0.0005 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.011 0.051 0.046</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='base_footprint_fixed_joint_lump__head_collision_2'>
+          <pose frame=''>-0.0065 0 0.056 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.04 0.04 0.04</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='base_footprint_fixed_joint_lump__lb_servo_collision_3'>
+          <pose frame=''>-0.0066 0.01655 -0.02475 3.14159 -0 3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.012 0.025 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='base_footprint_fixed_joint_lump__lt_servo_collision_4'>
+          <pose frame=''>-0.0066 0.022 0.02455 1.5708 -0 -3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.012 0.025 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='base_footprint_fixed_joint_lump__rb_servo_collision_5'>
+          <pose frame=''>-0.0066 -0.01655 -0.02475 3.14159 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.012 0.025 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='base_footprint_fixed_joint_lump__rt_servo_collision_6'>
+          <pose frame=''>-0.0066 -0.022 0.02455 1.5708 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.012 0.025 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='base_footprint_fixed_joint_lump__torso_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/torso.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='base_footprint_fixed_joint_lump__battery_visual_1'>
+          <pose frame=''>-0.036 0 -0.012 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/battery.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='base_footprint_fixed_joint_lump__head_visual_2'>
+          <pose frame=''>-0.0065 0 0.056 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/head.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='base_footprint_fixed_joint_lump__lb_servo_visual_3'>
+          <pose frame=''>-0.0066 0.0228 -0.02475 3.14159 -0 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/servo.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='base_footprint_fixed_joint_lump__lt_servo_visual_4'>
+          <pose frame=''>-0.0066 0.022 0.0308 1.5708 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/servo.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='base_footprint_fixed_joint_lump__rb_servo_visual_5'>
+          <pose frame=''>-0.0066 -0.0228 -0.02475 3.14159 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/servo.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='base_footprint_fixed_joint_lump__rt_servo_visual_6'>
+          <pose frame=''>-0.0066 -0.022 0.0308 1.5708 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/servo.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='l_shoulder'>
+        <pose frame=''>-0.0066 0.038 0.0308 1.57079 -1.57079 3.14159</pose>
+        <inertial>
+          <pose frame=''>0 0 0.0125 0 -0 0</pose>
+          <mass>0.002954</mass>
+          <inertia>
+            <ixx>2.33612e-07</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>2.33612e-07</iyy>
+            <iyz>0</iyz>
+            <izz>3.81312e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_shoulder_collision'>
+          <pose frame=''>0 0 0.0125 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.018 0.035 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='l_shoulder_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/shoulder.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='torso_l_shoulder' type='revolute'>
+        <child>l_shoulder</child>
+        <parent>base_footprint</parent>
+        <axis>
+          <xyz>-0 1 -0</xyz>
+          <limit>
+            <lower>-1.7</lower>
+            <upper>1.7</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='ls_servo'>
+        <pose frame=''>-0.006 0.05065 0.02545 -1.5708 -0 -1.5708</pose>
+        <inertial>
+          <pose frame=''>0 0.0195 -0.002 0 -0 0</pose>
+          <mass>0.029091</mass>
+          <inertia>
+            <ixx>7.00358e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>2.24916e-06</iyy>
+            <iyz>6.36e-07</iyz>
+            <izz>6.90758e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='ls_servo_collision'>
+          <pose frame=''>0 0.00625 0 0 -0 -3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.012 0.025 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='ls_servo_fixed_joint_lump__l_arm_collision_1'>
+          <pose frame=''>0 0.0195 -0.002 -1.5708 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.015 0.035 0.05</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='ls_servo_fixed_joint_lump__le_servo_collision_2'>
+          <pose frame=''>0 0.03275 -0.004 3.14159 -0 3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.012 0.025 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='ls_servo_visual'>
+          <pose frame=''>0 0 0 0 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/servo.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='ls_servo_fixed_joint_lump__l_arm_visual_1'>
+          <pose frame=''>0 0.0195 -0.002 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/arm.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='ls_servo_fixed_joint_lump__le_servo_visual_2'>
+          <pose frame=''>0 0.039 -0.004 3.14159 -0 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/servo.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_shoulder_ls_servo' type='revolute'>
+        <child>ls_servo</child>
+        <parent>l_shoulder</parent>
+        <axis>
+          <xyz>1 0 -0</xyz>
+          <limit>
+            <lower>-0.15</lower>
+            <upper>1.7</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_elbow'>
+        <pose frame=''>-0.0085 0.05065 -0.01355 1.57079 -1.57079 3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.023761 0 0 0 -0 0</pose>
+          <mass>0.011351</mass>
+          <inertia>
+            <ixx>1.28469e-06</ixx>
+            <ixy>9.87658e-21</ixy>
+            <ixz>2.92407e-24</ixz>
+            <iyy>2.53715e-06</iyy>
+            <iyz>-6.04766e-37</iyz>
+            <izz>2.78083e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_elbow_collision'>
+          <pose frame=''>-0.00675 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.027 0.034 0.014</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='l_elbow_fixed_joint_lump__l_hand_collision_1'>
+          <pose frame=''>-0.03 0 0 3.14159 1.57079 3e-06</pose>
+          <geometry>
+            <box>
+              <size>0.019 0.034 0.035</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='l_elbow_visual'>
+          <pose frame=''>-0.0135 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/elbow.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='l_elbow_fixed_joint_lump__l_hand_visual_1'>
+          <pose frame=''>-0.03 0 0 3.14159 1.57079 3e-06</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/hand.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='le_servo_l_elbow' type='revolute'>
+        <child>l_elbow</child>
+        <parent>ls_servo</parent>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-0.2</lower>
+            <upper>0.5</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_hip'>
+        <pose frame=''>-0.0066 0.0228 -0.03895 0 0 -1.5708</pose>
+        <inertial>
+          <pose frame=''>0 0 -0.009 0 -0 0</pose>
+          <mass>0.002568</mass>
+          <inertia>
+            <ixx>2.03086e-07</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>2.03086e-07</iyy>
+            <iyz>0</iyz>
+            <izz>3.959e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_hip_collision'>
+          <pose frame=''>0 0 -0.009 0 -0 -3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.025 0.035 0.018</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='l_hip_visual'>
+          <pose frame=''>0 0 0.001 0 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/lhip.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='lb_servo_l_hip' type='revolute'>
+        <child>l_hip</child>
+        <parent>base_footprint</parent>
+        <axis>
+          <xyz>-0 -0 1</xyz>
+          <limit>
+            <lower>-1.7</lower>
+            <upper>1.7</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_thigh'>
+        <pose frame=''>0.0104 0.0173 -0.0516 1.5708 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.014 -0.007 -0.007 0 -0 0</pose>
+          <mass>0.04</mass>
+          <inertia>
+            <ixx>5.22667e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>5.22667e-06</iyy>
+            <iyz>0</iyz>
+            <izz>5.22667e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_thigh_collision'>
+          <pose frame=''>-0.014 -0.007 -0.007 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.028 0.028 0.028</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='l_thigh_visual'>
+          <pose frame=''>0 0 0 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/rankle.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_hip_l_thigh' type='revolute'>
+        <child>l_thigh</child>
+        <parent>l_hip</parent>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-0.12</lower>
+            <upper>1.54</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_knee'>
+        <pose frame=''>0.003 0.0259 -0.0644 -3.14159 1.57079 3.14159</pose>
+        <inertial>
+          <pose frame=''>0.02491 0.000729 0.004411 0 -0 0</pose>
+          <mass>0.017004</mass>
+          <inertia>
+            <ixx>1.77048e-06</ixx>
+            <ixy>-9.08454e-08</ixy>
+            <ixz>-2.31748e-07</ixz>
+            <iyy>2.13862e-06</iyy>
+            <iyz>-5.40746e-08</iyz>
+            <izz>2.15698e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_knee_collision'>
+          <pose frame=''>0.0175 -0.001 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.038 0.03 0.024</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='l_knee_servo_collision_1'>
+          <pose frame=''>0.028 0.00145 0.00625 -1.5708 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.012 0.025 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='l_knee_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/lknee.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='l_knee_servo_visual_1'>
+          <pose frame=''>0.028 0.00145 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/servo.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_thigh_l_knee' type='revolute'>
+        <child>l_knee</child>
+        <parent>l_thigh</parent>
+        <axis>
+          <xyz>0 1 -0</xyz>
+          <limit>
+            <lower>-0.75</lower>
+            <upper>1.7</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_shin'>
+        <pose frame=''>0.00345 0.0257 -0.0925 3.14159 -1.57079 3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.018 0 0.004 0 -0 0</pose>
+          <mass>0.006965</mass>
+          <inertia>
+            <ixx>1.48238e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.48238e-06</iyy>
+            <iyz>0</iyz>
+            <izz>2.10401e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_shin_collision'>
+          <pose frame=''>-0.018 0 0.004 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.045 0.04 0.023</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='l_shin_visual'>
+          <pose frame=''>-0.0169 0 -0.0091 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/rshin.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_knee_l_shin' type='revolute'>
+        <child>l_shin</child>
+        <parent>l_knee</parent>
+        <axis>
+          <xyz>0 1 -0</xyz>
+          <limit>
+            <lower>-0.95</lower>
+            <upper>0.2</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_ankle'>
+        <pose frame=''>0.00345 0.0237 -0.12625 3.14159 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.007 0 0.007 0 -0 0</pose>
+          <mass>0.04</mass>
+          <inertia>
+            <ixx>5.22667e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>5.22667e-06</iyy>
+            <iyz>0</iyz>
+            <izz>5.22667e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_ankle_collision'>
+          <pose frame=''>-0.007 0 0.007 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.028 0.028 0.028</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='l_ankle_visual'>
+          <pose frame=''>-0.0075 0 -0.0075 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/rthigh.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_shin_l_ankle' type='revolute'>
+        <child>l_ankle</child>
+        <parent>l_shin</parent>
+        <axis>
+          <xyz>-0 -1 0</xyz>
+          <limit>
+            <lower>-1.54</lower>
+            <upper>0.95</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='l_foot'>
+        <pose frame=''>-0.00075 0.0162 -0.13905 0 -0 1.5708</pose>
+        <inertial>
+          <pose frame=''>0.00925 0 -0.009005 0 -0 0</pose>
+          <mass>0.015008</mass>
+          <inertia>
+            <ixx>2.1347e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>4.23516e-22</ixz>
+            <iyy>2.1347e-06</iyy>
+            <iyz>0</iyz>
+            <izz>7.05437e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_foot_collision'>
+          <pose frame=''>0.00925 0 -0.017 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.041 0.062867 0.004</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='l_foot_fixed_joint_lump__lfs_link_collision_1'>
+          <pose frame=''>0.00925 0 -0.018 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.041 0.062867 0.002</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='l_foot_visual'>
+          <pose frame=''>0.00885 0 -0.0142 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/lfoot.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='l_foot_fixed_joint_lump__lfs_link_visual_1'>
+          <pose frame=''>0.00925 0 -0.018 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.041 0.062867 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/GreyTransparent</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <sensor name='lfs_link_sensor' type='contact'>
+          <always_on>1</always_on>
+          <contact>
+            <collision>l_foot_fixed_joint_lump__lfs_link_collision_1</collision>
+            <topic>__default_topic__</topic>
+          </contact>
+          <plugin name='bumper0_plugin' filename='libgazebo_ros_bumper.so'>
+            <bumperTopicName>plen/left_foot_contact</bumperTopicName>
+            <frameName>plen/left_foot_contact</frameName>
+            <robotNamespace>/</robotNamespace>
+          </plugin>
+          <pose frame=''>0.00925 0 -0.018 0 -0 0</pose>
+        </sensor>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_ankle_l_foot' type='revolute'>
+        <child>l_foot</child>
+        <parent>l_ankle</parent>
+        <axis>
+          <xyz>-1 0 -0</xyz>
+          <limit>
+            <lower>-0.8</lower>
+            <upper>0.45</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_shoulder'>
+        <pose frame=''>-0.0066 -0.038 0.0308 -1.57079 -1.57079 3.14159</pose>
+        <inertial>
+          <pose frame=''>0 0 0.0125 0 -0 0</pose>
+          <mass>0.002954</mass>
+          <inertia>
+            <ixx>2.33612e-07</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>2.33612e-07</iyy>
+            <iyz>0</iyz>
+            <izz>3.81312e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_shoulder_collision'>
+          <pose frame=''>0 0 0.0125 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.018 0.035 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='r_shoulder_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/shoulder.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='torso_r_shoulder' type='revolute'>
+        <child>r_shoulder</child>
+        <parent>base_footprint</parent>
+        <axis>
+          <xyz>-0 -1 -0</xyz>
+          <limit>
+            <lower>-1.7</lower>
+            <upper>1.7</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='rs_servo'>
+        <pose frame=''>-0.0072 -0.05065 0.02545 -1.5708 0 1.5708</pose>
+        <inertial>
+          <pose frame=''>0 0.0195 -0.002 0 -0 0</pose>
+          <mass>0.029091</mass>
+          <inertia>
+            <ixx>7.00358e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>2.24916e-06</iyy>
+            <iyz>6.36e-07</iyz>
+            <izz>6.90758e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='rs_servo_collision'>
+          <pose frame=''>0 0.00625 0 0 -0 -3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.012 0.025 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='rs_servo_fixed_joint_lump__r_arm_collision_1'>
+          <pose frame=''>0 0.0195 -0.002 -1.5708 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.015 0.035 0.05</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='rs_servo_fixed_joint_lump__re_servo_collision_2'>
+          <pose frame=''>0 0.03275 -0.004 3.14159 -0 3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.012 0.025 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='rs_servo_visual'>
+          <pose frame=''>0 0 0 0 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/servo.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='rs_servo_fixed_joint_lump__r_arm_visual_1'>
+          <pose frame=''>0 0.0195 -0.002 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/arm.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='rs_servo_fixed_joint_lump__re_servo_visual_2'>
+          <pose frame=''>0 0.039 -0.004 3.14159 -0 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/servo.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_shoulder_rs_servo' type='revolute'>
+        <child>rs_servo</child>
+        <parent>r_shoulder</parent>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-0.15</lower>
+            <upper>1.7</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_elbow'>
+        <pose frame=''>-0.0047 -0.05065 -0.01355 -1.57079 -1.57079 3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.023761 0 0 0 -0 0</pose>
+          <mass>0.011351</mass>
+          <inertia>
+            <ixx>1.28469e-06</ixx>
+            <ixy>9.87658e-21</ixy>
+            <ixz>2.92407e-24</ixz>
+            <iyy>2.53715e-06</iyy>
+            <iyz>-6.04766e-37</iyz>
+            <izz>2.78083e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_elbow_collision'>
+          <pose frame=''>-0.00675 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.027 0.034 0.014</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='r_elbow_fixed_joint_lump__r_hand_collision_1'>
+          <pose frame=''>-0.03 0 0 3.14159 1.57079 3e-06</pose>
+          <geometry>
+            <box>
+              <size>0.019 0.034 0.035</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='r_elbow_visual'>
+          <pose frame=''>-0.0135 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/elbow.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='r_elbow_fixed_joint_lump__r_hand_visual_1'>
+          <pose frame=''>-0.03 0 0 3.14159 1.57079 3e-06</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/hand.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='re_servo_r_elbow' type='revolute'>
+        <child>r_elbow</child>
+        <parent>rs_servo</parent>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-0.2</lower>
+            <upper>0.5</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_hip'>
+        <pose frame=''>-0.0066 -0.0228 -0.03895 0 -0 1.5708</pose>
+        <inertial>
+          <pose frame=''>0 0 -0.009 0 -0 0</pose>
+          <mass>0.002568</mass>
+          <inertia>
+            <ixx>2.03086e-07</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>2.03086e-07</iyy>
+            <iyz>0</iyz>
+            <izz>3.959e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_hip_collision'>
+          <pose frame=''>0 0 -0.009 -3.14159 -0 -3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.025 0.035 0.018</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='r_hip_visual'>
+          <pose frame=''>0 0 0 -3.14159 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/rhip.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='rb_servo_r_hip' type='revolute'>
+        <child>r_hip</child>
+        <parent>base_footprint</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-1.7</lower>
+            <upper>1.7</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_thigh'>
+        <pose frame=''>-0.0046 -0.01735 -0.05176 -3.14159 -0 1.5708</pose>
+        <inertial>
+          <pose frame=''>-0.007 0 0.007 0 -0 0</pose>
+          <mass>0.04</mass>
+          <inertia>
+            <ixx>5.22667e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>5.22667e-06</iyy>
+            <iyz>0</iyz>
+            <izz>5.22667e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_thigh_collision'>
+          <pose frame=''>-0.007 0 0.007 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.028 0.028 0.028</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='r_thigh_visual'>
+          <pose frame=''>-0.0075 0 -0.0075 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/rthigh.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_hip_r_thigh' type='revolute'>
+        <child>r_thigh</child>
+        <parent>r_hip</parent>
+        <axis>
+          <xyz>1 0 -0</xyz>
+          <limit>
+            <lower>-1.54</lower>
+            <upper>0.12</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_knee'>
+        <pose frame=''>0.0029 -0.04035 -0.06451 -3e-06 1.57079 3.14159</pose>
+        <inertial>
+          <pose frame=''>0.02491 -0.013447 -0.004058 0 -0 0</pose>
+          <mass>0.017004</mass>
+          <inertia>
+            <ixx>1.74519e-06</ixx>
+            <ixy>-8.15754e-08</ixy>
+            <ixz>2.13209e-07</ixz>
+            <iyy>2.11743e-06</iyy>
+            <iyz>4.46723e-08</iyz>
+            <izz>2.15288e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_knee_collision'>
+          <pose frame=''>0.0175 -0.015 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.038 0.03 0.024</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='r_knee_servo_collision_1'>
+          <pose frame=''>0.028 -0.0128 -0.00575 1.5708 -0 -3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.012 0.025 0.025</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='r_knee_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/rknee.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='r_knee_servo_visual_1'>
+          <pose frame=''>0.028 -0.0128 0.0005 1.5708 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/servo.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_thigh_r_knee' type='revolute'>
+        <child>r_knee</child>
+        <parent>r_thigh</parent>
+        <axis>
+          <xyz>0 -1 -0</xyz>
+          <limit>
+            <lower>-1.7</lower>
+            <upper>0.75</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_shin'>
+        <pose frame=''>0.00245 -0.02575 -0.09261 -3e-06 1.57079 3.14159</pose>
+        <inertial>
+          <pose frame=''>0.018 0 0.004 0 -0 0</pose>
+          <mass>0.006965</mass>
+          <inertia>
+            <ixx>1.48238e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.48238e-06</iyy>
+            <iyz>0</iyz>
+            <izz>2.10401e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_shin_collision'>
+          <pose frame=''>0.018 0 0.004 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.045 0.04 0.023</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='r_shin_visual'>
+          <pose frame=''>0.0168 0 -0.0091 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/rshin.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_knee_r_shin' type='revolute'>
+        <child>r_shin</child>
+        <parent>r_knee</parent>
+        <axis>
+          <xyz>0 -1 -0</xyz>
+          <limit>
+            <lower>-0.2</lower>
+            <upper>0.95</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_ankle'>
+        <pose frame=''>0.00245 -0.00875 -0.12636 1.5708 -0 -3.14159</pose>
+        <inertial>
+          <pose frame=''>0.007 -0.007 -0.014 0 -0 0</pose>
+          <mass>0.04</mass>
+          <inertia>
+            <ixx>5.22667e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>5.22667e-06</iyy>
+            <iyz>0</iyz>
+            <izz>5.22667e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_ankle_collision'>
+          <pose frame=''>0.007 -0.007 -0.014 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.028 0.028 0.028</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='r_ankle_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/rankle.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Orange</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_shin_r_ankle' type='revolute'>
+        <child>r_ankle</child>
+        <parent>r_shin</parent>
+        <axis>
+          <xyz>-0 1 -0</xyz>
+          <limit>
+            <lower>-0.95</lower>
+            <upper>1.54</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='r_foot'>
+        <pose frame=''>-0.00175 -0.01615 -0.13906 0 -0 1.5708</pose>
+        <inertial>
+          <pose frame=''>-0.00925 0 -0.009005 0 -0 0</pose>
+          <mass>0.015008</mass>
+          <inertia>
+            <ixx>2.1347e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>-4.23516e-22</ixz>
+            <iyy>2.1347e-06</iyy>
+            <iyz>0</iyz>
+            <izz>7.05437e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_foot_collision'>
+          <pose frame=''>-0.00925 0 -0.017 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.041 0.062867 0.004</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='r_foot_fixed_joint_lump__rfs_link_collision_1'>
+          <pose frame=''>-0.00925 0 -0.018 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.041 0.062867 0.002</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+07</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>100</mu2>
+                <fdir1>1 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='r_foot_visual'>
+          <pose frame=''>-0.0085 0 -0.0198 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>/home/mori/Projects/plen/src/plen/plen_ros/meshes/rfoot.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Gray</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='r_foot_fixed_joint_lump__rfs_link_visual_1'>
+          <pose frame=''>-0.00925 0 -0.018 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.041 0.062867 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/GreyTransparent</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <gravity>1</gravity>
+        <velocity_decay>
+          <linear>0.001</linear>
+          <angular>0.001</angular>
+        </velocity_decay>
+        <sensor name='rfs_link_sensor' type='contact'>
+          <always_on>1</always_on>
+          <contact>
+            <collision>r_foot_fixed_joint_lump__rfs_link_collision_1</collision>
+            <topic>__default_topic__</topic>
+          </contact>
+          <plugin name='bumper0_plugin' filename='libgazebo_ros_bumper.so'>
+            <bumperTopicName>plen/right_foot_contact</bumperTopicName>
+            <frameName>plen/right_foot_contact</frameName>
+            <robotNamespace>/</robotNamespace>
+          </plugin>
+          <pose frame=''>-0.00925 0 -0.018 0 -0 0</pose>
+        </sensor>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_ankle_r_foot' type='revolute'>
+        <child>r_foot</child>
+        <parent>r_ankle</parent>
+        <axis>
+          <xyz>-1 -0 0</xyz>
+          <limit>
+            <lower>-0.45</lower>
+            <upper>0.8</upper>
+            <effort>0.15</effort>
+            <velocity>8</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <plugin name='gazebo_ros_control' filename='libgazebo_ros_control.so'>
+        <robotNamespace>/plen</robotNamespace>
+      </plugin>
+      <plugin name='p3d_base_controller' filename='libgazebo_ros_p3d.so'>
+        <alwaysOn>1</alwaysOn>
+        <topicName>plen/odom</topicName>
+        <gaussianNoise>0.01</gaussianNoise>
+        <frameName>world</frameName>
+        <xyzOffsets>0 0 0</xyzOffsets>
+        <rpyOffsets>0 0 0</rpyOffsets>
+        <robotNamespace>/</robotNamespace>
+        <bodyName>base_footprint</bodyName>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 -0 0</rpyOffset>
+      </plugin>
+      <static>0</static>
+      <plugin name='gazebo_ros_imu_controller' filename='libgazebo_ros_imu.so'>
+        <robotNamespace>/plen</robotNamespace>
+        <topicName>imu/data</topicName>
+        <serviceName>imu/service</serviceName>
+        <gaussianNoise>0</gaussianNoise>
+        <rpyOffsets>0 0 0</rpyOffsets>
+        <alwaysOn>1</alwaysOn>
+        <gaussianNoise>0</gaussianNoise>
+        <frameName>plen/imu</frameName>
+        <bodyName>base_footprint</bodyName>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 -0 0</rpyOffset>
+      </plugin>
+      <pose frame=''>0 0 0.158 0 -0 0</pose>
+    </model>
+    <state world_name='default'>
+      <sim_time>0 0</sim_time>
+      <real_time>0 0</real_time>
+      <wall_time>1581905194 986809136</wall_time>
+      <iterations>0</iterations>
+      <model name='ground_plane'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='plen'>
+        <pose frame=''>0 0 0.158 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='base_footprint'>
+          <pose frame=''>0 0 0.158 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='l_ankle'>
+          <pose frame=''>0.00345 0.0237 0.03175 3.14159 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='l_elbow'>
+          <pose frame=''>-0.0085 0.05065 0.14445 1.57079 -1.57079 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='l_foot'>
+          <pose frame=''>-0.00075 0.0162 0.01895 0 -0 1.5708</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='l_hip'>
+          <pose frame=''>-0.0066 0.0228 0.11905 0 0 -1.5708</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='l_knee'>
+          <pose frame=''>0.003 0.0259 0.0936 -3.14159 1.57079 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='l_shin'>
+          <pose frame=''>0.00345 0.0257 0.0655 3.14159 -1.57079 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='l_shoulder'>
+          <pose frame=''>-0.0066 0.038 0.1888 1.57079 -1.57079 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='l_thigh'>
+          <pose frame=''>0.0104 0.0173 0.1064 1.5708 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='ls_servo'>
+          <pose frame=''>-0.006 0.05065 0.18345 -1.5708 -0 -1.5708</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='r_ankle'>
+          <pose frame=''>0.00245 -0.00875 0.03164 1.5708 -0 -3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='r_elbow'>
+          <pose frame=''>-0.0047 -0.05065 0.14445 -1.57079 -1.57079 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='r_foot'>
+          <pose frame=''>-0.00175 -0.01615 0.01894 0 -0 1.5708</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='r_hip'>
+          <pose frame=''>-0.0066 -0.0228 0.11905 0 -0 1.5708</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='r_knee'>
+          <pose frame=''>0.0029 -0.04035 0.09349 -3e-06 1.57079 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='r_shin'>
+          <pose frame=''>0.00245 -0.02575 0.06539 -3e-06 1.57079 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='r_shoulder'>
+          <pose frame=''>-0.0066 -0.038 0.1888 -1.57079 -1.57079 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='r_thigh'>
+          <pose frame=''>-0.0046 -0.01735 0.10624 -3.14159 -0 1.5708</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='rs_servo'>
+          <pose frame=''>-0.0072 -0.05065 0.18345 -1.5708 0 1.5708</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+</sdf>

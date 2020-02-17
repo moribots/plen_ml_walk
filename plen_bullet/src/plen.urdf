@@ -1297,7 +1297,7 @@
     <origin rpy="1.57079632679 -1.57079632679 0" xyz="-0.0066 -0.038 0.0308"/>
     <parent link="torso"/>
     <child link="r_shoulder"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="r_shoulder_rs_servo" type="revolute">
@@ -1305,7 +1305,7 @@
     <origin rpy="-1.57079632679 1.57079632679 0" xyz="-0.00535 0.0006 0.01265"/>
     <parent link="r_shoulder"/>
     <child link="rs_servo"/>
-    <limit effort="100" lower="-3.14" upper="3.14" velocity="100"/>
+    <limit effort="0.15" lower="-3.14" upper="3.14" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="rs_servo_r_arm" type="fixed">
@@ -1323,7 +1323,7 @@
     <origin rpy="-1.57079632679 0 1.57079632679" xyz="0.0 0.0 -0.0015"/>
     <parent link="re_servo"/>
     <child link="r_elbow"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="r_elbow_r_hand" type="fixed">
@@ -1336,7 +1336,7 @@
     <origin rpy="-1.57079632679 -1.57079632679 0" xyz="-0.0066 0.038 0.0308"/>
     <parent link="torso"/>
     <child link="l_shoulder"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="l_shoulder_ls_servo" type="revolute">
@@ -1344,7 +1344,7 @@
     <origin rpy="-1.57079632679 1.57079632679 0" xyz="-0.00535 0.0006 0.01265"/>
     <parent link="l_shoulder"/>
     <child link="ls_servo"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="ls_servo_l_arm" type="fixed">
@@ -1362,7 +1362,7 @@
     <origin rpy="-1.57079632679 0 1.57079632679" xyz="0.0 0.0 -0.0015"/>
     <parent link="le_servo"/>
     <child link="l_elbow"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="l_elbow_l_hand" type="fixed">
@@ -1375,7 +1375,7 @@
     <origin rpy="3.14159265359 0 1.57079632679" xyz="0.0 0.0 0.0142"/>
     <parent link="rb_servo"/>
     <child link="r_hip"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="r_hip_r_thigh" type="revolute">
@@ -1383,7 +1383,7 @@
     <origin rpy="3.14159265359 0 0" xyz="0.00545 -0.002 -0.01281"/>
     <parent link="r_hip"/>
     <child link="r_thigh"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="r_thigh_r_knee" type="revolute">
@@ -1391,7 +1391,7 @@
     <origin rpy="1.57079632679 -1.57079632679 0" xyz="-0.023 0.0075 0.01275"/>
     <parent link="r_thigh"/>
     <child link="r_knee"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="r_knee_knee_servo" type="fixed">
@@ -1404,7 +1404,7 @@
     <origin rpy="0 0 0" xyz="0.0281 -0.0146 0.00045"/>
     <parent link="r_knee"/>
     <child link="r_shin"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="r_shin_r_ankle" type="revolute">
@@ -1412,7 +1412,7 @@
     <origin rpy="-1.57079632679 -1.57079632679 3.14159265359" xyz="0.03375 -0.017 0.0"/>
     <parent link="r_shin"/>
     <child link="r_ankle"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="r_ankle_r_foot" type="revolute">
@@ -1420,7 +1420,7 @@
     <origin rpy="-1.57079632679 -1.57079632679 0" xyz="0.0042 -0.0127 -0.0074"/>
     <parent link="r_ankle"/>
     <child link="r_foot"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="lb_servo_l_hip" type="revolute">
@@ -1428,7 +1428,7 @@
     <origin rpy="3.14159265359 0 1.57079632679" xyz="0.0 0.0 0.0142"/>
     <parent link="lb_servo"/>
     <child link="l_hip"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="l_hip_l_thigh" type="revolute">
@@ -1436,7 +1436,7 @@
     <origin rpy="1.57079632679 0 1.57079632679" xyz="0.0055 0.017 -0.01265"/>
     <parent link="l_hip"/>
     <child link="l_thigh"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="l_thigh_l_knee" type="revolute">
@@ -1444,7 +1444,7 @@
     <origin rpy="-1.57079632679 0 -1.57079632679" xyz="-0.0074 -0.0128 -0.0086"/>
     <parent link="l_thigh"/>
     <child link="l_knee"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="l_knee_knee_servo" type="fixed">
@@ -1457,7 +1457,7 @@
     <origin rpy="0 3.14159265359 0" xyz="0.0281 -0.0002 0.00045"/>
     <parent link="l_knee"/>
     <child link="l_shin"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="l_shin_l_ankle" type="revolute">
@@ -1465,7 +1465,7 @@
     <origin rpy="3.14159265359 1.57079632679 0" xyz="-0.03375 -0.002 0.0"/>
     <parent link="l_shin"/>
     <child link="l_ankle"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="l_ankle_l_foot" type="revolute">
@@ -1473,7 +1473,7 @@
     <origin rpy="3.14159265359 0 -1.57079632679" xyz="-0.0042 0.0075 0.0128"/>
     <parent link="l_ankle"/>
     <child link="l_foot"/>
-    <limit effort="100" lower="-0.001" upper="0.001" velocity="100"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
 </robot>

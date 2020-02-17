@@ -29,7 +29,7 @@ class PlenWalkEnv(gym.Env):
     def __init__(self, render=True):
         super(PlenWalkEnv, self).__init__()
 
-        self.running_step = 0.2
+        self.running_step = 0.05
         self.sim_step = 1. / 240.
         self.sim_stepsize = int(self.running_step / self.sim_step)
         print("SIM STEP SIZE: {}".format(self.sim_stepsize))
@@ -219,8 +219,10 @@ class PlenWalkEnv(gym.Env):
         for joint in self.movingJoints:
             p.resetJointState(self.robotId, joint, 0)
 
+        # time.sleep(2)
+        self.move_joints(np.zeros(18))
         # for i in range(self.sim_stepsize):
-        #     p.stepSimulation()
+        p.stepSimulation()
 
         observation = self.compute_observation()
         self._publish_reward(self.cumulated_episode_reward, self.episode_num)
@@ -272,7 +274,7 @@ class PlenWalkEnv(gym.Env):
         for i in range(self.sim_stepsize):
                 p.stepSimulation()
 
-        time.sleep(2)
+        # time.sleep(2)
 
         observation = self.compute_observation()
         done = self.compute_done()
@@ -334,21 +336,23 @@ class PlenWalkEnv(gym.Env):
 
         TOTAL: 18
         """
-        # p.setJointMotorControlArray(bodyUniqueId=self.robotId,
-        #                             jointIndices=self.movingJoints,
-        #                             controlMode=p.POSITION_CONTROL,
-        #                             targetPositions=action)
+        p.setJointMotorControlArray(bodyUniqueId=self.robotId,
+                                    jointIndices=self.movingJoints,
+                                    controlMode=p.POSITION_CONTROL,
+                                    targetPositions=action,
+                                    targetVelocities=np.zeros(18),
+                                    forces=np.ones(18) * 0.15)
 
         # for i, key in enumerate(self.movingJoints):
         #     p.setJointMotorControl2(bodyUniqueId=self.robotId,
         #                             jointIndex=key,
         #                             controlMode=p.POSITION_CONTROL,
         #                             targetPosition=action[i])
-        for i in range(len(self.movingJoints)):
-            p.setJointMotorControl2(bodyUniqueId=self.robotId,
-                                    jointIndex=self.movingJoints[i],
-                                    controlMode=p.POSITION_CONTROL,
-                                    targetPosition=action[i])
+        # for i in range(len(self.movingJoints)):
+        #     p.setJointMotorControl2(bodyUniqueId=self.robotId,
+        #                             jointIndex=self.movingJoints[i],
+        #                             controlMode=p.POSITION_CONTROL,
+        #                             targetPosition=action[i])
         # print("INDEX: {}".format(i))
         # print("KEY: {}".format(key))
 
