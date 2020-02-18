@@ -2,22 +2,24 @@
 
 import rospy
 import numpy as np
-import copy
 # Gym
 from gym import spaces
 from gym.envs.registration import register
 # PLEN Environment
-from plen_ros.plen_env import PlenEnv
+from plen_ros_helpers.plen_env import PlenEnv
 # Gazebo/ROS
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Vector3
 from gazebo_msgs.msg import ContactsState
 from sensor_msgs.msg import JointState
 from tf.transformations import euler_from_quaternion
+from plen_ros.srv import Iterate
+import time
+from std_msgs.msg import Int32
 
 register(
     id='PlenWalkEnv-v0',
-    entry_point='plen_ros.plen_walk:PlenWalkEnv',
+    entry_point='plen_ros_helpers.plen_walk:PlenWalkEnv',
     max_episode_steps=500,  # Time Step Limit Per Episode
 )
 
@@ -33,9 +35,9 @@ class PlenWalkEnv(PlenEnv):
 
         self.init_pose = np.zeros(18)
 
-        # How long to step the simulation for (sec)
-        self.update_rate = 3.0  # Make sure this matches update rate in gazebo cnx
-        self.running_step = 0.0165 / self.update_rate
+        # How long to step the simulation
+        self.running_step = 165e5  # in nsec
+        self.running_step_sec = 0.0165
 
         # Agent Action Space
         low_act = np.ones(18) * -1
@@ -409,14 +411,37 @@ class PlenWalkEnv(PlenEnv):
     def _set_init_pose(self):
         """Sets the Robot in its init pose
         """
-        # joints_initialized = False
-        # self.gazebo.change_gravity(0, 0, 0)
+        self.next_sim_time = self.sim_time + rospy.Duration(
+            self.running_step_sec, 0)
+        # rospy.loginfo("Current time %i %i", self.sim_time.secs,
+        #               self.sim_time.nsecs)
+        # Unpause
+        self.gazebo.unpauseSim()
+        # Move Joints
         self.joints.set_init_pose(self.init_pose)
-        # rospy.sleep(0.05)
+        # Pause
+        self.gazebo.pauseSim()
+        # Iterate for remaining time
+        time_to_iterate = self.next_sim_time - self.sim_time
+        # rospy.loginfo("Current time %i %i", self.sim_time.secs,
+        #               self.sim_time.nsecs)
+        # rospy.loginfo("Next time %i %i", self.next_sim_time.secs,
+        #               self.next_sim_time.nsecs)
+        # rospy.loginfo("TIME TO ITERATE: {}".format(time_to_iterate))
+        steps_to_iterate = (self.running_step - time_to_iterate.nsecs
+                            ) * 1e-9 / self.gazebo._time_step
+        if steps_to_iterate < 0:
+            steps_to_iterate = 0
+        else:
+            rospy.loginfo("NONZERO WAIT")
+        self.iterate_proxy.call(int(steps_to_iterate))
+        # Let run for running_step seconds
+        while self.sim_time < self.next_sim_time:
+            pass
         self.gazebo.reset_joints(self.controllers_list, "plen")
-        # self.gazebo.change_gravity(0, 0, -9.81)
-        rospy.sleep(self.running_step)
-        # self.joints.set_init_pose(self.init_pose)
+        # rospy.loginfo("DONE ACTION")
+        # rospy.loginfo("Current time %i %i", self.sim_time.secs,
+        #               self.sim_time.nsecs)
 
     def check_joints_init(self):
         # absolute(arr1 - arr2) <= (atol + rtol * absolute(arr2))
@@ -442,9 +467,6 @@ class PlenWalkEnv(PlenEnv):
         """
         Move the robot based on the action variable given
         """
-        # Pause
-        self.gazebo.pauseSim()
-
         # Convert agent actions into real actions
         env_action = np.empty(18)
         for i in range(len(action)):
@@ -452,15 +474,40 @@ class PlenWalkEnv(PlenEnv):
             env_action[i] = self.agent_to_env(self.env_ranges[i], action[i])
 
         # rospy.logdebug("Executing Action ==>" + str(env_action))
-
+        # rospy.loginfo("SETTING ACTION")
+        self.next_sim_time = self.sim_time + rospy.Duration(
+            self.running_step_sec, 0)
+        # rospy.loginfo("Current time %i %i", self.sim_time.secs,
+        #               self.sim_time.nsecs)
+        # rospy.loginfo("Next time %i %i", self.next_sim_time.secs,
+        #               self.next_sim_time.nsecs)
         # Unpause
+        # time.sleep(2)
         self.gazebo.unpauseSim()
         # Move Joints
         self.joints.move_joints(env_action)
-        # Let run for running_step seconds
-        rospy.sleep(self.running_step)
         # Pause
         self.gazebo.pauseSim()
+        # Iterate for remaining time
+        time_to_iterate = self.next_sim_time - self.sim_time
+        # rospy.loginfo("Current time %i %i", self.sim_time.secs,
+        #               self.sim_time.nsecs)
+        # rospy.loginfo("Next time %i %i", self.next_sim_time.secs,
+        #               self.next_sim_time.nsecs)
+        # rospy.loginfo("TIME TO ITERATE: {}".format(time_to_iterate))
+        steps_to_iterate = (self.running_step - time_to_iterate.nsecs
+                            ) * 1e-9 / self.gazebo._time_step
+        if steps_to_iterate < 0:
+            steps_to_iterate = 0
+        self.iterate_proxy.call(int(steps_to_iterate))
+        # Let run for running_step seconds
+        while self.sim_time < self.next_sim_time:
+            pass
+        # Pause
+        # self.gazebo.pauseSim()
+        # rospy.loginfo("DONE ACTION")
+        # rospy.loginfo("Current time %i %i", self.sim_time.secs,
+        #               self.sim_time.nsecs)
 
         # rospy.logdebug("Action Completed")
 

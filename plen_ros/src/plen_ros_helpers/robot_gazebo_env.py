@@ -3,10 +3,14 @@
 import rospy
 import gym
 from gym.utils import seeding
-from plen_ros.gazebo_connection import GazeboConnection
-from plen_ros.controllers_connection import ControllersConnection
+from plen_ros_helpers.gazebo_connection import GazeboConnection
+from plen_ros_helpers.controllers_connection import ControllersConnection
 from openai_ros.msg import RLExperimentInfo
+from plen_ros.srv import Iterate
 import numpy as np
+import time
+
+from rosgraph_msgs.msg import Clock
 
 #https://bitbucket.org/theconstructcore/theconstruct_msgs/src/master/msg/RLExperimentInfo.msg
 # from openai_ros.msg import RLExperimentInfo - CHANGE THIS TO NORMAL MESSAGE IMPORT
@@ -35,6 +39,15 @@ class RobotGazeboEnv(gym.Env):
         self.seed()
         self.robot_name_space = robot_name_space
 
+        # GAZEBO CLOCK SUBSCRIBER - SUPER IMPORTANT FOR DETERMINISTIC STEPS
+        self.clock_subscriber = rospy.Subscriber(
+            '/clock', Clock,
+            self.clock_callback)
+
+        # /iterate SERVICE CLIENT, ALSO IMPORTANT FOR DETERMINISTIC STEPS
+        self.iterate_proxy = rospy.ServiceProxy(
+            '/iterate', Iterate)
+
         # Set up ROS related variables
         self.episode_num = 0
         self.cumulated_episode_reward = 0
@@ -59,10 +72,18 @@ class RobotGazeboEnv(gym.Env):
         and need to be reseted to work properly.
         """
         self.gazebo.unpauseSim()
-        if self.reset_controls:
-            self.controllers_object.reset_controllers()
+        self.controllers_object.reset_controllers()
+
+        self._check_all_systems_ready()
+
+        self.gazebo.pauseSim()
 
         rospy.logdebug("END init RobotGazeboEnv")
+
+    def clock_callback(self, data):
+        """
+        """
+        self.sim_time = data.clock
 
     # Env methods
     def seed(self, seed=None):
@@ -81,11 +102,9 @@ class RobotGazeboEnv(gym.Env):
         Here we should convert the action num to movement action, execute the action in the
         simulation and get the observations result of performing that action.
         """
-        rospy.logdebug("START STEP OpenAIROS")
-
-        self.gazebo.unpauseSim()
-        self._set_action(action)
-        self.gazebo.pauseSim()
+        # rospy.logdebug("START STEP OpenAIROS")
+        self._set_action(action)  # handles unpause and pause
+        # time.sleep(2)  # FOR TESTING
         obs = self._get_obs()
         done = self._is_done(obs)
         info = {}
@@ -94,17 +113,17 @@ class RobotGazeboEnv(gym.Env):
         self.episode_timestep += 1
         self.total_timesteps += 1
 
-        rospy.logdebug("END STEP OpenAIROS")
+        # rospy.loginfo("STEP DONE")
 
         return obs, reward, done, info
 
     def reset(self):
-        rospy.logdebug("Reseting RobotGazeboEnvironment")
+        # rospy.logdebug("Reseting RobotGazeboEnvironment")
         self._reset_sim()
         self._init_env_variables()
         self._update_episode()
         obs = self._get_obs()
-        rospy.logdebug("END Reseting RobotGazeboEnvironment")
+        # rospy.logdebug("END Reseting RobotGazeboEnvironment")
         return obs
 
     def close(self):
@@ -113,7 +132,7 @@ class RobotGazeboEnv(gym.Env):
         Use it for closing GUIS and other systems that need closing.
         :return:
         """
-        rospy.logdebug("Closing RobotGazeboEnvironment")
+        rospy.logerr("Closing RobotGazeboEnvironment")
         rospy.signal_shutdown("Closing RobotGazeboEnvironment")
 
     def _update_episode(self):
@@ -122,12 +141,12 @@ class RobotGazeboEnv(gym.Env):
         increases the episode number by one.
         :return:
         """
-        rospy.logdebug("PUBLISHING REWARD...")
+        # rospy.logdebug("PUBLISHING REWARD...")
         self._publish_reward_topic(self.cumulated_episode_reward,
                                    self.episode_num)
-        rospy.logdebug("EPISODE REWARD = " +
-                       str(self.cumulated_episode_reward) + ", EP = " +
-                       str(self.episode_num))
+        # rospy.logdebug("EPISODE REWARD = " +
+        #                str(self.cumulated_episode_reward) + ", EP = " +
+        #                str(self.episode_num))
 
         self.episode_num += 1
         self.moving_avg_counter += 1
@@ -195,12 +214,8 @@ class RobotGazeboEnv(gym.Env):
             self.gazebo.unpauseSim()
             self.controllers_object.reset_controllers()
             self._check_all_systems_ready()
-            # self.gazebo.resetSim()
-            # self.gazebo.change_gravity(0, 0, 0)
-            self._set_init_pose()
-            # self.gazebo.change_gravity(0, 0, -9.81)
-            # rospy.sleep(0.5)
             self.gazebo.pauseSim()
+            self._set_init_pose()  # handles unpause and pause
             self.gazebo.resetSim()
             self.gazebo.unpauseSim()
             self.controllers_object.reset_controllers()

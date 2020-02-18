@@ -5,10 +5,10 @@ import rospy
 import time
 
 # Parent Robot Environment for Gym
-from plen_ros.robot_gazebo_env import RobotGazeboEnv
+from plen_ros_helpers.robot_gazebo_env import RobotGazeboEnv
 
 # Joint Publisher
-from plen_ros.joint_traj_publisher import JointTrajPub
+from plen_ros_helpers.joint_traj_publisher import JointTrajPub
 
 from gazebo_msgs.msg import ContactsState
 from sensor_msgs.msg import Imu
@@ -111,12 +111,12 @@ class PlenEnv(RobotGazeboEnv):
                                       reset_world_or_sim="WORLD")
 
         rospy.logdebug("PlenEnv unpause...")
-        self.gazebo.unpauseSim()
-        self.controllers_object.reset_controllers()
+        # self.gazebo.unpauseSim()
+        # self.controllers_object.reset_controllers()
 
-        self._check_all_systems_ready()
+        # self._check_all_systems_ready()
 
-        self.gazebo.pauseSim()
+        # self.gazebo.pauseSim()
 
         rospy.logdebug("Finished PlenEnv INIT...")
 

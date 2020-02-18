@@ -26,7 +26,7 @@ class PlenWalkEnv(gym.Env):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def __init__(self, render=True):
+    def __init__(self, render=False):
         super(PlenWalkEnv, self).__init__()
 
         self.running_step = 0.0165

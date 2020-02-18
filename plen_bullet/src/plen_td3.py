@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from plen_ros.td3 import ReplayBuffer, TD3Agent
+from plen_ros_helpers.td3 import ReplayBuffer, TD3Agent
 
 from plen_bullet import plen_env
 

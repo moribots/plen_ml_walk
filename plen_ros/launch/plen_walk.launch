@@ -12,6 +12,8 @@
 	    <arg name="headless" value="$(arg headless)"/>
 	</include>
 
+	<node name="gazebo_tools_test" pkg="plen_ros" type="gazebo_tools_test"/>
+
 
 	<include file="$(find plen_ros)/launch/traj_controller.launch"/>
 

@@ -69,48 +69,50 @@ class GazeboConnection():
         self.model_config_proxy(config)
 
     def pauseSim(self):
-        rospy.logdebug("PAUSING service found...")
-        paused_done = False
-        counter = 0
-        while not paused_done and not rospy.is_shutdown():
-            if counter < self._max_retry:
-                try:
-                    # rospy.logdebug("PAUSING service calling...")
-                    self.pause()
-                    paused_done = True
-                    # rospy.logdebug("PAUSING service calling...DONE")
-                except rospy.ServiceException as e:
-                    counter += 1
-                    rospy.logerr("/gazebo/pause_physics service call failed")
-            else:
-                error_message = "Maximum retries done" + str(
-                    self._max_retry) + ", please check Gazebo pause service"
-                rospy.logerr(error_message)
-                assert False, error_message
+        # rospy.logdebug("PAUSING service found...")
+        # paused_done = False
+        # counter = 0
+        # while not paused_done and not rospy.is_shutdown():
+        #     if counter < self._max_retry:
+        #         try:
+        #             # rospy.logdebug("PAUSING service calling...")
+        #             self.pause()
+        #             paused_done = True
+        #             # rospy.logdebug("PAUSING service calling...DONE")
+        #         except rospy.ServiceException as e:
+        #             counter += 1
+        #             rospy.logerr("/gazebo/pause_physics service call failed")
+        #     else:
+        #         error_message = "Maximum retries done" + str(
+        #             self._max_retry) + ", please check Gazebo pause service"
+        #         rospy.logerr(error_message)
+        #         assert False, error_message
 
-        # rospy.logdebug("PAUSING FINISH")
+        # # rospy.logdebug("PAUSING FINISH")
+        self.pause()
 
     def unpauseSim(self):
-        # rospy.logdebug("UNPAUSING service found...")
-        unpaused_done = False
-        counter = 0
-        while not unpaused_done and not rospy.is_shutdown():
-            if counter < self._max_retry:
-                try:
-                    # rospy.logdebug("UNPAUSING service calling...")
-                    self.unpause()
-                    unpaused_done = True
-                    # rospy.logdebug("UNPAUSING service calling...DONE")
-                except rospy.ServiceException as e:
-                    counter += 1
-                    rospy.logerr(
-                        "/gazebo/unpause_physics service call failed...Retrying "
-                        + str(counter))
-            else:
-                error_message = "Maximum retries done" + str(
-                    self._max_retry) + ", please check Gazebo unpause service"
-                rospy.logerr(error_message)
-                assert False, error_message
+        # # rospy.logdebug("UNPAUSING service found...")
+        # unpaused_done = False
+        # counter = 0
+        # while not unpaused_done and not rospy.is_shutdown():
+        #     if counter < self._max_retry:
+        #         try:
+        #             # rospy.logdebug("UNPAUSING service calling...")
+        #             self.unpause()
+        #             unpaused_done = True
+        #             # rospy.logdebug("UNPAUSING service calling...DONE")
+        #         except rospy.ServiceException as e:
+        #             counter += 1
+        #             rospy.logerr(
+        #                 "/gazebo/unpause_physics service call failed...Retrying "
+        #                 + str(counter))
+        #     else:
+        #         error_message = "Maximum retries done" + str(
+        #             self._max_retry) + ", please check Gazebo unpause service"
+        #         rospy.logerr(error_message)
+        #         assert False, error_message
+        self.unpause()
 
         # rospy.logdebug("UNPAUSING FiNISH")
 
@@ -161,11 +163,11 @@ class GazeboConnection():
         We initialise the physics parameters of the simulation, like gravity,
         friction coeficients and so on.
         """
-        self._time_step = Float64(0.001)
+        self._time_step = 0.001
         # Setting this to zero will force gazebo to update
         # as fast as it can while keeping realism
         # default is 1000
-        self._max_update_rate = Float64(0.)
+        self._max_update_rate = 0.
 
         self._gravity = Vector3()
         self._gravity.x = 0.0
@@ -191,8 +193,8 @@ class GazeboConnection():
         self.pauseSim()
 
         set_physics_request = SetPhysicsPropertiesRequest()
-        set_physics_request.time_step = self._time_step.data
-        set_physics_request.max_update_rate = self._max_update_rate.data
+        set_physics_request.time_step = self._time_step
+        set_physics_request.max_update_rate = self._max_update_rate
         set_physics_request.gravity = self._gravity
         set_physics_request.ode_config = self._ode_config
 

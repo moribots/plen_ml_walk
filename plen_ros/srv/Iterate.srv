@@ -1,0 +1,5 @@
+# Desired number of iterations
+int32 iterations
+---
+# Result (Success/Fail)
+bool result

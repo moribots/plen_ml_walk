@@ -3,9 +3,9 @@
 import numpy as np
 import rospy
 
-from plen_ros.td3 import ReplayBuffer, TD3Agent, evaluate_policy
+from plen_ros_helpers.td3 import ReplayBuffer, TD3Agent, evaluate_policy
 
-from plen_ros import plen_walk
+from plen_ros_helpers import plen_walk
 
 import gym
 import torch
