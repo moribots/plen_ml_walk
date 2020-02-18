@@ -30,8 +30,8 @@ class PlenWalkEnv(gym.Env):
         super(PlenWalkEnv, self).__init__()
 
         self.running_step = 0.0165
-        self.sim_step = 1. / 240.
-        self.sim_stepsize = int(self.running_step / self.sim_step)
+        self.timestep = 1. / 240.
+        self.sim_stepsize = int(self.running_step / self.timestep)
         print("SIM STEP SIZE: {}".format(self.sim_stepsize))
 
         # Learning Info Loggers
@@ -53,7 +53,7 @@ class PlenWalkEnv(gym.Env):
         self.dead_penalty = 100.
         self.alive_reward = self.dead_penalty / self.max_episode_steps
         # Reward for forward velocity
-        self.vel_weight = 1.
+        self.vel_weight = 2.
         # Reward for maintaining original height
         self.init_height = 0.158
         self.height_weight = 2.
@@ -186,14 +186,13 @@ class PlenWalkEnv(gym.Env):
         p.setAdditionalSearchPath(
             pybullet_data.getDataPath())  # used by loadURDF
         p.resetDebugVisualizerCamera(cameraDistance=0.8,
-                                     cameraYaw=0,
+                                     cameraYaw=45,
                                      cameraPitch=-30,
                                      cameraTargetPosition=[0, 0, 0])
         self._seed()
-        p.setRealTimeSimulation(0)
+        p.setRealTimeSimulation(0)  # 1=Realtime, 0=Simtime
         p.resetSimulation()
         p.setGravity(0, 0, -9.81)  # m/s^2
-        self.timestep = 1. / 240.
         self.frame_skip = 4
         self.numSolverIterations = 5
         # p.setPhysicsEngineParameter(
@@ -203,7 +202,7 @@ class PlenWalkEnv(gym.Env):
         # p.setTimeStep(0.01)   # sec
         # p.setTimeStep(0.001)  # sec
         self.plane = p.loadURDF("plane.urdf")
-        self.StartPos = [0, 0, 0.16]
+        self.StartPos = [0, 0, 0.158]
         self.StartOrientation = p.getQuaternionFromEuler([0, 0, 0])
         self.robotId = p.loadURDF("plen.urdf", self.StartPos,
                                   self.StartOrientation)
@@ -274,6 +273,7 @@ class PlenWalkEnv(gym.Env):
         self.move_joints(env_action)
         # p.stepSimulation()
         for i in range(self.sim_stepsize):
+                # time.sleep(0.005)
                 p.stepSimulation()
 
         # time.sleep(2)
@@ -413,6 +413,7 @@ class PlenWalkEnv(gym.Env):
         reward += self.alive_reward
         # Reward for forward velocity
         reward += np.sign(self.torso_vx) * (self.torso_vx * self.vel_weight)**2
+        # print("TORSO VX: {}".format(self.torso_vx))
         # Reward for maintaining original height
         reward -= (np.abs(self.init_height - self.torso_z) *
                    self.height_weight)**2

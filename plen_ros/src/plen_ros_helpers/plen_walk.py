@@ -606,6 +606,7 @@ class PlenWalkEnv(PlenEnv):
         # Reward for being alive
         reward += self.alive_reward
         # Reward for forward velocity
+        # Sign to preserve (-)since we do vx**2
         reward += np.sign(self.torso_vx) * (self.torso_vx * self.vel_weight)**2
         # Reward for maintaining original height
         reward -= (np.abs(self.init_height - self.torso_z) *

@@ -70,7 +70,7 @@ class RobotGazeboEnv(gym.Env):
         and need to be reseted to work properly.
         """
         self.gazebo.unpauseSim()
-        self.controllers_object.reset_controllers()
+        # self.controllers_object.reset_controllers()
 
         self._check_all_systems_ready()
 
@@ -209,20 +209,22 @@ class RobotGazeboEnv(gym.Env):
         rospy.logdebug("RESETTING")
         if self.reset_controls:
             rospy.logdebug("RESET CONTROLLERS")
-            self.gazebo.unpauseSim()
-            self.controllers_object.reset_controllers()
-            self._check_all_systems_ready()
-            self.gazebo.pauseSim()
+            # self.gazebo.unpauseSim()
+            # # self.controllers_object.reset_controllers()
+            # self._check_all_systems_ready()
+            # self.gazebo.pauseSim()
             self._set_init_pose()  # handles unpause and pause
             self.gazebo.pauseSim()
             self.gazebo.resetSim()
             self.gazebo.unpauseSim()
             self.gazebo.reset_joints(self.controllers_list, "plen")
+            self._check_all_systems_ready()
+            self.gazebo.pauseSim()
             self._set_init_pose()
             # time.sleep(0.2)
             # self.controllers_object.reset_controllers()
             # self._check_all_systems_ready()
-            self.gazebo.pauseSim()
+            # self.gazebo.pauseSim()
             self.next_sim_time = self.sim_time + rospy.Duration(
                 0.19, 0)
             # time.sleep(2)

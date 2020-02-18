@@ -29,16 +29,16 @@ movingJoints = [
 #     joint = p.getJointInfo(boxId, i)
 #     print("Joint {} name: {}".format(i, joint[1]))
 printer = 0
+maxVelocity = 100
+mode = p.POSITION_CONTROL
+p.setJointMotorControlArray(bodyUniqueId=boxId,
+                            jointIndices=movingJoints,
+                            controlMode=p.POSITION_CONTROL,
+                            targetPositions=np.zeros(18),
+                            targetVelocities=np.zeros(18),
+                            forces=np.ones(18) * 0.15)
 for i in range(100000000):
     # Control Motors
-    maxVelocity = 100
-    mode = p.POSITION_CONTROL
-    p.setJointMotorControlArray(bodyUniqueId=boxId,
-                                jointIndices=movingJoints,
-                                controlMode=p.POSITION_CONTROL,
-                                targetPositions=np.ones(18),
-                                targetVelocities=np.zeros(18),
-                                forces=np.ones(18) * 0.15)
     # joint = p.getJointState(boxId, 21)
     # if printer == 0:
     #     # print("Joint Pos: {}".format(joint[0]))

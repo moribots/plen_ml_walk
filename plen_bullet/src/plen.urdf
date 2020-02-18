@@ -1079,6 +1079,9 @@
     </inertial>
   </link>
   <link name="r_foot">
+    <contact>
+      <lateral_friction value="100"/>
+  </contact>
     <visual>
       <origin rpy="0 0 0" xyz="-0.0085 0 -0.0198"/>
       <geometry>
@@ -1093,6 +1096,7 @@
       <geometry>
         <box size="0.041 0.062867 0.004"/>
       </geometry>
+      <contact_coefficients mu="100000.0" kp="10000000.0" kd="10.0"/>
     </collision>
     <inertial>
       <mass value="0.015"/>
@@ -1240,6 +1244,9 @@
     </inertial>
   </link>
   <link name="l_foot">
+    <contact>
+      <lateral_friction value="100"/>
+  </contact>
     <visual>
       <origin rpy="0 0 0" xyz="0.00885 0 -0.0142"/>
       <geometry>
@@ -1254,6 +1261,7 @@
       <geometry>
         <box size="0.041 0.062867 0.004"/>
       </geometry>
+      <contact_coefficients mu="100000.0" kp="10000000.0" kd="10.0"/>
     </collision>
     <inertial>
       <mass value="0.015"/>
