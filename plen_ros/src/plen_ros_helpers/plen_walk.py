@@ -415,10 +415,15 @@ class PlenWalkEnv(PlenEnv):
             self.running_step_sec, 0)
         # rospy.loginfo("Current time %i %i", self.sim_time.secs,
         #               self.sim_time.nsecs)
+        # rospy.loginfo("UNPAUSE")
         # Unpause
         self.gazebo.unpauseSim()
+        # rospy.loginfo("MOVE JOINTS: INIT")
         # Move Joints
         self.joints.set_init_pose(self.init_pose)
+        # rospy.loginfo("RESET JOINTS")
+        self.gazebo.reset_joints(self.controllers_list, "plen")
+        # rospy.loginfo("PAUSE")
         # Pause
         self.gazebo.pauseSim()
         # Iterate for remaining time
@@ -432,13 +437,13 @@ class PlenWalkEnv(PlenEnv):
                             ) * 1e-9 / self.gazebo._time_step
         if steps_to_iterate < 0:
             steps_to_iterate = 0
+            # No need to iterate
         else:
             rospy.loginfo("NONZERO WAIT")
-        self.iterate_proxy.call(int(steps_to_iterate))
+            self.iterate_proxy.call(int(steps_to_iterate))
         # Let run for running_step seconds
         while self.sim_time < self.next_sim_time:
             pass
-        self.gazebo.reset_joints(self.controllers_list, "plen")
         # rospy.loginfo("DONE ACTION")
         # rospy.loginfo("Current time %i %i", self.sim_time.secs,
         #               self.sim_time.nsecs)
@@ -483,9 +488,12 @@ class PlenWalkEnv(PlenEnv):
         #               self.next_sim_time.nsecs)
         # Unpause
         # time.sleep(2)
+        # rospy.loginfo("UNPAUSE")
         self.gazebo.unpauseSim()
+        # rospy.loginfo("MOVE JOINTS: ACTION")
         # Move Joints
         self.joints.move_joints(env_action)
+        # rospy.loginfo("PAUSE")
         # Pause
         self.gazebo.pauseSim()
         # Iterate for remaining time
@@ -499,7 +507,9 @@ class PlenWalkEnv(PlenEnv):
                             ) * 1e-9 / self.gazebo._time_step
         if steps_to_iterate < 0:
             steps_to_iterate = 0
-        self.iterate_proxy.call(int(steps_to_iterate))
+            # No need to iterate
+        else:
+            self.iterate_proxy.call(int(steps_to_iterate))
         # Let run for running_step seconds
         while self.sim_time < self.next_sim_time:
             pass

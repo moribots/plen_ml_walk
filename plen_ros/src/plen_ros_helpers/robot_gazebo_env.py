@@ -214,8 +214,9 @@ class RobotGazeboEnv(gym.Env):
             self.gazebo.unpauseSim()
             self.controllers_object.reset_controllers()
             self._check_all_systems_ready()
-            self.gazebo.pauseSim()
+            # self.gazebo.pauseSim()
             self._set_init_pose()  # handles unpause and pause
+            self.gazebo.pauseSim()
             self.gazebo.resetSim()
             self.gazebo.unpauseSim()
             self.controllers_object.reset_controllers()
