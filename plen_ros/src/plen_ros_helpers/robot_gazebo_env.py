@@ -5,7 +5,7 @@ import gym
 from gym.utils import seeding
 from plen_ros_helpers.gazebo_connection import GazeboConnection
 from plen_ros_helpers.controllers_connection import ControllersConnection
-from openai_ros.msg import RLExperimentInfo
+from plen_ros.msg import RLExperimentInfo
 from plen_ros.srv import Iterate
 import numpy as np
 import time

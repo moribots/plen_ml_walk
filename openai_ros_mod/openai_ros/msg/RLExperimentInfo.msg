@@ -1,4 +1,0 @@
-int32 episode_number
-int32 total_timesteps
-float32 episode_reward
-float32 moving_avg_reward
