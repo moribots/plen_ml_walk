@@ -50,13 +50,13 @@ class PlenWalkEnv(gym.Env):
         self.max_episode_steps = 500
 
         # Reward for being alive
-        self.dead_penalty = 100.
+        self.dead_penalty = 30.
         self.alive_reward = self.dead_penalty / self.max_episode_steps
         # Reward for forward velocity
-        self.vel_weight = 2.
+        self.vel_weight = 5.
         # Reward for maintaining original height
         self.init_height = 0.158
-        self.height_weight = 2.
+        self.height_weight = 1.
         # Reward for staying on x axis
         self.straight_weight = 1
         # Reward staying upright
@@ -211,6 +211,19 @@ class PlenWalkEnv(gym.Env):
             5, 6, 7, 9, 10, 11, 13, 14, 15, 17, 18, 19, 20, 21, 24, 26, 27, 30
         ]
 
+        # Change Right and Left Foot Dynamics
+        # p.changeDynamics(self.robotId,
+        #                  11,
+        #                  lateralFriction=10.0,
+        #                  linearDamping=1)
+        # p.changeDynamics(self.robotId,
+        #                  19,
+        #                  lateralFriction=10.0,
+        #                  linearDamping=1)
+
+        # for joint in self.movingJoints:
+        #     p.changeDynamics(self.robotId, joint, maxJointVelocity=8.76)
+
     def reset(self):
         p.resetBasePositionAndOrientation(self.robotId,
                                           posObj=self.StartPos,
@@ -273,8 +286,8 @@ class PlenWalkEnv(gym.Env):
         self.move_joints(env_action)
         # p.stepSimulation()
         for i in range(self.sim_stepsize):
-                # time.sleep(0.005)
-                p.stepSimulation()
+            # time.sleep(0.005)
+            p.stepSimulation()
 
         # time.sleep(2)
 
@@ -338,12 +351,14 @@ class PlenWalkEnv(gym.Env):
 
         TOTAL: 18
         """
-        p.setJointMotorControlArray(bodyUniqueId=self.robotId,
-                                    jointIndices=self.movingJoints,
-                                    controlMode=p.POSITION_CONTROL,
-                                    targetPositions=action,
-                                    # targetVelocities=np.zeros(18),
-                                    forces=np.ones(18) * 0.15)
+        p.setJointMotorControlArray(
+            bodyUniqueId=self.robotId,
+            jointIndices=self.movingJoints,
+            controlMode=p.POSITION_CONTROL,
+            targetPositions=action,
+            # maxVelocities=np.ones(18) * 8.0,
+            # targetVelocities=np.zeros(18),
+            forces=np.ones(18) * 0.15)
 
         # for i, key in enumerate(self.movingJoints):
         #     p.setJointMotorControl2(bodyUniqueId=self.robotId,
@@ -363,14 +378,19 @@ class PlenWalkEnv(gym.Env):
         JointStates = p.getJointStates(self.robotId, self.movingJoints)
         BaseAngVel = p.getBaseVelocity(self.robotId)
         left_contact = p.getContactPoints(self.robotId, self.plane, 19)
-        if left_contact is not None:
+        # print(len(left_contact))
+        if len(left_contact) > 0:
             self.left_contact = 1
+            # print("LEFT CONTACT")
         else:
+            # print("LEFT AIR")
             self.left_contact = 0
         right_contact = p.getContactPoints(self.robotId, self.plane, 11)
-        if right_contact is not None:
+        if len(right_contact) > 0:
             self.right_contact = 1
+            # print("RIGHT CONTACT")
         else:
+            # print("RIGHT AIR")
             self.right_contact = 0
 
         self.torso_z = baseOri[0][2]
@@ -468,5 +488,6 @@ class PlenWalkEnv(gym.Env):
             self.dead = False
         return done
 
-    def render(self, mode='human', close=False):
-        pass
+    def close(self):
+        print("Ending Simulation")
+        p.disconnect()

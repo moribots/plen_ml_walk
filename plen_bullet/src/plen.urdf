@@ -508,7 +508,7 @@
         <mesh filename="package://plen_ros/meshes_bin/torso.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
-        <color rgba="1 0 0 1"/>
+        <color rgba="0 0 0 1"/>
       </material>
     </visual>
     <collision>
@@ -532,7 +532,7 @@
         <mesh filename="package://plen_ros/meshes_bin/battery.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
-        <color rgba="0 1 0 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -555,7 +555,7 @@
         <mesh filename="package://plen_ros/meshes_bin/head.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
-        <color rgba="0 1 0 1"/>
+        <color rgba="0.42 0.05 0.68 1"/>
       </material>
     </visual>
     <collision>
@@ -578,7 +578,7 @@
         <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -601,7 +601,7 @@
         <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -624,7 +624,7 @@
         <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -647,7 +647,7 @@
         <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -670,7 +670,7 @@
         <mesh filename="package://plen_ros/meshes_bin/shoulder.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
-        <color rgba="0 1 0 1"/>
+        <color rgba="0.42 0.05 0.68 1"/>
       </material>
     </visual>
     <collision>
@@ -693,7 +693,7 @@
         <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -716,7 +716,7 @@
         <mesh filename="package://plen_ros/meshes_bin/arm.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
-        <color rgba="1 0 0 1"/>
+        <color rgba="0 0 0 1"/>
       </material>
     </visual>
     <collision>
@@ -739,7 +739,7 @@
         <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -762,7 +762,7 @@
         <mesh filename="package://plen_ros/meshes_bin/elbow.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
-        <color rgba="0 1 0 1"/>
+        <color rgba="0.42 0.05 0.68 1"/>
       </material>
     </visual>
     <collision>
@@ -785,7 +785,7 @@
         <mesh filename="package://plen_ros/meshes_bin/hand.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
-        <color rgba="1 0 0 1"/>
+        <color rgba="0 0 0 1"/>
       </material>
     </visual>
     <collision>
@@ -808,7 +808,7 @@
         <mesh filename="package://plen_ros/meshes_bin/shoulder.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
-        <color rgba="0 1 0 1"/>
+        <color rgba="0.42 0.05 0.68 1"/>
       </material>
     </visual>
     <collision>
@@ -831,7 +831,7 @@
         <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -854,7 +854,7 @@
         <mesh filename="package://plen_ros/meshes_bin/arm.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
-        <color rgba="1 0 0 1"/>
+        <color rgba="0 0 0 1"/>
       </material>
     </visual>
     <collision>
@@ -877,7 +877,7 @@
         <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -900,7 +900,7 @@
         <mesh filename="package://plen_ros/meshes_bin/elbow.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
-        <color rgba="0 1 0 1"/>
+        <color rgba="0.42 0.05 0.68 1"/>
       </material>
     </visual>
     <collision>
@@ -923,7 +923,7 @@
         <mesh filename="package://plen_ros/meshes_bin/hand.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
-        <color rgba="1 0 0 1"/>
+        <color rgba="0 0 0 1"/>
       </material>
     </visual>
     <collision>
@@ -946,7 +946,7 @@
         <mesh filename="package://plen_ros/meshes_bin/rhip.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -969,7 +969,7 @@
         <mesh filename="package://plen_ros/meshes_bin/rthigh.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
-        <color rgba="0 1 0 1"/>
+        <color rgba="0.42 0.05 0.68 1"/>
       </material>
     </visual>
     <collision>
@@ -993,7 +993,7 @@
         <mesh filename="package://plen_ros/meshes_bin/rknee.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
-        <color rgba="1 0 0 1"/>
+        <color rgba="0 0 0 1"/>
       </material>
     </visual>
     <collision>
@@ -1016,7 +1016,7 @@
         <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -1039,7 +1039,7 @@
         <mesh filename="package://plen_ros/meshes_bin/rshin.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -1062,7 +1062,7 @@
         <mesh filename="package://plen_ros/meshes_bin/rankle.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
-        <color rgba="0 1 0 1"/>
+        <color rgba="0.42 0.05 0.68 1"/>
       </material>
     </visual>
     <collision>
@@ -1088,7 +1088,7 @@
         <mesh filename="package://plen_ros/meshes_bin/rfoot.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
-        <color rgba="1 0 0 1"/>
+        <color rgba="0 0 0 1"/>
       </material>
     </visual>
     <collision>
@@ -1112,7 +1112,7 @@
         <mesh filename="package://plen_ros/meshes_bin/lhip.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -1135,7 +1135,7 @@
         <mesh filename="package://plen_ros/meshes_bin/rankle.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
-        <color rgba="0 1 0 1"/>
+        <color rgba="0.42 0.05 0.68 1"/>
       </material>
     </visual>
     <collision>
@@ -1158,7 +1158,7 @@
         <mesh filename="package://plen_ros/meshes_bin/lknee.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
-        <color rgba="1 0 0 1"/>
+        <color rgba="0 0 0 1"/>
       </material>
     </visual>
     <collision>
@@ -1181,7 +1181,7 @@
         <mesh filename="package://plen_ros/meshes_bin/servo.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -1204,7 +1204,7 @@
         <mesh filename="package://plen_ros/meshes_bin/rshin.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="blue_mat">
-        <color rgba="0 0 1 1"/>
+        <color rgba="1 0.49 0 1"/>
       </material>
     </visual>
     <collision>
@@ -1227,7 +1227,7 @@
         <mesh filename="package://plen_ros/meshes_bin/rthigh.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="green_mat">
-        <color rgba="0 1 0 1"/>
+        <color rgba="0.42 0.05 0.68 1"/>
       </material>
     </visual>
     <collision>
@@ -1253,7 +1253,7 @@
         <mesh filename="package://plen_ros/meshes_bin/lfoot.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="red_mat">
-        <color rgba="1 0 0 1"/>
+        <color rgba="0 0 0 1"/>
       </material>
     </visual>
     <collision>
@@ -1313,7 +1313,7 @@
     <origin rpy="-1.57079632679 1.57079632679 0" xyz="-0.00535 0.0006 0.01265"/>
     <parent link="r_shoulder"/>
     <child link="rs_servo"/>
-    <limit effort="0.15" lower="-3.14" upper="3.14" velocity="8.0"/>
+    <limit effort="0.15" lower="-1.7" upper="1.7" velocity="8.0"/>
     <joint_properties damping="1" friction="1"/>
   </joint>
   <joint name="rs_servo_r_arm" type="fixed">

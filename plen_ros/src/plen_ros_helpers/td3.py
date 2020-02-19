@@ -391,15 +391,15 @@ def evaluate_policy(policy, env_name, seed, eval_episodes=10, render=False):
             avg_reward (float): average reward over the number of evaluations
 
     """
-    eval_env = gym.make(env_name)
+    eval_env = gym.make(env_name, render=render)
     eval_env.seed(seed + 100)
 
     avg_reward = 0.
     for _ in range(eval_episodes):
         state, done = eval_env.reset(), False
         while not done:
-            if render:
-                eval_env.render()
+            # if render:
+            #     eval_env.render()
                 # sleep(0.01)
             action = policy.select_action(np.array(state))
             state, reward, done, _ = eval_env.step(action)

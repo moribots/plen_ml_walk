@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from plen_ros_helpers.td3 import ReplayBuffer, TD3Agent
+from plen_ros_helpers.td3 import ReplayBuffer, TD3Agent, evaluate_policy
 
 from plen_bullet import plen_env
 
@@ -40,7 +40,7 @@ def main():
     if not os.path.exists(models_path):
         os.makedirs(models_path)
 
-    env = gym.make(env_name)
+    env = gym.make(env_name, render=False)
 
     # Set seeds
     env.seed(seed)
@@ -132,6 +132,7 @@ def main():
 
         # Evaluate episode
         if (t + 1) % eval_freq == 0:
+            evaluate_policy(policy, env_name, seed, 5, False)
             # THIS BREAKS THE ENVIRONMENT FOR SOME REASON...
             # # Reset environment
             # state, done = env.reset(), False
@@ -153,9 +154,8 @@ def main():
                 policy.save(models_path + "/" + str(file_name) + str(t))
                 replay_buffer.save(t)
 
+    env.close()
+
 
 if __name__ == '__main__':
-    try:
-        main()
-    except rospy.ROSInterruptException:
-        pass
+    main()
