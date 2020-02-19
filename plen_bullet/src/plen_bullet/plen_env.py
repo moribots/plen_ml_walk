@@ -50,10 +50,10 @@ class PlenWalkEnv(gym.Env):
         self.max_episode_steps = 500
 
         # Reward for being alive
-        self.dead_penalty = 30.
+        self.dead_penalty = 100.
         self.alive_reward = self.dead_penalty / self.max_episode_steps
         # Reward for forward velocity
-        self.vel_weight = 5.
+        self.vel_weight = 3.
         # Reward for maintaining original height
         self.init_height = 0.158
         self.height_weight = 1.
@@ -76,24 +76,44 @@ class PlenWalkEnv(gym.Env):
         self.action_space = spaces.Box(low_act, high_act, dtype=np.float32)
 
         # Environment Action Space
+        # self.env_ranges = [
+        #     [-1.7, 1.7],  # RIGHT LEG
+        #     [-1.54, 0.12],
+        #     [-1.7, 0.75],
+        #     [-0.2, 0.95],
+        #     [-0.95, 1.54],
+        #     [-0.45, 0.8],
+        #     [-1.7, 1.7],  # LEFT LEG
+        #     [-0.12, 1.54],
+        #     [-0.75, 1.7],
+        #     [-0.95, 0.2],
+        #     [-1.54, 0.95],
+        #     [-0.8, 0.45],
+        #     [-1.7, 1.7],  # RIGHT ARM
+        #     [-0.15, 1.7],
+        #     [-0.2, 0.5],
+        #     [-1.7, 1.7],  # LEFT ARM
+        #     [-0.15, 1.7],
+        #     [-0.2, 0.5]
+        # ]
         self.env_ranges = [
-            [-1.7, 1.7],  # RIGHT LEG
-            [-1.54, 0.12],
-            [-1.7, 0.75],
-            [-0.2, 0.95],
-            [-0.95, 1.54],
-            [-0.45, 0.8],
-            [-1.7, 1.7],  # LEFT LEG
-            [-0.12, 1.54],
-            [-0.75, 1.7],
-            [-0.95, 0.2],
-            [-1.54, 0.95],
-            [-0.8, 0.45],
-            [-1.7, 1.7],  # RIGHT ARM
-            [-0.15, 1.7],
+            [-1.57, 1.57],  # RIGHT LEG
+            [-1.5, 0.1],
+            [-1.57, 0.7],
+            [-0.2, 0.9],
+            [-0.9, 1.5],
+            [-0.4, 0.8],
+            [-1.57, 1.57],  # LEFT LEG
+            [-0.1, 1.5],
+            [-0.7, 1.57],
+            [-0.9, 0.2],
+            [-1.5, 0.9],
+            [-0.8, 0.4],
+            [-1.57, 1.57],  # RIGHT ARM
+            [-0.15, 1.57],
             [-0.2, 0.5],
-            [-1.7, 1.7],  # LEFT ARM
-            [-0.15, 1.7],
+            [-1.57, 1.57],  # LEFT ARM
+            [-0.15, 1.57],
             [-0.2, 0.5]
         ]
 
@@ -233,7 +253,7 @@ class PlenWalkEnv(gym.Env):
 
         # time.sleep(2)
         self.move_joints(np.zeros(18))
-        for i in range(self.sim_stepsize):
+        for i in range(2 * self.sim_stepsize):
             p.stepSimulation()
 
         # time.sleep(0.1)
@@ -246,7 +266,7 @@ class PlenWalkEnv(gym.Env):
         self.episode_timestep = 0
         return observation
 
-    def _publish_reward(self, reward, episode_number=1):
+    def _publish_reward(self, reward, episode_number):
         """
         This function publishes the given reward in the reward topic for
         easy access from ROS infrastructure.
