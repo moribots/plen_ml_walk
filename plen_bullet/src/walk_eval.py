@@ -47,7 +47,7 @@ def main():
 
     policy = TD3Agent(state_dim, action_dim, max_action)
     # Optionally load existing policy, replace 9999 with num
-    policy_num = 919999
+    policy_num = 199999
     if os.path.exists(models_path + "/" + "plen_walk_gazebo_" +
                       str(policy_num) + "_critic"):
         print("Loading Existing Policy")

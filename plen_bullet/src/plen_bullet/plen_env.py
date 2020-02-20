@@ -29,10 +29,12 @@ class PlenWalkEnv(gym.Env):
     def __init__(self, render=True):
         super(PlenWalkEnv, self).__init__()
 
-        self.running_step = 0.0165
+        self.running_step = 1. / 60.
         self.timestep = 1. / 240.
         self.sim_stepsize = int(self.running_step / self.timestep)
+        print("--------------------------------------------")
         print("SIM STEP SIZE: {}".format(self.sim_stepsize))
+        print("--------------------------------------------")
 
         # Learning Info Loggers
         self.episode_num = 0
@@ -56,7 +58,7 @@ class PlenWalkEnv(gym.Env):
         self.vel_weight = 3.
         # Reward for maintaining original height
         self.init_height = 0.158
-        self.height_weight = 1.
+        self.height_weight = 5.
         # Reward for staying on x axis
         self.straight_weight = 1
         # Reward staying upright
@@ -231,15 +233,131 @@ class PlenWalkEnv(gym.Env):
             5, 6, 7, 9, 10, 11, 13, 14, 15, 17, 18, 19, 20, 21, 24, 26, 27, 30
         ]
 
+        # Get the number of joints
+        numj = p.getNumJoints(self.robotId)
+
+        # List the joint names
+        print("--------------------------------------------")
+        print("JOINT NAMES")
+        print("--------------------------------------------")
+        for i in range(numj):
+            joint = p.getJointInfo(self.robotId, i)
+            print("Joint {} name: {}".format(i, joint[1]))
+
+        # Link name dictionary
+        _link_name_to_index = {
+            p.getBodyInfo(self.robotId)[0].decode('UTF-8'): -1,
+        }
+        # List the link names
+        print("--------------------------------------------")
+        print("LINK NAMES")
+        print("--------------------------------------------")
+        link_names = []
+        for _id in range(p.getNumJoints(self.robotId)):
+            _name = p.getJointInfo(self.robotId, _id)[12].decode('UTF-8')
+            link_names.append(_name)
+            _link_name_to_index[_name] = _id
+            print("Link name: {} \t index: {}".format(
+                _name, _link_name_to_index[_name]))
+
+        # COLLISIONS
+        print("--------------------------------------------")
+        print("COLLISIONS")
+        print("--------------------------------------------")
+        # RIGHT LEG GROUP
+        # Collide with all joints except those in right leg
+        for j in range(6):
+            for cj in range(6, numj):
+                # Don't collide with right bottom servo on torso
+                if self.movingJoints[j] != cj and cj != 4:
+                    p.setCollisionFilterPair(self.robotId,
+                                             self.robotId,
+                                             self.movingJoints[j],
+                                             cj,
+                                             enableCollision=1)
+                    print("COLLISION BETWEEN LINKS: {} AND {}".format(
+                        link_names[self.movingJoints[j]], link_names[cj]))
+
+        # LEFT LEG GROUP
+        for j in range(6, 12):
+            for cj in range(12, numj):
+                # Don't collide with left bottom servo on torso
+                if self.movingJoints[j] != cj and cj != 12:
+                    p.setCollisionFilterPair(self.robotId,
+                                             self.robotId,
+                                             self.movingJoints[j],
+                                             cj,
+                                             enableCollision=1)
+                    print("COLLISION BETWEEN LINKS: {} AND {}".format(
+                        link_names[self.movingJoints[j]], link_names[cj]))
+            for cj in range(6):
+                # Don't collide with left bottom servo on torso
+                if self.movingJoints[j] != cj and cj != 12:
+                    p.setCollisionFilterPair(self.robotId,
+                                             self.robotId,
+                                             self.movingJoints[j],
+                                             cj,
+                                             enableCollision=1)
+                    print("COLLISION BETWEEN LINKS: {} AND {}".format(
+                        link_names[self.movingJoints[j]], link_names[cj]))
+
+        # RIGHT ARM GROUP
+        for j in range(12, 15):
+            for cj in range(15, numj):
+                # Don't collide with right top servo on torso
+                if self.movingJoints[j] != cj and cj != 2:
+                    p.setCollisionFilterPair(self.robotId,
+                                             self.robotId,
+                                             self.movingJoints[j],
+                                             cj,
+                                             enableCollision=1)
+                    print("COLLISION BETWEEN LINKS: {} AND {}".format(
+                        link_names[self.movingJoints[j]], link_names[cj]))
+            for cj in range(12):
+                # Don't collide with right top servo on torso
+                if self.movingJoints[j] != cj and cj != 2:
+                    p.setCollisionFilterPair(self.robotId,
+                                             self.robotId,
+                                             self.movingJoints[j],
+                                             cj,
+                                             enableCollision=1)
+                    print("COLLISION BETWEEN LINKS: {} AND {}".format(
+                        link_names[self.movingJoints[j]], link_names[cj]))
+
+        # LEFT ARM GROUP
+        for j in range(15, 18):
+            for cj in range(18, numj):
+                # Don't collide with right top servo on torso
+                if self.movingJoints[j] != cj and cj != 3:
+                    p.setCollisionFilterPair(self.robotId,
+                                             self.robotId,
+                                             self.movingJoints[j],
+                                             cj,
+                                             enableCollision=1)
+                    print("COLLISION BETWEEN LINKS: {} AND {}".format(
+                        link_names[self.movingJoints[j]], link_names[cj]))
+            for cj in range(15):
+                # Don't collide with right top servo on torso
+                if self.movingJoints[j] != cj and cj != 3:
+                    p.setCollisionFilterPair(self.robotId,
+                                             self.robotId,
+                                             self.movingJoints[j],
+                                             cj,
+                                             enableCollision=1)
+                    print("COLLISION BETWEEN LINKS: {} AND {}".format(
+                        link_names[self.movingJoints[j]], link_names[cj]))
+        print("--------------------------------------------")
+        print("--------------------------------------------")
+
         # Change Right and Left Foot Dynamics
         p.changeDynamics(self.robotId,
                          11,
                          lateralFriction=100000000.0,
-                         linearDamping=1.0)
+                         linearDamping=0.1)
         p.changeDynamics(self.robotId,
                          19,
                          lateralFriction=100000000.0,
-                         linearDamping=1.0)
+                         linearDamping=0.1)
 
         # for joint in self.movingJoints:
         #     p.changeDynamics(self.robotId, joint, maxJointVelocity=8.76)
@@ -455,7 +573,6 @@ class PlenWalkEnv(gym.Env):
         reward += np.sign(self.torso_vx) * (self.torso_vx * self.vel_weight)**2
         # print("TORSO VX: {}".format(self.torso_vx))
         # Reward for maintaining original height
-
         """NOTE: TOGGLE BELOW TO ADD ADDITIONAL CONSTRAINTS TO REWARD FCN
         """
         reward -= (np.abs(self.init_height - self.torso_z) *

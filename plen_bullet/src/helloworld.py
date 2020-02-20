@@ -12,7 +12,7 @@ planeId = p.loadURDF("plane.urdf")
 StartPos = [0, 0, 0.158]
 StartOrientation = p.getQuaternionFromEuler([0, 0, 0])
 p.resetDebugVisualizerCamera(cameraDistance=0.8,
-                             cameraYaw=0,
+                             cameraYaw=45,
                              cameraPitch=-30,
                              cameraTargetPosition=[0, 0, 0])
 boxId = p.loadURDF("plen.urdf", StartPos,
@@ -27,9 +27,22 @@ joint = []
 movingJoints = [
     5, 6, 7, 9, 10, 11, 13, 14, 15, 17, 18, 19, 20, 21, 24, 26, 27, 30
 ]
-# for i in range(32):
-#     joint = p.getJointInfo(boxId, i)
-#     print("Joint {} name: {}".format(i, joint[1]))
+for i in range(32):
+    joint = p.getJointInfo(boxId, i)
+    print("Joint {} name: {}".format(i, joint[1]))
+
+_link_name_to_index = {
+    p.getBodyInfo(boxId)[0].decode('UTF-8'): -1,
+}
+
+for _id in range(p.getNumJoints(boxId)):
+    _name = p.getJointInfo(boxId, _id)[12].decode('UTF-8')
+    _link_name_to_index[_name] = _id
+    print("Link name: {} \t index: {}".format(_name,
+                                              _link_name_to_index[_name]))
+
+p.changeDynamics(boxId, 11, lateralFriction=100000000.0, linearDamping=1.0)
+p.changeDynamics(boxId, 19, lateralFriction=100000000.0, linearDamping=1.0)
 # for i in range(32):
 #     link = p.getLinkState(boxId, i)
 #     print("Link {} name: {}".format(i, link[1]))
