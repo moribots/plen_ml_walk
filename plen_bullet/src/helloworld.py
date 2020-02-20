@@ -21,18 +21,18 @@ numj = p.getNumJoints(boxId)
 numb = p.getNumBodies()
 Pos, Orn = p.getBasePositionAndOrientation(boxId)
 print(Pos, Orn)
-print("Number of joints {}".format(numj))
-print("Number of links {}".format(numb))
+# print("Number of joints {}".format(numj))
+# print("Number of links {}".format(numb))
 joint = []
 movingJoints = [
     5, 6, 7, 9, 10, 11, 13, 14, 15, 17, 18, 19, 20, 21, 24, 26, 27, 30
 ]
-for i in range(32):
-    joint = p.getJointInfo(boxId, i)
-    print("Joint {} name: {}".format(i, joint[1]))
-for i in range(32):
-    link = p.getLinkState(boxId, i)
-    print("Link {} name: {}".format(i, link[1]))
+# for i in range(32):
+#     joint = p.getJointInfo(boxId, i)
+#     print("Joint {} name: {}".format(i, joint[1]))
+# for i in range(32):
+#     link = p.getLinkState(boxId, i)
+#     print("Link {} name: {}".format(i, link[1]))
 printer = 0
 maxVelocity = 100
 mode = p.POSITION_CONTROL

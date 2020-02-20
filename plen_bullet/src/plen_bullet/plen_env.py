@@ -98,7 +98,7 @@ class PlenWalkEnv(gym.Env):
         # ]
         self.env_ranges = [
             [-1.57, 1.57],  # RIGHT LEG
-            [-1.5, 0.1],
+            [-0.15, 1.5],
             [-1.57, 0.7],
             [-0.2, 0.9],
             [-0.9, 1.5],
@@ -110,7 +110,7 @@ class PlenWalkEnv(gym.Env):
             [-1.5, 0.9],
             [-0.8, 0.4],
             [-1.57, 1.57],  # RIGHT ARM
-            [-0.15, 1.57],
+            [-1.5, 0.15],
             [-0.2, 0.5],
             [-1.57, 1.57],  # LEFT ARM
             [-0.15, 1.57],
@@ -232,14 +232,14 @@ class PlenWalkEnv(gym.Env):
         ]
 
         # Change Right and Left Foot Dynamics
-        # p.changeDynamics(self.robotId,
-        #                  11,
-        #                  lateralFriction=10.0,
-        #                  linearDamping=1)
-        # p.changeDynamics(self.robotId,
-        #                  19,
-        #                  lateralFriction=10.0,
-        #                  linearDamping=1)
+        p.changeDynamics(self.robotId,
+                         11,
+                         lateralFriction=100000000.0,
+                         linearDamping=1.0)
+        p.changeDynamics(self.robotId,
+                         19,
+                         lateralFriction=100000000.0,
+                         linearDamping=1.0)
 
         # for joint in self.movingJoints:
         #     p.changeDynamics(self.robotId, joint, maxJointVelocity=8.76)
@@ -334,10 +334,10 @@ class PlenWalkEnv(gym.Env):
         # Make sure no out of bounds
         if env_val >= env_range[1]:
             env_val = env_range[1] - 0.001
-            print("Sampled Too High!")
+            # print("Sampled Too High!")
         elif env_val <= env_range[0]:
             env_val = env_range[0] + 0.001
-            print("Sampled Too Low!")
+            # print("Sampled Too Low!")
 
         return env_val
 
@@ -455,6 +455,9 @@ class PlenWalkEnv(gym.Env):
         reward += np.sign(self.torso_vx) * (self.torso_vx * self.vel_weight)**2
         # print("TORSO VX: {}".format(self.torso_vx))
         # Reward for maintaining original height
+
+        """NOTE: TOGGLE BELOW TO ADD ADDITIONAL CONSTRAINTS TO REWARD FCN
+        """
         reward -= (np.abs(self.init_height - self.torso_z) *
                    self.height_weight)**2
         # Reward for staying on x axis
@@ -465,6 +468,7 @@ class PlenWalkEnv(gym.Env):
         reward -= (np.abs(self.torso_pitch))**2 * self.pitch_weight
         # Reward for facing forward
         reward -= (np.abs(self.torso_yaw))**2 * self.yaw_weight
+
         # Reward for minimal joint actuation
         # NOTE: UNUSED SINCE CANNOT MEASURE ON REAL PLEN
         # for effort in self.joint_efforts:

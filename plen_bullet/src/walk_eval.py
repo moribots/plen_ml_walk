@@ -47,7 +47,7 @@ def main():
 
     policy = TD3Agent(state_dim, action_dim, max_action)
     # Optionally load existing policy, replace 9999 with num
-    policy_num = 1689999
+    policy_num = 919999
     if os.path.exists(models_path + "/" + "plen_walk_gazebo_" +
                       str(policy_num) + "_critic"):
         print("Loading Existing Policy")
@@ -80,7 +80,7 @@ def main():
         episode_timesteps += 1
         # Deterministic Policy Action
         action = np.clip(policy.select_action(np.array(state)),
-                         0.99 * -max_action, 0.99 * max_action)
+                         -max_action, max_action)
         # rospy.logdebug("Selected Acton: {}".format(action))
 
         # Perform action

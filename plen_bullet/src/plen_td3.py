@@ -99,7 +99,7 @@ def main():
             action = np.clip(
                 (policy.select_action(np.array(state)) + np.random.normal(
                     0, max_action * expl_noise, size=action_dim)),
-                0.99 * -max_action, 0.99 * max_action)
+                -max_action, max_action)
             # rospy.logdebug("Selected Acton: {}".format(action))
 
         # Perform action
