@@ -109,6 +109,7 @@
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
+<!-- RIGHT ARM -->
   <xacro:mesh_link name="r_shoulder"
               origin_rpy="0 0 ${0}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${25/2000}"
@@ -193,8 +194,9 @@
               meshfile="package://plen_ros/meshes/hand.stl"
               meshscale="0.001 0.001 0.001" />
 
+<!-- LEFT ARM -->
   <xacro:mesh_link name="l_shoulder"
-              origin_rpy="0 0 ${0}" origin_xyz="0 0 0"
+              origin_rpy="0 ${pi} ${pi}" origin_xyz="0 0 0"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${25/2000}"
               mass="${2.954/1000}"
               ixx="${2.954*(18*18+25*25)/(12*1000000000)}" ixy="${0}" ixz="${0}"
@@ -204,7 +206,7 @@
               size="${18/1000} ${35/1000} ${25/1000}"
               matname="purple_mat"
               rgba="0.42 0.05 0.68 1"
-              meshfile="package://plen_ros/meshes/shoulder.stl"
+              meshfile="package://plen_ros/meshes/lhip.stl"
               meshscale="0.001 0.001 0.001" />
 
   <xacro:mesh_link name="ls_servo"
@@ -277,6 +279,7 @@
               meshfile="package://plen_ros/meshes/hand.stl"
               meshscale="0.001 0.001 0.001" />
 
+<!-- RIGHT LEG -->
   <xacro:mesh_link name="r_hip"
               origin_rpy="${pi} ${0} ${pi}" origin_xyz="${0/1000} ${0/1000} ${0/1000}"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${-18/2000}"
@@ -399,6 +402,7 @@
         </visual>
   </link>
 
+<!-- LEFT LEG -->
   <xacro:mesh_link name="l_hip"
               origin_rpy="${0} ${0} ${pi}" origin_xyz="${0/1000} ${0/1000} ${1/1000}"
               i_rpy="0 0 0" i_xyz="${0} ${0} ${-18/2000}"
@@ -606,13 +610,13 @@
      
   <xacro:rev_joint name="l_shoulder_ls_servo" number="17" type="revolute"
                     axis_xyz="0 0 1"
-                    origin_rpy="${-pi/2} ${pi/2} ${0}" origin_xyz="${-5.35/1000} ${0.6/1000} ${12.65/1000}"
+                    origin_rpy="${pi/2} ${-pi/2} ${0}" origin_xyz="${-5.35/1000} ${-0.6/1000} ${12.65/1000}"
                     parent="l_shoulder" child="ls_servo"
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-0.15"
-                    upper="1.57"/>
+                    lower="-1.57"
+                    upper="0.15"/>
 
   <xacro:frame_joint name="ls_servo_l_arm" type="fixed"
                     origin_rpy="${-pi/2} 0 ${0}" origin_xyz="${0/1000} ${19.5/1000} ${-2/1000}"
@@ -629,11 +633,11 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-0.2"
-                    upper="0.35"/>
+                    lower="-0.35"
+                    upper="0.2"/>
 
   <xacro:frame_joint name="l_elbow_l_hand" type="fixed"
-                    origin_rpy="${pi} ${pi/2} ${0}" origin_xyz="${-30/1000} ${0/1000} ${0/1000}"
+                    origin_rpy="${0} ${-pi/2} ${0}" origin_xyz="${-30/1000} ${0/1000} ${0/1000}"
                     parent="l_elbow" child="l_hand"/>
 
   <!-- RIGHT LEG -->

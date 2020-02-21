@@ -82,8 +82,8 @@ class PlenWalkEnv(PlenEnv):
             [-0.15, 1.57],
             [-0.2, 0.35],
             [-1.57, 1.57],  # LEFT ARM
-            [-0.15, 1.57],
-            [-0.2, 0.35]
+            [-1.57, 0.15],
+            [-0.35, 0.2]
         ]
 
         # Possible Rewards
@@ -93,18 +93,18 @@ class PlenWalkEnv(PlenEnv):
         self.dead_penalty = 100.
         self.alive_reward = self.dead_penalty / self.max_episode_steps
         # Reward for forward velocity
-        self.vel_weight = 50.
+        self.vel_weight = 3.
         # Reward for maintaining original height
         self.init_height = 0.158
-        self.height_weight = 70.
+        self.height_weight = 20.
         # Reward for staying on x axis
-        self.straight_weight = 50
+        self.straight_weight = 1
         # Reward staying upright
-        self.roll_weight = 50.
+        self.roll_weight = 1.
         # Reward for staying upright
-        self.pitch_weight = 30.
+        self.pitch_weight = 0.5
         # reward for facing forward
-        self.yaw_weight = 50.
+        self.yaw_weight = 1.
         # Reward for minimal joint actuation
         self.joint_effort_weight = 0.035
         # Whether the episode is done due to failure
