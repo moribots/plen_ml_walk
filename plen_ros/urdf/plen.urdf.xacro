@@ -21,7 +21,7 @@
               c_xyz="${0/8000} ${0} ${0/2000}"
               size="${45/1000} ${48/1000} ${75/1000}"
               matname="red_mat"
-              rgba="1 0 0 1"
+              rgba="0 0 0 1"
               meshfile="package://plen_ros/meshes/torso.stl"
               meshscale="0.001 0.001 0.001" /> <!-- m to mm -->
 
@@ -34,8 +34,8 @@
               izz="${64*(11*11+51*51)/(12*1000000000)}"
               c_xyz="${15/2000} ${0} ${46/4000}"
               size="${11/1000} ${51/1000} ${46/1000}"
-              matname="green_mat"
-              rgba="0 1 0 1"
+              matname="purple_mat"
+              rgba="0.42 0.05 0.68 1"
               meshfile="package://plen_ros/meshes/battery.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -48,8 +48,8 @@
               izz="${10*(40*40+40*40)/(12*1000000000)}"
               c_xyz="${0} ${0} ${0/2000}"
               size="${40/1000} ${40/1000} ${40/1000}"
-              matname="green_mat"
-              rgba="0 1 0 1"
+              matname="purple_mat"
+              rgba="0.42 0.05 0.68 1"
               meshfile="package://plen_ros/meshes/head.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -62,8 +62,8 @@
               izz="${12*(12*12+25*25)/(12*1000000000)}"
               c_xyz="${0} ${25/4000} ${0/2000}"
               size="${12/1000} ${25/1000} ${25/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -76,8 +76,8 @@
               izz="${12*(12*12+25*25)/(12*1000000000)}"
               c_xyz="${0} ${25/4000} ${0/2000}"
               size="${12/1000} ${25/1000} ${25/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -90,8 +90,8 @@
               izz="${12*(12*12+25*25)/(12*1000000000)}"
               c_xyz="${0} ${25/4000} ${0/2000}"
               size="${12/1000} ${25/1000} ${25/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -104,8 +104,8 @@
               izz="${12*(12*12+25*25)/(12*1000000000)}"
               c_xyz="${0} ${25/4000} ${0/2000}"
               size="${12/1000} ${25/1000} ${25/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -118,8 +118,8 @@
               izz="${2.954*(18*18+35*35)/(12*1000000000)}"
               c_xyz="${0} ${0} ${25/2000}"
               size="${18/1000} ${35/1000} ${25/1000}"
-              matname="green_mat"
-              rgba="0 1 0 1"
+              matname="purple_mat"
+              rgba="0.42 0.05 0.68 1"
               meshfile="package://plen_ros/meshes/shoulder.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -132,8 +132,8 @@
               izz="${12*(12*12+25*25)/(12*1000000000)}"
               c_xyz="${0} ${25/4000} ${0/2000}"
               size="${12/1000} ${25/1000} ${25/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -147,7 +147,7 @@
               c_xyz="${0} ${0} ${0/2000}"
               size="${15/1000} ${35/1000} ${50/1000}"
               matname="red_mat"
-              rgba="1 0 0 1"
+              rgba="0 0 0 1"
               meshfile="package://plen_ros/meshes/arm.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -160,8 +160,8 @@
               izz="${12*(12*12+25*25)/(12*1000000000)}"
               c_xyz="${0} ${25/4000} ${0/2000}"
               size="${12/1000} ${25/1000} ${25/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -174,8 +174,8 @@
               izz="${3.046*(27*27+34*34)/(12*1000000000)}"
               c_xyz="${-27/4000} ${0} ${0/2000}"
               size="${27/1000} ${34/1000} ${14/1000}"
-              matname="green_mat"
-              rgba="0 1 0 1"
+              matname="purple_mat"
+              rgba="0.42 0.05 0.68 1"
               meshfile="package://plen_ros/meshes/elbow.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -189,7 +189,7 @@
               c_xyz="${0} ${0} ${0/2000}"
               size="${19/1000} ${34/1000} ${35/1000}"
               matname="red_mat"
-              rgba="1 0 0 1"
+              rgba="0 0 0 1"
               meshfile="package://plen_ros/meshes/hand.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -202,8 +202,8 @@
               izz="${2.954*(18*18+35*35)/(12*1000000000)}"
               c_xyz="${0} ${0} ${25/2000}"
               size="${18/1000} ${35/1000} ${25/1000}"
-              matname="green_mat"
-              rgba="0 1 0 1"
+              matname="purple_mat"
+              rgba="0.42 0.05 0.68 1"
               meshfile="package://plen_ros/meshes/shoulder.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -216,8 +216,8 @@
               izz="${12*(12*12+25*25)/(12*1000000000)}"
               c_xyz="${0} ${25/4000} ${0/2000}"
               size="${12/1000} ${25/1000} ${25/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -231,7 +231,7 @@
               c_xyz="${0} ${0} ${0/2000}"
               size="${15/1000} ${35/1000} ${50/1000}"
               matname="red_mat"
-              rgba="1 0 0 1"
+              rgba="0 0 0 1"
               meshfile="package://plen_ros/meshes/arm.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -244,8 +244,8 @@
               izz="${12*(12*12+25*25)/(12*1000000000)}"
               c_xyz="${0} ${25/4000} ${0/2000}"
               size="${12/1000} ${25/1000} ${25/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -258,8 +258,8 @@
               izz="${3.046*(27*27+34*34)/(12*1000000000)}"
               c_xyz="${-27/4000} ${0} ${0/2000}"
               size="${27/1000} ${34/1000} ${14/1000}"
-              matname="green_mat"
-              rgba="0 1 0 1"
+              matname="purple_mat"
+              rgba="0.42 0.05 0.68 1"
               meshfile="package://plen_ros/meshes/elbow.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -273,7 +273,7 @@
               c_xyz="${0} ${0} ${0/2000}"
               size="${19/1000} ${34/1000} ${35/1000}"
               matname="red_mat"
-              rgba="1 0 0 1"
+              rgba="0 0 0 1"
               meshfile="package://plen_ros/meshes/hand.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -286,8 +286,8 @@
               izz="${2.568*(25*25+35*35)/(12*1000000000)}"
               c_xyz="${0} ${0} ${-18/2000}"
               size="${25/1000} ${35/1000} ${18/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/rhip.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -300,8 +300,8 @@
               izz="${40*(28*28+28*28)/(12*1000000000)}"
               c_xyz="${-14/2000} ${0} ${14/2000}"
               size="${28/1000} ${28/1000} ${28/1000}"
-              matname="green_mat"
-              rgba="0 1 0 1"
+              matname="purple_mat"
+              rgba="0.42 0.05 0.68 1"
               meshfile="package://plen_ros/meshes/rthigh.stl"
               meshscale="0.001 0.001 0.001" />
               <!-- og mass: 21.617-->
@@ -316,7 +316,7 @@
               c_xyz="${35/2000} ${-30/2000} ${0/2000}"
               size="${38/1000} ${30/1000} ${24/1000}"
               matname="red_mat"
-              rgba="1 0 0 1"
+              rgba="0 0 0 1"
               meshfile="package://plen_ros/meshes/rknee.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -329,8 +329,8 @@
               izz="${12*(12*12+25*25)/(12*1000000000)}"
               c_xyz="${0} ${25/4000} ${0/2000}"
               size="${12/1000} ${25/1000} ${25/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -343,8 +343,8 @@
               izz="${6.965*(45*45+40*40)/(12*1000000000)}"
               c_xyz="${36/2000} ${0} ${8/2000}"
               size="${45/1000} ${40/1000} ${23/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/rshin.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -357,8 +357,8 @@
               izz="${40*(28*28+28*28)/(12*1000000000)}"
               c_xyz="${14/2000} ${-14/2000} ${-28/2000}"
               size="${28/1000} ${28/1000} ${28/1000}"
-              matname="green_mat"
-              rgba="0 1 0 1"
+              matname="purple_mat"
+              rgba="0.42 0.05 0.68 1"
               meshfile="package://plen_ros/meshes/rankle.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -372,7 +372,7 @@
               c_xyz="${-37/4000} ${0} ${-17/1000}"
               size="${41/1000} ${62.867/1000} ${4/1000}"
               matname="red_mat"
-              rgba="1 0 0 1"
+              rgba="0 0 0 1"
               meshfile="package://plen_ros/meshes/rfoot.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -393,8 +393,8 @@
             <geometry>
                 <box size="${41/1000} ${62.867/1000} ${2/1000}"/>
             </geometry>
-            <material name="blue_mat">
-              <color rgba="0 0 1 1" />
+            <material name="orange_mat">
+              <color rgba="1 0.49 0 1" />
             </material>
         </visual>
   </link>
@@ -408,8 +408,8 @@
               izz="${2.568*(25*25+35*35)/(12*1000000000)}"
               c_xyz="${0} ${0} ${-18/2000}"
               size="${25/1000} ${35/1000} ${18/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/lhip.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -422,8 +422,8 @@
               izz="${40*(28*28+28*28)/(12*1000000000)}"
               c_xyz="${-28/2000} ${-14/2000} ${-14/2000}"
               size="${28/1000} ${28/1000} ${28/1000}"
-              matname="green_mat"
-              rgba="0 1 0 1"
+              matname="purple_mat"
+              rgba="0.42 0.05 0.68 1"
               meshfile="package://plen_ros/meshes/rankle.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -437,7 +437,7 @@
               c_xyz="${35/2000} ${-2/2000} ${0/2000}"
               size="${38/1000} ${30/1000} ${24/1000}"
               matname="red_mat"
-              rgba="1 0 0 1"
+              rgba="0 0 0 1"
               meshfile="package://plen_ros/meshes/lknee.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -450,8 +450,8 @@
               izz="${12*(12*12+25*25)/(12*1000000000)}"
               c_xyz="${0} ${25/4000} ${0/2000}"
               size="${12/1000} ${25/1000} ${25/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/servo.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -464,8 +464,8 @@
               izz="${6.965*(45*45+40*40)/(12*1000000000)}"
               c_xyz="${-36/2000} ${0} ${8/2000}"
               size="${45/1000} ${40/1000} ${23/1000}"
-              matname="blue_mat"
-              rgba="0 0 1 1"
+              matname="orange_mat"
+              rgba="1 0.49 0 1"
               meshfile="package://plen_ros/meshes/rshin.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -478,8 +478,8 @@
               izz="${40*(28*28+28*28)/(12*1000000000)}"
               c_xyz="${-14/2000} ${0/2000} ${14/2000}"
               size="${28/1000} ${28/1000} ${28/1000}"
-              matname="green_mat"
-              rgba="0 1 0 1"
+              matname="purple_mat"
+              rgba="0.42 0.05 0.68 1"
               meshfile="package://plen_ros/meshes/rthigh.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -493,7 +493,7 @@
               c_xyz="${37/4000} ${0} ${-17/1000}"
               size="${41/1000} ${62.867/1000} ${4/1000}"
               matname="red_mat"
-              rgba="1 0 0 1"
+              rgba="0 0 0 1"
               meshfile="package://plen_ros/meshes/lfoot.stl"
               meshscale="0.001 0.001 0.001" />
 
@@ -514,8 +514,8 @@
             <geometry>
                 <box size="${41/1000} ${62.867/1000} ${2/1000}"/>
             </geometry>
-            <material name="blue_mat">
-              <color rgba="0 0 1 1" />
+            <material name="orange_mat">
+              <color rgba="1 0.49 0 1" />
             </material>
         </visual>
   </link>
@@ -558,8 +558,8 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-1.7"
-                    upper="1.7"/>
+                    lower="-1.57"
+                    upper="1.57"/>
      
   <xacro:rev_joint name="r_shoulder_rs_servo" number="14" type="revolute"
                     axis_xyz="0 0 1"
@@ -569,7 +569,7 @@
                     damping="1"
                     friction="1"
                     lower="-0.15"
-                    upper="1.7"/>
+                    upper="1.57"/>
 
   <xacro:frame_joint name="rs_servo_r_arm" type="fixed"
                     origin_rpy="${-pi/2} 0 ${0}" origin_xyz="${0/1000} ${19.5/1000} ${-2/1000}"
@@ -587,7 +587,7 @@
                     damping="1"
                     friction="1"
                     lower="-0.2"
-                    upper="0.5"/>
+                    upper="0.35"/>
 
   <xacro:frame_joint name="r_elbow_r_hand" type="fixed"
                     origin_rpy="${pi} ${pi/2} ${0}" origin_xyz="${-30/1000} ${0/1000} ${0/1000}"
@@ -601,8 +601,8 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-1.7"
-                    upper="1.7"/>
+                    lower="-1.57"
+                    upper="1.57"/>
      
   <xacro:rev_joint name="l_shoulder_ls_servo" number="17" type="revolute"
                     axis_xyz="0 0 1"
@@ -612,7 +612,7 @@
                     damping="1"
                     friction="1"
                     lower="-0.15"
-                    upper="1.7"/>
+                    upper="1.57"/>
 
   <xacro:frame_joint name="ls_servo_l_arm" type="fixed"
                     origin_rpy="${-pi/2} 0 ${0}" origin_xyz="${0/1000} ${19.5/1000} ${-2/1000}"
@@ -630,7 +630,7 @@
                     damping="1"
                     friction="1"
                     lower="-0.2"
-                    upper="0.5"/>
+                    upper="0.35"/>
 
   <xacro:frame_joint name="l_elbow_l_hand" type="fixed"
                     origin_rpy="${pi} ${pi/2} ${0}" origin_xyz="${-30/1000} ${0/1000} ${0/1000}"
@@ -644,8 +644,8 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-1.7"
-                    upper="1.7"/>
+                    lower="-1.57"
+                    upper="1.57"/>
 
   <xacro:rev_joint name="r_hip_r_thigh" number="2" type="revolute"
                     axis_xyz="0 1 0"
@@ -654,8 +654,8 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-1.54"
-                    upper="0.12"/>
+                    lower="-0.15"
+                    upper="1.5"/>
 
   <xacro:rev_joint name="r_thigh_r_knee" number="3" type="revolute"
                     axis_xyz="0 1 0"
@@ -664,7 +664,7 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-1.7"
+                    lower="-0.95"
                     upper="0.75"/>
 
   <xacro:frame_joint name="r_knee_knee_servo" type="fixed"
@@ -678,8 +678,8 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-0.2"
-                    upper="0.95"/>
+                    lower="-0.9"
+                    upper="0.3"/>
 
   <xacro:rev_joint name="r_shin_r_ankle" number="5" type="revolute"
                     axis_xyz="0 0 1"
@@ -689,7 +689,7 @@
                     damping="1"
                     friction="1"
                     lower="-0.95"
-                    upper="1.54"/>
+                    upper="1.2"/>
 
   <xacro:rev_joint name="r_ankle_r_foot" number="6" type="revolute"
                     axis_xyz="0 1 0"
@@ -698,8 +698,8 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-0.45"
-                    upper="0.8"/>
+                    lower="-0.8"
+                    upper="0.4"/>
 
   <joint name="r_foot_r_sensor" type="fixed">
         <parent link="r_foot"/>
@@ -715,8 +715,8 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-1.7"
-                    upper="1.7"/>
+                    lower="-1.57"
+                    upper="1.57"/>
 
   <xacro:rev_joint name="l_hip_l_thigh" number="8" type="revolute"
                     axis_xyz="1 0 0"
@@ -725,8 +725,8 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-0.12"
-                    upper="1.54"/>
+                    lower="-1.5"
+                    upper="0.15"/>
 
   <xacro:rev_joint name="l_thigh_l_knee" number="9" type="revolute"
                     axis_xyz="0 1 0"
@@ -736,7 +736,7 @@
                     damping="1"
                     friction="1"
                     lower="-0.75"
-                    upper="1.7"/>
+                    upper="0.95"/>
 
   <xacro:frame_joint name="l_knee_knee_servo" type="fixed"
                     origin_rpy="${-pi/2} ${pi} 0" origin_xyz="${28/1000} ${1.45/1000} ${0/1000}"
@@ -749,8 +749,8 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-0.95"
-                    upper="0.2"/>
+                    lower="-0.3"
+                    upper="0.9"/>
 
   <xacro:rev_joint name="l_shin_l_ankle" number="11" type="revolute"
                     axis_xyz="0 1 0"
@@ -759,7 +759,7 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-1.54"
+                    lower="-1.2"
                     upper="0.95"/>
 
   <xacro:rev_joint name="l_ankle_l_foot" number="12" type="revolute"
@@ -769,8 +769,8 @@
                     effort="0.15" velocity="8"
                     damping="1"
                     friction="1"
-                    lower="-0.8"
-                    upper="0.45"/> <!-- effort and velocity taken from FEETECH FS90-FB datasheet -->
+                    lower="-0.4"
+                    upper="0.8"/> <!-- effort and velocity taken from FEETECH FS90-FB datasheet -->
 
   <joint name="l_foot_l_sensor" type="fixed">
         <parent link="l_foot"/>
