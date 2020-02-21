@@ -58,7 +58,7 @@ class PlenWalkEnv(gym.Env):
         self.vel_weight = 3.
         # Reward for maintaining original height
         self.init_height = 0.158
-        self.height_weight = 5.
+        self.height_weight = 20.
         # Reward for staying on x axis
         self.straight_weight = 1
         # Reward staying upright
@@ -101,22 +101,22 @@ class PlenWalkEnv(gym.Env):
         self.env_ranges = [
             [-1.57, 1.57],  # RIGHT LEG
             [-0.15, 1.5],
-            [-1.57, 0.7],
-            [-0.2, 0.9],
-            [-0.9, 1.5],
-            [-0.4, 0.8],
-            [-1.57, 1.57],  # LEFT LEG
-            [-0.1, 1.5],
-            [-0.7, 1.57],
-            [-0.9, 0.2],
-            [-1.5, 0.9],
+            [-0.95, 0.75],
+            [-0.9, 0.3],
+            [-0.95, 1.2],
             [-0.8, 0.4],
-            [-1.57, 1.57],  # RIGHT ARM
+            [-1.57, 1.57],  # LEFT LEG
             [-1.5, 0.15],
-            [-0.2, 0.5],
+            [-0.75, 0.95],
+            [-0.3, 0.9],
+            [-1.2, 0.95],
+            [-0.4, 0.8],
+            [-1.57, 1.57],  # RIGHT ARM
+            [-0.15, 1.57],
+            [-0.2, 0.35],
             [-1.57, 1.57],  # LEFT ARM
             [-0.15, 1.57],
-            [-0.2, 0.5]
+            [-0.2, 0.35]
         ]
 
         # Observation Values
@@ -577,6 +577,8 @@ class PlenWalkEnv(gym.Env):
         """
         reward -= (np.abs(self.init_height - self.torso_z) *
                    self.height_weight)**2
+        # print("HEIGHT PENALTY: {}".format(
+        #     (np.abs(self.init_height - self.torso_z) * self.height_weight)**2))
         # Reward for staying on x axis
         reward -= (np.abs(self.torso_y))**2 * self.straight_weight
         # Reward staying upright
