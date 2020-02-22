@@ -224,6 +224,10 @@ class PlenWalkEnv(gym.Env):
         # p.setTimeStep(0.01)   # sec
         # p.setTimeStep(0.001)  # sec
         self.plane = p.loadURDF("plane.urdf")
+
+        # Modify Ground Plane Friction and Restitution
+        p.changeDynamics(self.plane, -1, lateralFriction=0.8, restitution=0.5)
+
         self.StartPos = [0, 0, 0.158]
         self.StartOrientation = p.getQuaternionFromEuler([0, 0, 0])
         self.robotId = p.loadURDF("plen.urdf", self.StartPos,
@@ -351,8 +355,8 @@ class PlenWalkEnv(gym.Env):
 
         # Change Right and Left Foot Dynamics
         roll_fric = 0.01
-        lat_fric = 1000.0
-        spin_fric = 1.0
+        lat_fric = 0.8
+        spin_fric = 0.1
         p.changeDynamics(
             self.robotId,
             11,
@@ -384,7 +388,7 @@ class PlenWalkEnv(gym.Env):
                              j,
                              linearDamping=0.0,
                              angularDamping=0.0,
-                             restitution=0.0)
+                             restitution=0.5)
 
         # for joint in self.movingJoints:
         #     p.changeDynamics(self.robotId, joint, maxJointVelocity=8.76)

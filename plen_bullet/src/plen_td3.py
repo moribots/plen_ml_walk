@@ -132,7 +132,7 @@ def main():
 
         # Evaluate episode
         if (t + 1) % eval_freq == 0:
-            evaluate_policy(policy, env_name, seed, 5, False)
+            # evaluate_policy(policy, env_name, seed, 5, False)
             # THIS BREAKS THE ENVIRONMENT FOR SOME REASON...
             # # Reset environment
             # state, done = env.reset(), False
