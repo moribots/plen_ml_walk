@@ -12,7 +12,7 @@ import time
 register(
     id="PlenWalkEnv-v1",
     entry_point='plen_bullet.plen_env:PlenWalkEnv',
-    max_episode_steps=500,
+    max_episode_steps=300,
 )
 
 
@@ -49,7 +49,7 @@ class PlenWalkEnv(gym.Env):
         # Possible Rewards
         self.reward_range = (-np.inf, np.inf)
 
-        self.max_episode_steps = 500
+        self.max_episode_steps = 300
 
         # Reward for being alive
         self.dead_penalty = 100.
@@ -350,14 +350,41 @@ class PlenWalkEnv(gym.Env):
         print("--------------------------------------------")
 
         # Change Right and Left Foot Dynamics
-        p.changeDynamics(self.robotId,
-                         11,
-                         lateralFriction=100000000.0,
-                         linearDamping=0.1)
-        p.changeDynamics(self.robotId,
-                         19,
-                         lateralFriction=100000000.0,
-                         linearDamping=0.1)
+        roll_fric = 0.01
+        lat_fric = 1000.0
+        spin_fric = 1.0
+        p.changeDynamics(
+            self.robotId,
+            11,
+            # prevents sliding
+            lateralFriction=lat_fric,
+            # prevents spinning in place
+            spinningFriction=spin_fric,
+            # slip by rolling (high to encourage earlier
+            # falling so robot learns to walk without
+            # potentially causing this
+            rollingFriction=roll_fric)
+        p.changeDynamics(
+            self.robotId,
+            19,
+            # prevernts sliding
+            lateralFriction=lat_fric,
+            # prevents spinning in place
+            spinningFriction=spin_fric,
+            # slip by rolling (high to encourage earlier
+            # falling so robot learns to walk without
+            # potentially causing this
+            rollingFriction=roll_fric)
+
+        # Better performance (realism) if damping for all joints turned off
+        # These dampings essentially act as aerodynamic drag
+        # Default damping is 0.04
+        for j in range(p.getNumJoints(self.robotId)):
+            p.changeDynamics(self.robotId,
+                             j,
+                             linearDamping=0.0,
+                             angularDamping=0.0,
+                             restitution=0.0)
 
         # for joint in self.movingJoints:
         #     p.changeDynamics(self.robotId, joint, maxJointVelocity=8.76)
@@ -587,6 +614,11 @@ class PlenWalkEnv(gym.Env):
         reward -= (np.abs(self.torso_pitch))**2 * self.pitch_weight
         # Reward for facing forward
         reward -= (np.abs(self.torso_yaw))**2 * self.yaw_weight
+
+        # Penalty for having both feet on the ground
+        # NOTE: UNSURE ABOUT RESULTS
+        if self.right_contact == 1 and self.left_contact == 1:
+            reward -= 1
 
         # Reward for minimal joint actuation
         # NOTE: UNUSED SINCE CANNOT MEASURE ON REAL PLEN

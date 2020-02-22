@@ -1079,9 +1079,9 @@
     </inertial>
   </link>
   <link name="r_foot">
-    <contact>
+    <!-- <contact>
       <lateral_friction value="100"/>
-  </contact>
+  </contact> -->
     <visual>
       <origin rpy="0 0 0" xyz="-0.0085 0 -0.0198"/>
       <geometry>
@@ -1094,9 +1094,10 @@
     <collision>
       <origin rpy="0 0 0" xyz="-0.00925 0 -0.017"/>
       <geometry>
-        <box size="0.041 0.062867 0.004"/>
+        <mesh filename="package://plen_ros/meshes_bin/rfoot.stl" scale="0.001 0.001 0.001"/>
+        <!-- <box size="0.041 0.062867 0.004"/> -->
       </geometry>
-      <contact_coefficients mu="100000.0" kp="10000000.0" kd="10.0"/>
+      <!-- <contact_coefficients mu="100000.0" kp="10000000.0" kd="10.0"/> -->
     </collision>
     <inertial>
       <mass value="0.015"/>
@@ -1244,9 +1245,9 @@
     </inertial>
   </link>
   <link name="l_foot">
-    <contact>
+   <!--  <contact>
       <lateral_friction value="100"/>
-  </contact>
+  </contact> -->
     <visual>
       <origin rpy="0 0 0" xyz="0.00885 0 -0.0142"/>
       <geometry>
@@ -1259,9 +1260,10 @@
     <collision>
       <origin rpy="0 0 0" xyz="0.00925 0 -0.017"/>
       <geometry>
-        <box size="0.041 0.062867 0.004"/>
+        <mesh filename="package://plen_ros/meshes_bin/lfoot.stl" scale="0.001 0.001 0.001"/>
+        <!-- <box size="0.041 0.062867 0.004"/> -->
       </geometry>
-      <contact_coefficients mu="100000.0" kp="10000000.0" kd="10.0"/>
+      <!-- <contact_coefficients mu="100000.0" kp="10000000.0" kd="10.0"/> -->
     </collision>
     <inertial>
       <mass value="0.015"/>
