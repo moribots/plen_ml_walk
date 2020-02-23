@@ -58,8 +58,8 @@ class PlenWalkEnv(gym.Env):
         # Reward for forward velocity
         self.vel_weight = 5.
         # Reward for maintaining original height
-        self.init_height = 0.158
-        self.height_weight = 10.
+        self.init_height = 0.160178937611  # measured in bullet
+        self.height_weight = 30.
         # Reward for staying on x axis
         self.straight_weight = 1
         # Reward staying upright
@@ -102,7 +102,7 @@ class PlenWalkEnv(gym.Env):
         # (symmetric) motions
         # Since we will sum the similarities for the above, we divide the
         # reward by 3... or not?
-        self.cosine_similarity_weight = 1.0 / 3.0
+        self.cosine_similarity_weight = 0.2 / 3.0
         # Reset lists at right heel strike after 40 steps
         # Also Reset each episode
 
@@ -672,6 +672,10 @@ class PlenWalkEnv(gym.Env):
         """
         reward -= (np.abs(self.init_height - self.torso_z) *
                    self.height_weight)**2
+        # height_pen = (np.abs(self.init_height - self.torso_z) *
+        #               self.height_weight)**2
+        # print("HEIGHT: {} HEIGHT DIFF: {} HEIGHT PENALTY: {}".format(
+        #     self.torso_z, np.abs(self.init_height - self.torso_z), height_pen))
         # Reward for staying on x axis
         reward -= (np.abs(self.torso_y))**2 * self.straight_weight
         # Reward staying upright
@@ -680,7 +684,6 @@ class PlenWalkEnv(gym.Env):
         reward -= (np.abs(self.torso_pitch))**2 * self.pitch_weight
         # Reward for facing forward
         reward -= (np.abs(self.torso_yaw))**2 * self.yaw_weight
-
         """ Gait Based Rewards
         """
         joint_angle_rewards = 0

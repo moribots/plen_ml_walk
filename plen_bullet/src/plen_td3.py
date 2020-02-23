@@ -40,7 +40,7 @@ def main():
     if not os.path.exists(models_path):
         os.makedirs(models_path)
 
-    env = gym.make(env_name, render=True)
+    env = gym.make(env_name, render=False)
 
     # Set seeds
     env.seed(seed)
