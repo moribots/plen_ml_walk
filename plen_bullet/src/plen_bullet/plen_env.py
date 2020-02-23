@@ -53,12 +53,13 @@ class PlenWalkEnv(gym.Env):
 
         # Reward for being alive
         self.dead_penalty = 100.
-        self.alive_reward = self.dead_penalty / self.max_episode_steps
+        # PENALTY FOR BEING ALIVE TO DISCOURAGE STANDING
+        self.alive_reward = self.dead_penalty / (self.max_episode_steps * 10.0)
         # Reward for forward velocity
-        self.vel_weight = 3.
+        self.vel_weight = 5.
         # Reward for maintaining original height
         self.init_height = 0.158
-        self.height_weight = 20.
+        self.height_weight = 10.
         # Reward for staying on x axis
         self.straight_weight = 1
         # Reward staying upright
@@ -71,6 +72,39 @@ class PlenWalkEnv(gym.Env):
         self.joint_effort_weight = 0.035
         # Whether the episode is done due to failure
         self.dead = False
+        """
+            Here we create some paramters to build a gait-inspired reward fcn
+
+            This fcn builds a gait cycle comprised of a number of timesteps,
+            a number of timesteps for acceptable dual support (both feet on
+            the ground)
+        """
+        # Human Gait-optimized Reward Parameters
+        self.gait_period_steps = 40  # 20 steps per leg swing
+        self.double_support_period_steps = int(self.gait_period_steps / 10.0)
+        self.gait_period_counter = 0
+        self.double_support_preriod_counter = 0
+        # Reset counters at right heel strike after 40 steps
+        # Also Reset each episode
+
+        # Used for comparing cosine similarity to promote symmetry in gait
+        # thigh_knee in URDF
+        self.lhip_joint_angles = np.array([])
+        self.rhip_joint_angles = np.array([])
+        # knee_shin in URDF
+        self.lknee_joint_angles = np.array([])
+        self.rknee_joint_angles = np.array([])
+        # shin_ankle in URDF
+        self.lankle_joint_angles = np.array([])
+        self.rankle_joint_angles = np.array([])
+        # NOTE: Since the joint angles for left and right legs are opposites in
+        # the URDF, cosine similarity will equal 1 if the legs perform opposed
+        # (symmetric) motions
+        # Since we will sum the similarities for the above, we divide the
+        # reward by 3... or not?
+        self.cosine_similarity_weight = 1.0 / 3.0
+        # Reset lists at right heel strike after 40 steps
+        # Also Reset each episode
 
         # Agent Action Space
         low_act = np.ones(18) * -1
@@ -354,7 +388,7 @@ class PlenWalkEnv(gym.Env):
         print("--------------------------------------------")
 
         # Change Right and Left Foot Dynamics
-        roll_fric = 0.01
+        roll_fric = 0.2  # 0.1
         lat_fric = 0.8
         spin_fric = 0.1
         p.changeDynamics(
@@ -393,6 +427,8 @@ class PlenWalkEnv(gym.Env):
         # for joint in self.movingJoints:
         #     p.changeDynamics(self.robotId, joint, maxJointVelocity=8.76)
 
+        print("PLEN ENVIRONMENT INITIALIZED")
+
     def reset(self):
         p.resetBasePositionAndOrientation(self.robotId,
                                           posObj=self.StartPos,
@@ -413,6 +449,15 @@ class PlenWalkEnv(gym.Env):
         self.moving_avg_counter += 1
         self.cumulated_episode_reward = 0
         self.episode_timestep = 0
+        # Reset Gait Params
+        self.gait_period_counter = 0
+        self.double_support_preriod_counter = 0
+        self.lhip_joint_angles = np.array([])
+        self.rhip_joint_angles = np.array([])
+        self.lknee_joint_angles = np.array([])
+        self.rknee_joint_angles = np.array([])
+        self.lankle_joint_angles = np.array([])
+        self.rankle_joint_angles = np.array([])
         return observation
 
     def _publish_reward(self, reward, episode_number):
@@ -466,6 +511,8 @@ class PlenWalkEnv(gym.Env):
         self.cumulated_episode_reward += reward
         self.episode_timestep += 1
         self.total_timesteps += 1
+        # Increment Gait Reward Counters
+        self.gait_period_counter += 1
         return observation, reward, done, {}
 
     def agent_to_env(self, env_range, agent_val):
@@ -590,6 +637,23 @@ class PlenWalkEnv(gym.Env):
                 self.left_contact
             ]))
 
+        # Pupulate joint angle arrays for gait calc
+        # thigh_knee in URDF
+        self.lhip_joint_angles = np.append(self.lhip_joint_angles,
+                                           JointStates[2][0])
+        self.rhip_joint_angles = np.append(self.rhip_joint_angles,
+                                           JointStates[8][0])
+        # knee_shin in URDF
+        self.lknee_joint_angles = np.append(self.lknee_joint_angles,
+                                            JointStates[3][0])
+        self.rknee_joint_angles = np.append(self.rknee_joint_angles,
+                                            JointStates[9][0])
+        # shin_ankle in URDF
+        self.lankle_joint_angles = np.append(self.lankle_joint_angles,
+                                             JointStates[4][0])
+        self.rankle_joint_angles = np.append(self.rankle_joint_angles,
+                                             JointStates[10][0])
+
         return observations
 
     def compute_reward(self):
@@ -608,8 +672,6 @@ class PlenWalkEnv(gym.Env):
         """
         reward -= (np.abs(self.init_height - self.torso_z) *
                    self.height_weight)**2
-        # print("HEIGHT PENALTY: {}".format(
-        #     (np.abs(self.init_height - self.torso_z) * self.height_weight)**2))
         # Reward for staying on x axis
         reward -= (np.abs(self.torso_y))**2 * self.straight_weight
         # Reward staying upright
@@ -619,10 +681,61 @@ class PlenWalkEnv(gym.Env):
         # Reward for facing forward
         reward -= (np.abs(self.torso_yaw))**2 * self.yaw_weight
 
-        # Penalty for having both feet on the ground
-        # NOTE: UNSURE ABOUT RESULTS
+        """ Gait Based Rewards
+        """
+        joint_angle_rewards = 0
+        # Assuming start of gait cycle on right foot contact
+        if self.gait_period_counter >= self.gait_period_steps and self.right_contact == 1:
+            self.lhip_joint_angles = np.array([])
+            self.rhip_joint_angles = np.array([])
+            self.lknee_joint_angles = np.array([])
+            self.rknee_joint_angles = np.array([])
+            self.lankle_joint_angles = np.array([])
+            self.rankle_joint_angles = np.array([])
+            self.gait_period_counter = 0
+            self.double_support_preriod_counter = 0
+        elif self.gait_period_counter >= 1.5 * self.gait_period_steps:
+            reward -= 2
+        else:
+            # Compute Reward due to Joint Angle Cosine Similarity
+            # Hips
+            hdot = np.dot(self.lhip_joint_angles, self.rhip_joint_angles)
+            hnorml = np.linalg.norm(self.lhip_joint_angles)
+            hnormr = np.linalg.norm(self.rhip_joint_angles)
+            hcos = hdot / (hnorml * hnormr)
+            joint_angle_rewards += hcos
+            # Knees
+            kdot = np.dot(self.lknee_joint_angles, self.rknee_joint_angles)
+            knorml = np.linalg.norm(self.lknee_joint_angles)
+            knormr = np.linalg.norm(self.rknee_joint_angles)
+            kcos = kdot / (knorml * knormr)
+            joint_angle_rewards += kcos
+            # Ankles
+            adot = np.dot(self.lankle_joint_angles, self.rankle_joint_angles)
+            anorml = np.linalg.norm(self.lankle_joint_angles)
+            anormr = np.linalg.norm(self.rankle_joint_angles)
+            acos = adot / (anorml * anormr)
+            joint_angle_rewards += acos
+
+            # Multiply by Coef
+            joint_angle_rewards *= self.cosine_similarity_weight
+
+            # print("JOINT ANGLE REWARD: {}".format(joint_angle_rewards))
+
+        reward += joint_angle_rewards
+
+        # If right foot contact is start of gait cycle, then left foot
+        # should contact halfway through
+        # Use tanh to cap reward between -1 and 1
+        if self.left_contact == 1:
+            reward += 0.2 * (1 - np.tanh((
+                (self.gait_period_counter / self.gait_period_steps) - 0.5)**2))
+
+        # Penalty for having both feet on the ground for too long
         if self.right_contact == 1 and self.left_contact == 1:
-            reward -= 1
+            self.double_support_preriod_counter += 1
+            if self.double_support_preriod_counter >= self.double_support_period_steps:
+                reward -= 2
 
         # Reward for minimal joint actuation
         # NOTE: UNUSED SINCE CANNOT MEASURE ON REAL PLEN
