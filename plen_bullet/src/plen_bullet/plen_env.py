@@ -54,7 +54,8 @@ class PlenWalkEnv(gym.Env):
         # Reward for being alive
         self.dead_penalty = 100.
         # PENALTY FOR BEING ALIVE TO DISCOURAGE STANDING
-        self.alive_reward = 0 * self.dead_penalty / (self.max_episode_steps * 10.0)
+        self.alive_reward = 0 * self.dead_penalty / (self.max_episode_steps *
+                                                     10.0)
         # Reward for forward velocity
         self.vel_weight = 3.
         # Reward for maintaining original height
@@ -102,9 +103,25 @@ class PlenWalkEnv(gym.Env):
         # (symmetric) motions
         # Since we will sum the similarities for the above, we divide the
         # reward by 3... or not?
-        self.cosine_similarity_weight = 10.0 / 3.0
+        self.cosine_similarity_weight = 1.0 / 3.0
         # Reset lists at right heel strike after 40 steps
         # Also Reset each episode
+
+        # Store current and previous hip, knee, ankle angles
+        # And compare (subtract) to current to find cosine similarity
+        # Between that and array of zeros. If high, punish to discourage
+        # standing in place
+        self.lhip_joint_angle_diff = 0
+        self.rhip_joint_angle_diff = 0
+        # knee_shin in URDF
+        self.lknee_joint_angle_diff = 0
+        self.rknee_joint_angle_diff = 0
+        # shin_ankle in URDF
+        self.lankle_joint_angle_diff = 0
+        self.rankle_joint_angle_diff = 0
+        # Boolean to indicate that we shouldn't calculate joint angle
+        # Penalties this iteration
+        self.first_pass = True
 
         # Agent Action Space
         low_act = np.ones(18) * -1
@@ -637,6 +654,33 @@ class PlenWalkEnv(gym.Env):
                 self.left_contact
             ]))
 
+        # Populate Joint Angle Difference Arrays using current - prev
+        if len(self.lhip_joint_angles) > 0:
+            # thigh_knee in URDF
+            self.lhip_joint_angle_diff = self.lhip_joint_angles[
+                -1] - JointStates[2][0]
+            self.rhip_joint_angle_diff = self.rhip_joint_angles[
+                -1] - JointStates[8][0]
+            # knee_shin in URDF
+            self.lknee_joint_angle_diff = self.lknee_joint_angles[
+                -1] - JointStates[3][0]
+            self.rknee_joint_angle_diff = self.rknee_joint_angles[
+                -1] - JointStates[9][0]
+            # shin_ankle in URDF
+            self.lankle_joint_angle_diff = self.lankle_joint_angles[
+                -1] - JointStates[4][0]
+            self.rankle_joint_angle_diff = self.rankle_joint_angles[
+                -1] - JointStates[10][0]
+            self.first_pass = False
+        else:
+            self.first_pass = True
+            self.lhip_joint_angle_diff = 0
+            self.rhip_joint_angle_diff = 0
+            self.lknee_joint_angle_diff = 0
+            self.rknee_joint_angle_diff = 0
+            self.lankle_joint_angle_diff = 0
+            self.rankle_joint_angle_diff = 0
+
         # Pupulate joint angle arrays for gait calc
         # thigh_knee in URDF
         self.lhip_joint_angles = np.append(self.lhip_joint_angles,
@@ -665,7 +709,14 @@ class PlenWalkEnv(gym.Env):
         # Reward for being alive
         reward += self.alive_reward
         # Reward for forward velocity
-        reward += np.sign(self.torso_vx) * (self.torso_vx * self.vel_weight)**2
+        # Penalty if velociy below a certain amount (bias amount)
+        # adjusted_torso_vx = self.torso_vx - self.torso_vx_bias
+        # Large penalty for neg vel
+        if np.sign(self.torso_vx) < 0:
+            reward -= np.exp(self.torso_vx * self.vel_weight)
+        # Smaller Reward for pos vel
+        else:
+            reward += (self.torso_vx * self.vel_weight)**2
         # print("TORSO VX: {}".format(self.torso_vx))
         # Reward for maintaining original height
         """NOTE: TOGGLE BELOW TO ADD ADDITIONAL CONSTRAINTS TO REWARD FCN
@@ -687,6 +738,7 @@ class PlenWalkEnv(gym.Env):
         """ Gait Based Rewards
         """
         joint_angle_rewards = 0
+        joint_angle_penalties = 0
         # Assuming start of gait cycle on right foot contact
         if self.gait_period_counter >= self.gait_period_steps and self.right_contact == 1:
             self.lhip_joint_angles = np.array([])
@@ -699,7 +751,7 @@ class PlenWalkEnv(gym.Env):
             self.double_support_preriod_counter = 0
         elif self.gait_period_counter >= 1.5 * self.gait_period_steps:
             reward -= 2
-        else:
+        elif self.gait_period_counter > 0:
             # Compute Reward due to Joint Angle Cosine Similarity
             # Hips
             hdot = np.dot(self.lhip_joint_angles, self.rhip_joint_angles)
@@ -722,10 +774,29 @@ class PlenWalkEnv(gym.Env):
 
             # Multiply by Coef
             joint_angle_rewards *= self.cosine_similarity_weight
-
             # print("JOINT ANGLE REWARD: {}".format(joint_angle_rewards))
 
+            # Joint angle penalties if difference near zero
+            if not self.first_pass:
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.lhip_joint_angle_diff))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.rhip_joint_angle_diff))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.lknee_joint_angle_diff))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.rknee_joint_angle_diff))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.lankle_joint_angle_diff))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.rankle_joint_angle_diff))
+
+                joint_angle_penalties *= self.cosine_similarity_weight * 0.5
+
+                # print("JOINT DIFF PENALTY: {}".format(joint_angle_penalties))
+
         reward += joint_angle_rewards
+        reward += joint_angle_penalties
 
         # If right foot contact is start of gait cycle, then left foot
         # should contact halfway through
