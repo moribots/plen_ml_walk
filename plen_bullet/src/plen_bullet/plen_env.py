@@ -81,10 +81,12 @@ class PlenWalkEnv(gym.Env):
             the ground)
         """
         # Human Gait-optimized Reward Parameters
-        self.gait_period_steps = 50  # 25 steps per leg swing
+        self.gait_period_steps = 60  # /2 timesteps per leg swing
         self.double_support_period_steps = int(self.gait_period_steps / 5.0)
         self.gait_period_counter = 0
         self.double_support_preriod_counter = 0
+        self.right_contact_counter = 0
+        self.left_contact_counter = 0
         # Reset counters at right heel strike after 40 steps
         # Also Reset each episode
 
@@ -103,7 +105,7 @@ class PlenWalkEnv(gym.Env):
         # (symmetric) motions
         # Since we will sum the similarities for the above, we divide the
         # reward by 3... or not?
-        self.cosine_similarity_weight = 1.0 / 3.0
+        self.cosine_similarity_weight = 2.0 / 3.0
         # Reset lists at right heel strike after 40 steps
         # Also Reset each episode
 
@@ -469,6 +471,8 @@ class PlenWalkEnv(gym.Env):
         # Reset Gait Params
         self.gait_period_counter = 0
         self.double_support_preriod_counter = 0
+        self.right_contact_counter = 0
+        self.left_contact_counter = 0
         self.lhip_joint_angles = np.array([])
         self.rhip_joint_angles = np.array([])
         self.lknee_joint_angles = np.array([])
@@ -749,6 +753,8 @@ class PlenWalkEnv(gym.Env):
             self.rankle_joint_angles = np.array([])
             self.gait_period_counter = 0
             self.double_support_preriod_counter = 0
+            self.right_contact_counter = 0
+            self.left_contact_counter = 0
         elif self.gait_period_counter >= 1.5 * self.gait_period_steps:
             reward -= 2
         elif self.gait_period_counter > 0:
@@ -814,6 +820,18 @@ class PlenWalkEnv(gym.Env):
             self.double_support_preriod_counter += 1
             if self.double_support_preriod_counter >= self.double_support_period_steps:
                 reward -= 2
+
+        # Penalty for right foot on the ground for too long
+        if self.right_contact == 1:
+            self.right_contact_counter += 1
+            if self.right_contact_counter >= self.double_support_period_steps:
+                reward -= 1
+
+        # Penalty for left foot on the ground for too long
+        if self.left_contact == 1:
+            self.left_contact_counter += 1
+            if self.left_contact_counter >= self.double_support_period_steps:
+                reward -= 1
 
         # Reward for minimal joint actuation
         # NOTE: UNUSED SINCE CANNOT MEASURE ON REAL PLEN
