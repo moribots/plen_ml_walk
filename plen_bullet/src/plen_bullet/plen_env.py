@@ -54,12 +54,12 @@ class PlenWalkEnv(gym.Env):
         # Reward for being alive
         self.dead_penalty = 100.
         # PENALTY FOR BEING ALIVE TO DISCOURAGE STANDING
-        self.alive_reward = self.dead_penalty / (self.max_episode_steps * 10.0)
+        self.alive_reward = 0 * self.dead_penalty / (self.max_episode_steps * 10.0)
         # Reward for forward velocity
-        self.vel_weight = 5.
+        self.vel_weight = 3.
         # Reward for maintaining original height
         self.init_height = 0.160178937611  # measured in bullet
-        self.height_weight = 30.
+        self.height_weight = 40.
         # Reward for staying on x axis
         self.straight_weight = 1
         # Reward staying upright
@@ -80,8 +80,8 @@ class PlenWalkEnv(gym.Env):
             the ground)
         """
         # Human Gait-optimized Reward Parameters
-        self.gait_period_steps = 40  # 20 steps per leg swing
-        self.double_support_period_steps = int(self.gait_period_steps / 10.0)
+        self.gait_period_steps = 50  # 25 steps per leg swing
+        self.double_support_period_steps = int(self.gait_period_steps / 5.0)
         self.gait_period_counter = 0
         self.double_support_preriod_counter = 0
         # Reset counters at right heel strike after 40 steps
@@ -102,7 +102,7 @@ class PlenWalkEnv(gym.Env):
         # (symmetric) motions
         # Since we will sum the similarities for the above, we divide the
         # reward by 3... or not?
-        self.cosine_similarity_weight = 0.2 / 3.0
+        self.cosine_similarity_weight = 10.0 / 3.0
         # Reset lists at right heel strike after 40 steps
         # Also Reset each episode
 
@@ -388,7 +388,7 @@ class PlenWalkEnv(gym.Env):
         print("--------------------------------------------")
 
         # Change Right and Left Foot Dynamics
-        roll_fric = 0.2  # 0.1
+        roll_fric = 0.1  # 0.1
         lat_fric = 0.8
         spin_fric = 0.1
         p.changeDynamics(
@@ -731,8 +731,12 @@ class PlenWalkEnv(gym.Env):
         # should contact halfway through
         # Use tanh to cap reward between -1 and 1
         if self.left_contact == 1:
-            reward += 0.2 * (1 - np.tanh((
-                (self.gait_period_counter / self.gait_period_steps) - 0.5)**2))
+            left_heel_strike_rwd = 0.5 * (1 - np.tanh(
+                ((self.gait_period_counter * 10 / self.gait_period_steps) -
+                 0.5 * 10)**2))
+            reward += left_heel_strike_rwd
+            # print("Gait Period Counter: {}".format(self.gait_period_counter))
+            # print("LEFT HEEL STRIKE REWARD: {}".format(left_heel_strike_rwd))
 
         # Penalty for having both feet on the ground for too long
         if self.right_contact == 1 and self.left_contact == 1:

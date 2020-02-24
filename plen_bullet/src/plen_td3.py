@@ -54,9 +54,11 @@ def main():
     print("RECORDED MAX ACTION: {}".format(max_action))
 
     policy = TD3Agent(state_dim, action_dim, max_action)
-    # # Optionally load existing policy, replace 9999 with num
-    # if os.path.exists(models_path + "/" + "plen_walk_gazebo_9999"):
-    #     policy.load(models_path + "/" + "plen_walk_gazebo_9999")
+    policy_num = 0
+    if os.path.exists(models_path + "/" + "plen_walk_gazebo_" +
+                      str(policy_num) + "_critic"):
+        print("Loading Existing Policy")
+        policy.load(models_path + "/" + "plen_walk_gazebo_" + str(policy_num))
 
     replay_buffer = ReplayBuffer()
     # Optionally load existing policy, replace 9999 with num
