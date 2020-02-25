@@ -784,18 +784,18 @@ class PlenWalkEnv(gym.Env):
 
             # Joint angle penalties if difference near zero
             if not self.first_pass:
-                joint_angle_penalties -= (1.0 /
-                                          np.exp(self.lhip_joint_angle_diff))
-                joint_angle_penalties -= (1.0 /
-                                          np.exp(self.rhip_joint_angle_diff))
-                joint_angle_penalties -= (1.0 /
-                                          np.exp(self.lknee_joint_angle_diff))
-                joint_angle_penalties -= (1.0 /
-                                          np.exp(self.rknee_joint_angle_diff))
-                joint_angle_penalties -= (1.0 /
-                                          np.exp(self.lankle_joint_angle_diff))
-                joint_angle_penalties -= (1.0 /
-                                          np.exp(self.rankle_joint_angle_diff))
+                joint_angle_penalties -= (
+                    1.0 / np.exp(np.abs(self.lhip_joint_angle_diff)))
+                joint_angle_penalties -= (
+                    1.0 / np.exp(np.abs(self.rhip_joint_angle_diff)))
+                joint_angle_penalties -= (
+                    1.0 / np.exp(np.abs(self.lknee_joint_angle_diff)))
+                joint_angle_penalties -= (
+                    1.0 / np.exp(np.abs(self.rknee_joint_angle_diff)))
+                joint_angle_penalties -= (
+                    1.0 / np.exp(np.abs(self.lankle_joint_angle_diff)))
+                joint_angle_penalties -= (
+                    1.0 / np.exp(np.abs(self.rankle_joint_angle_diff)))
 
                 joint_angle_penalties *= self.cosine_similarity_weight * 0.5
 
@@ -808,12 +808,26 @@ class PlenWalkEnv(gym.Env):
         # should contact halfway through
         # Use tanh to cap reward between -1 and 1
         if self.left_contact == 1:
-            left_heel_strike_rwd = 0.5 * (1 - np.tanh(
+            left_heel_strike_rwd = 1.0 * (1 - np.tanh(
                 ((self.gait_period_counter * 10 / self.gait_period_steps) -
                  0.5 * 10)**2))
             reward += left_heel_strike_rwd
             # print("Gait Period Counter: {}".format(self.gait_period_counter))
             # print("LEFT HEEL STRIKE REWARD: {}".format(left_heel_strike_rwd))
+
+        # Incentivise which foot should be on the ground during gait portion
+        if self.gait_period_counter < self.gait_period_steps / 2.0:
+            # Right foot should be on the ground during first half of cycle
+            if self.right_contact == 1 and self.left_contact == 0:
+                reward += 0.5
+            elif self.right_contact == 0:
+                reward -= 0.5
+        elif self.gait_period_counter < self.gait_period_steps:
+            # Left foot should be on the ground during second half of cycle
+            if self.left_contact == 1 and self.right_contact == 0:
+                reward += 0.5
+            elif self.left_contact == 0:
+                reward -= 0.5
 
         # Penalty for having both feet on the ground for too long
         if self.right_contact == 1 and self.left_contact == 1:
@@ -821,17 +835,17 @@ class PlenWalkEnv(gym.Env):
             if self.double_support_preriod_counter >= self.double_support_period_steps:
                 reward -= 2
 
-        # Penalty for right foot on the ground for too long
-        if self.right_contact == 1:
-            self.right_contact_counter += 1
-            if self.right_contact_counter >= self.double_support_period_steps:
-                reward -= 1
+        # # Penalty for right foot on the ground for too long
+        # if self.right_contact == 1:
+        #     self.right_contact_counter += 1
+        #     if self.right_contact_counter >= self.double_support_period_steps:
+        #         reward -= 1
 
-        # Penalty for left foot on the ground for too long
-        if self.left_contact == 1:
-            self.left_contact_counter += 1
-            if self.left_contact_counter >= self.double_support_period_steps:
-                reward -= 1
+        # # Penalty for left foot on the ground for too long
+        # if self.left_contact == 1:
+        #     self.left_contact_counter += 1
+        #     if self.left_contact_counter >= self.double_support_period_steps:
+        #         reward -= 1
 
         # Reward for minimal joint actuation
         # NOTE: UNUSED SINCE CANNOT MEASURE ON REAL PLEN

@@ -47,7 +47,7 @@ def main():
 
     policy = TD3Agent(state_dim, action_dim, max_action)
     # Optionally load existing policy, replace 9999 with num
-    policy_num = 1139999
+    policy_num = 1039999
     if os.path.exists(models_path + "/" + "plen_walk_gazebo_" +
                       str(policy_num) + "_critic"):
         print("Loading Existing Policy")
@@ -75,7 +75,7 @@ def main():
 
     for t in range(int(max_timesteps)):
 
-        time.sleep(0.3)
+        time.sleep(0.03)
 
         episode_timesteps += 1
         # Deterministic Policy Action
