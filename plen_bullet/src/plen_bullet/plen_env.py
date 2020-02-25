@@ -29,6 +29,7 @@ class PlenWalkEnv(gym.Env):
     def __init__(self, render=True):
         super(PlenWalkEnv, self).__init__()
 
+        self.render = render
         self.running_step = 1. / 60.
         self.timestep = 1. / 240.
         self.sim_stepsize = int(self.running_step / self.timestep)
@@ -260,8 +261,8 @@ class PlenWalkEnv(gym.Env):
             self.physicsClient = p.connect(p.DIRECT)  # non-graphical version
         p.setAdditionalSearchPath(
             pybullet_data.getDataPath())  # used by loadURDF
-        p.resetDebugVisualizerCamera(cameraDistance=0.8,
-                                     cameraYaw=45,
+        p.resetDebugVisualizerCamera(cameraDistance=0.5,
+                                     cameraYaw=35,
                                      cameraPitch=-30,
                                      cameraTargetPosition=[0, 0, 0])
         self._seed()
@@ -534,6 +535,14 @@ class PlenWalkEnv(gym.Env):
         self.total_timesteps += 1
         # Increment Gait Reward Counters
         self.gait_period_counter += 1
+
+        if self.render:
+            # Make camera follow robot
+            p.resetDebugVisualizerCamera(
+                cameraDistance=0.5,
+                cameraYaw=35,
+                cameraPitch=-30,
+                cameraTargetPosition=[self.torso_x, self.torso_y, 0])
         return observation, reward, done, {}
 
     def agent_to_env(self, env_range, agent_val):
@@ -629,7 +638,7 @@ class PlenWalkEnv(gym.Env):
         else:
             # print("RIGHT AIR")
             self.right_contact = 0
-
+        self.torso_x = baseOri[0][0]
         self.torso_z = baseOri[0][2]
         self.torso_y = baseOri[0][1]
         roll, pitch, yaw = p.getEulerFromQuaternion(
@@ -819,15 +828,15 @@ class PlenWalkEnv(gym.Env):
         if self.gait_period_counter < self.gait_period_steps / 2.0:
             # Right foot should be on the ground during first half of cycle
             if self.right_contact == 1 and self.left_contact == 0:
-                reward += 0.5
+                reward += 0.1
             elif self.right_contact == 0:
-                reward -= 0.5
+                reward -= 0.1
         elif self.gait_period_counter < self.gait_period_steps:
             # Left foot should be on the ground during second half of cycle
             if self.left_contact == 1 and self.right_contact == 0:
-                reward += 0.5
+                reward += 0.1
             elif self.left_contact == 0:
-                reward -= 0.5
+                reward -= 0.1
 
         # Penalty for having both feet on the ground for too long
         if self.right_contact == 1 and self.left_contact == 1:
@@ -881,10 +890,10 @@ class PlenWalkEnv(gym.Env):
                 np.pi / 3.) or self.torso_z < 0.08 or self.torso_y > 1:
             done = True
             self.dead = True
-        elif self.episode_timestep > self.max_episode_steps and self.torso_x < 1:
-            # Terminate episode if plen hasn't moved significantly
-            done = True
-            self.dead = False
+        # elif self.episode_timestep > self.max_episode_steps and self.torso_x < 1:
+        #     # Terminate episode if plen hasn't moved significantly
+        #     done = True
+        #     self.dead = False
         else:
             done = False
             self.dead = False
