@@ -8,7 +8,7 @@ class ObjectDetector:
     def __init__(self,
                  thresh_lower=(10, 141, 131),
                  thresh_upper=(23, 255, 255),
-                 radius=1,
+                 radius=0,
                  min_radius=2,
                  ymid=480 / 2.0,
                  xmid=640 / 2.0):
@@ -27,10 +27,12 @@ class ObjectDetector:
         self.lineType = 2
         self.cam = 0
         self.iterations = 5
+        self.cap = cv2.VideoCapture(self.cam)
 
-    def detect(self, cap):
+    def detect(self):
         """ Detect the object's position in pixel coordinates
         """
+        cap = self.cap
         ret, frame = cap.read()
         # ret is True or False (connected or not).
         # frame is the next frame from the camera using cap.read()
@@ -98,11 +100,9 @@ class ObjectDetector:
 
     def show(self):
 
-        cap = cv2.VideoCapture(self.cam)
-
         while (True):
 
-            vision_param = self.detect(cap)
+            vision_param = self.detect()
             # radius = vision_param[0]
             # centre = vision_param[1]
             frame = vision_param[2]

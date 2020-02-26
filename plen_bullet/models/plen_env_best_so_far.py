@@ -26,10 +26,9 @@ class PlenWalkEnv(gym.Env):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def __init__(self, render=False, realtime=False):
+    def __init__(self, render=True):
         super(PlenWalkEnv, self).__init__()
 
-        self.render = render
         self.running_step = 1. / 60.
         self.timestep = 1. / 240.
         self.sim_stepsize = int(self.running_step / self.timestep)
@@ -82,12 +81,10 @@ class PlenWalkEnv(gym.Env):
             the ground)
         """
         # Human Gait-optimized Reward Parameters
-        self.gait_period_steps = 60  # /2 timesteps per leg swing
+        self.gait_period_steps = 50  # 25 steps per leg swing
         self.double_support_period_steps = int(self.gait_period_steps / 5.0)
         self.gait_period_counter = 0
         self.double_support_preriod_counter = 0
-        self.right_contact_counter = 0
-        self.left_contact_counter = 0
         # Reset counters at right heel strike after 40 steps
         # Also Reset each episode
 
@@ -261,15 +258,12 @@ class PlenWalkEnv(gym.Env):
             self.physicsClient = p.connect(p.DIRECT)  # non-graphical version
         p.setAdditionalSearchPath(
             pybullet_data.getDataPath())  # used by loadURDF
-        p.resetDebugVisualizerCamera(cameraDistance=0.5,
-                                     cameraYaw=35,
+        p.resetDebugVisualizerCamera(cameraDistance=0.8,
+                                     cameraYaw=45,
                                      cameraPitch=-30,
                                      cameraTargetPosition=[0, 0, 0])
         self._seed()
-        if realtime:
-            p.setRealTimeSimulation(1)  # 1=Realtime, 0=Simtime
-        else:
-            p.setRealTimeSimulation(0)  # 1=Realtime, 0=Simtime
+        p.setRealTimeSimulation(0)  # 1=Realtime, 0=Simtime
         p.resetSimulation()
         p.setGravity(0, 0, -9.81)  # m/s^2
         self.frame_skip = 4
@@ -475,8 +469,6 @@ class PlenWalkEnv(gym.Env):
         # Reset Gait Params
         self.gait_period_counter = 0
         self.double_support_preriod_counter = 0
-        self.right_contact_counter = 0
-        self.left_contact_counter = 0
         self.lhip_joint_angles = np.array([])
         self.rhip_joint_angles = np.array([])
         self.lknee_joint_angles = np.array([])
@@ -538,14 +530,6 @@ class PlenWalkEnv(gym.Env):
         self.total_timesteps += 1
         # Increment Gait Reward Counters
         self.gait_period_counter += 1
-
-        if self.render:
-            # Make camera follow robot
-            p.resetDebugVisualizerCamera(
-                cameraDistance=0.5,
-                cameraYaw=35,
-                cameraPitch=-30,
-                cameraTargetPosition=[self.torso_x, self.torso_y, 0])
         return observation, reward, done, {}
 
     def agent_to_env(self, env_range, agent_val):
@@ -641,7 +625,7 @@ class PlenWalkEnv(gym.Env):
         else:
             # print("RIGHT AIR")
             self.right_contact = 0
-        self.torso_x = baseOri[0][0]
+
         self.torso_z = baseOri[0][2]
         self.torso_y = baseOri[0][1]
         roll, pitch, yaw = p.getEulerFromQuaternion(
@@ -765,8 +749,6 @@ class PlenWalkEnv(gym.Env):
             self.rankle_joint_angles = np.array([])
             self.gait_period_counter = 0
             self.double_support_preriod_counter = 0
-            self.right_contact_counter = 0
-            self.left_contact_counter = 0
         elif self.gait_period_counter >= 1.5 * self.gait_period_steps:
             reward -= 2
         elif self.gait_period_counter > 0:
@@ -796,22 +778,20 @@ class PlenWalkEnv(gym.Env):
 
             # Joint angle penalties if difference near zero
             if not self.first_pass:
-                joint_angle_penalties -= (
-                    1.0 / np.exp(np.abs(self.lhip_joint_angle_diff)))
-                # print("Left hip diff: {}".format(self.lhip_joint_angle_diff))
-                # print("Joint diff penalty: {}".format(joint_angle_penalties))
-                joint_angle_penalties -= (
-                    1.0 / np.exp(np.abs(self.rhip_joint_angle_diff)))
-                joint_angle_penalties -= (
-                    1.0 / np.exp(np.abs(self.lknee_joint_angle_diff)))
-                joint_angle_penalties -= (
-                    1.0 / np.exp(np.abs(self.rknee_joint_angle_diff)))
-                joint_angle_penalties -= (
-                    1.0 / np.exp(np.abs(self.lankle_joint_angle_diff)))
-                joint_angle_penalties -= (
-                    1.0 / np.exp(np.abs(self.rankle_joint_angle_diff)))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.lhip_joint_angle_diff))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.rhip_joint_angle_diff))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.lknee_joint_angle_diff))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.rknee_joint_angle_diff))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.lankle_joint_angle_diff))
+                joint_angle_penalties -= (1.0 /
+                                          np.exp(self.rankle_joint_angle_diff))
 
-                joint_angle_penalties *= 0.5 * self.cosine_similarity_weight
+                joint_angle_penalties *= self.cosine_similarity_weight * 0.5
 
                 # print("JOINT DIFF PENALTY: {}".format(joint_angle_penalties))
 
@@ -829,39 +809,11 @@ class PlenWalkEnv(gym.Env):
             # print("Gait Period Counter: {}".format(self.gait_period_counter))
             # print("LEFT HEEL STRIKE REWARD: {}".format(left_heel_strike_rwd))
 
-        # Incentivise which foot should be on the ground during gait portion
-        if self.gait_period_counter < self.gait_period_steps / 2.0:
-            # print("FIRST HALF OF GAIT")
-            # Right foot should be on the ground during first half of cycle
-            if self.right_contact == 1 and self.left_contact == 0:
-                reward += 0.1
-            elif self.right_contact == 0:
-                reward -= 0.1
-        elif self.gait_period_counter < self.gait_period_steps:
-            # print("SECOND HALF OF GAIT")
-            # Left foot should be on the ground during second half of cycle
-            if self.left_contact == 1 and self.right_contact == 0:
-                reward += 0.1
-            elif self.left_contact == 0:
-                reward -= 0.1
-
         # Penalty for having both feet on the ground for too long
         if self.right_contact == 1 and self.left_contact == 1:
             self.double_support_preriod_counter += 1
             if self.double_support_preriod_counter >= self.double_support_period_steps:
                 reward -= 2
-
-        # # Penalty for right foot on the ground for too long
-        # if self.right_contact == 1:
-        #     self.right_contact_counter += 1
-        #     if self.right_contact_counter >= self.double_support_period_steps:
-        #         reward -= 1
-
-        # # Penalty for left foot on the ground for too long
-        # if self.left_contact == 1:
-        #     self.left_contact_counter += 1
-        #     if self.left_contact_counter >= self.double_support_period_steps:
-        #         reward -= 1
 
         # Reward for minimal joint actuation
         # NOTE: UNUSED SINCE CANNOT MEASURE ON REAL PLEN
@@ -897,10 +849,10 @@ class PlenWalkEnv(gym.Env):
                 np.pi / 3.) or self.torso_z < 0.08 or self.torso_y > 1:
             done = True
             self.dead = True
-        # elif self.episode_timestep > self.max_episode_steps and self.torso_x < 1:
-        #     # Terminate episode if plen hasn't moved significantly
-        #     done = True
-        #     self.dead = False
+        elif self.episode_timestep > self.max_episode_steps and self.torso_x < 1:
+            # Terminate episode if plen hasn't moved significantly
+            done = True
+            self.dead = False
         else:
             done = False
             self.dead = False

@@ -32,7 +32,7 @@ def main():
     if not os.path.exists(models_path):
         os.makedirs(models_path)
 
-    env = gym.make(env_name)
+    env = gym.make(env_name, render=True)
 
     # Set seeds
     env.seed(seed)
@@ -47,7 +47,7 @@ def main():
 
     policy = TD3Agent(state_dim, action_dim, max_action)
     # Optionally load existing policy, replace 9999 with num
-    policy_num = 1989999
+    policy_num = 629999
     if os.path.exists(models_path + "/" + "plen_walk_gazebo_" +
                       str(policy_num) + "_critic"):
         print("Loading Existing Policy")
@@ -88,7 +88,7 @@ def main():
 
         state = next_state
         episode_reward += reward
-        print("DT REWARD: {}".format(reward))
+        # print("DT REWARD: {}".format(reward))
 
         if done:
             # +1 to account for 0 indexing.

@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-import image_recognition_singlecam
+from plen_real.object_detector import ObjectDetector
 import os
 
 
@@ -33,12 +33,9 @@ class PixelToXYZ:
         if not os.path.exists(camera_data_path):
             os.makedirs(camera_data_path)
 
-        captures_path = "/home/pi/Desktop/Captures/"
-        camera_data_path = "camera_data/"
-        self.imageRec = image_recognition_singlecam.image_recognition(
-            False, False, captures_path, captures_path, False, True, False)
+        self.obj_detect = ObjectDetector()
 
-        # self.imageRec=image_recognition_singlecam.image_recognition(True,False,captures_path,captures_path,True,True)
+        # self.obj_detect=image_recognition_singlecam.image_recognition(True,False,captures_path,captures_path,True,True)
 
         self.cam_matrix = np.load(camera_data_path + 'cam_matrix.npy')
         self.dist = np.load(camera_data_path + 'dist.npy')
@@ -89,38 +86,11 @@ class PixelToXYZ:
         XYZ = []
         # self.previewImage("capture image",img_undst)
         # self.previewImage("bg image",self.bg_undst)
-        obj_count, detected_points, img_output = self.imageRec.run_detection(
-            img, self.bg)
+        vision_param = self.obj_detect.detect()
 
-        if (obj_count > 0):
-
-            for i in range(0, obj_count):
-                x = detected_points[i][0]
-                y = detected_points[i][1]
-                w = detected_points[i][2]
-                h = detected_points[i][3]
-                cx = detected_points[i][4]
-                cy = detected_points[i][5]
-
-                cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-                # draw center
-                cv2.circle(img, (cx, cy), 3, (0, 255, 0), 2)
-
-                cv2.putText(
-                    img, "cx,cy: " + str(self.truncate(cx, 2)) + "," +
-                    str(self.truncate(cy, 2)), (x, y + h + 28),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                if calcXYZ:
-                    XYZ.append(self.calculate_XYZ(cx, cy))
-                    cv2.putText(
-                        img, "X,Y: " + str(self.truncate(XYZ[i][0], 2)) + "," +
-                        str(self.truncate(XYZ[i][1], 2)), (x, y + h + 14),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                if calcarea:
-                    cv2.putText(img, "area: " + str(self.truncate(w * h, 2)),
-                                (x, y - 12), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                                (0, 255, 0), 2)
+        radius = vision_param[0]
+        centre = vision_param[1]
+        frame = vision_param[2]
 
         return img, XYZ
 
@@ -136,8 +106,3 @@ class PixelToXYZ:
         XYZ = self.inverse_R_matrix.dot(xyz_c)
 
         return XYZ
-
-    def truncate(self, n, decimals=0):
-        n = float(n)
-        multiplier = 10**decimals
-        return int(n * multiplier) / multiplier
