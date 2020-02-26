@@ -22,4 +22,4 @@ for i in range(1000):
     else:
         kit.servo[0].angle = 0
         flag = True
-    time.sleep(1)
+    time.sleep(0.3)

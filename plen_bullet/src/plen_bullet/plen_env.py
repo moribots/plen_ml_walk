@@ -106,7 +106,7 @@ class PlenWalkEnv(gym.Env):
         # (symmetric) motions
         # Since we will sum the similarities for the above, we divide the
         # reward by 3... or not?
-        self.cosine_similarity_weight = 2.0 / 3.0
+        self.cosine_similarity_weight = 1.0 / 3.0
         # Reset lists at right heel strike after 40 steps
         # Also Reset each episode
 
@@ -795,6 +795,8 @@ class PlenWalkEnv(gym.Env):
             if not self.first_pass:
                 joint_angle_penalties -= (
                     1.0 / np.exp(np.abs(self.lhip_joint_angle_diff)))
+                # print("Left hip diff: {}".format(self.lhip_joint_angle_diff))
+                # print("Joint diff penalty: {}".format(joint_angle_penalties))
                 joint_angle_penalties -= (
                     1.0 / np.exp(np.abs(self.rhip_joint_angle_diff)))
                 joint_angle_penalties -= (
@@ -806,7 +808,7 @@ class PlenWalkEnv(gym.Env):
                 joint_angle_penalties -= (
                     1.0 / np.exp(np.abs(self.rankle_joint_angle_diff)))
 
-                joint_angle_penalties *= self.cosine_similarity_weight * 0.5
+                joint_angle_penalties *= 0.5 * self.cosine_similarity_weight
 
                 # print("JOINT DIFF PENALTY: {}".format(joint_angle_penalties))
 
@@ -817,7 +819,7 @@ class PlenWalkEnv(gym.Env):
         # should contact halfway through
         # Use tanh to cap reward between -1 and 1
         if self.left_contact == 1:
-            left_heel_strike_rwd = 1.0 * (1 - np.tanh(
+            left_heel_strike_rwd = 0.5 * (1 - np.tanh(
                 ((self.gait_period_counter * 10 / self.gait_period_steps) -
                  0.5 * 10)**2))
             reward += left_heel_strike_rwd

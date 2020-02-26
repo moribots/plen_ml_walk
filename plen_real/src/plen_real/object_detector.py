@@ -9,12 +9,12 @@ class ObjectDetector:
                  thresh_lower=(10, 141, 131),
                  thresh_upper=(23, 255, 255),
                  radius=1,
-                 min_radius=15,
+                 min_radius=2,
                  ymid=480 / 2.0,
                  xmid=640 / 2.0):
 
-        self.thresh_lower = (10, 141, 131)
-        self.thresh_upper = (23, 255, 255)
+        self.thresh_lower = (92, 46, 25)  # purple
+        self.thresh_upper = (167, 163, 255)  # purple
         self.radius = radius
         self.min_radius = min_radius
         self.ymid = ymid
@@ -25,6 +25,8 @@ class ObjectDetector:
         self.fontScale = 1
         self.fontColor = (255, 0, 0)
         self.lineType = 2
+        self.cam = 0
+        self.iterations = 5
 
     def detect(self, cap):
         """ Detect the object's position in pixel coordinates
@@ -42,9 +44,10 @@ class ObjectDetector:
         # make a mask for the desired color and threshold the image
         mask = cv2.inRange(hsv, self.thresh_lower, self.thresh_upper)
         # Perform erosions to remove noise
-        mask = cv2.erode(mask, None, iterations=10)
+        mask = cv2.erode(mask, None, iterations=self.iterations)
         # Perform dialations to restore the eroded shape
-        mask = cv2.dilate(mask, None, iterations=10)
+        mask = cv2.dilate(mask, None, iterations=self.iterations)
+        cv2.imshow('processed', mask)
 
         # find mask contours
         cnts, hierarchy = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
@@ -95,7 +98,7 @@ class ObjectDetector:
 
     def show(self):
 
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(self.cam)
 
         while (True):
 
