@@ -14,5 +14,8 @@ class JointModel:
             motor joint
         """
         pos_change = desired_pos - current_pos
-        percent_of_pos_reached = np.abs(pos_change) / (self.speed * dt)
+        percent_of_pos_reached = (self.speed * dt) / np.abs(pos_change)
+        # Cap at 100%
+        if percent_of_pos_reached > 100.0:
+            percent_of_pos_reached = 100.0
         return current_pos + (pos_change * percent_of_pos_reached)

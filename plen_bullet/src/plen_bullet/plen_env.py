@@ -82,7 +82,7 @@ class PlenWalkEnv(gym.Env):
             the ground)
         """
         # Human Gait-optimized Reward Parameters
-        self.gait_period_steps = 60  # /2 timesteps per leg swing
+        self.gait_period_steps = 80  # /2 timesteps per leg swing: stock is 60
         self.double_support_period_steps = int(self.gait_period_steps / 5.0)
         self.gait_period_counter = 0
         self.double_support_preriod_counter = 0
@@ -830,7 +830,7 @@ class PlenWalkEnv(gym.Env):
             # print("LEFT HEEL STRIKE REWARD: {}".format(left_heel_strike_rwd))
 
         # Incentivise which foot should be on the ground during gait portion
-        gait_period_reward = 0.2
+        gait_period_reward = 0.2  # stock is 0.1
         if self.gait_period_counter < self.gait_period_steps / 2.0:
             # print("FIRST HALF OF GAIT")
             # Right foot should be on the ground during first half of cycle
