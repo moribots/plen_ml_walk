@@ -830,20 +830,21 @@ class PlenWalkEnv(gym.Env):
             # print("LEFT HEEL STRIKE REWARD: {}".format(left_heel_strike_rwd))
 
         # Incentivise which foot should be on the ground during gait portion
+        gait_period_reward = 0.2
         if self.gait_period_counter < self.gait_period_steps / 2.0:
             # print("FIRST HALF OF GAIT")
             # Right foot should be on the ground during first half of cycle
             if self.right_contact == 1 and self.left_contact == 0:
-                reward += 0.1
+                reward += gait_period_reward
             elif self.right_contact == 0:
-                reward -= 0.1
+                reward -= gait_period_reward
         elif self.gait_period_counter < self.gait_period_steps:
             # print("SECOND HALF OF GAIT")
             # Left foot should be on the ground during second half of cycle
             if self.left_contact == 1 and self.right_contact == 0:
-                reward += 0.1
+                reward += gait_period_reward
             elif self.left_contact == 0:
-                reward -= 0.1
+                reward -= gait_period_reward
 
         # Penalty for having both feet on the ground for too long
         if self.right_contact == 1 and self.left_contact == 1:
