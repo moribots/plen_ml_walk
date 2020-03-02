@@ -25,15 +25,24 @@ class ObjectDetector:
         self.fontScale = 1
         self.fontColor = (255, 0, 0)
         self.lineType = 2
-        self.cam = 0
+        self.cam = 2
         self.iterations = 5
         self.cap = cv2.VideoCapture(self.cam)
+
+        self.x_dist = 1.43  # meters
+        self.y_dist = 1.04  # meters
+        self.z_dist = 1.89  # meters
+
+        self.pixel_x = self.x_dist / 640.0
+        self.pixel_y = self.y_dist / 480
 
     def detect(self):
         """ Detect the object's position in pixel coordinates
         """
         cap = self.cap
         ret, frame = cap.read()
+
+        # print(frame.shape)
         # ret is True or False (connected or not).
         # frame is the next frame from the camera using cap.read()
 
@@ -49,7 +58,7 @@ class ObjectDetector:
         mask = cv2.erode(mask, None, iterations=self.iterations)
         # Perform dialations to restore the eroded shape
         mask = cv2.dilate(mask, None, iterations=self.iterations)
-        cv2.imshow('processed', mask)
+        # cv2.imshow('processed', mask)
 
         # find mask contours
         cnts, hierarchy = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
@@ -95,6 +104,22 @@ class ObjectDetector:
             cv2.line(frame, (centre[0], 0), (centre[0], 480), (0, 140, 255), 2)
             cv2.line(frame, (0, centre[1]), (640, centre[1]), (0, 140, 255), 2)
 
+            # PRINT X,Y POSITION
+            # Global Zero x: 0.208
+            # Global Zero y: 0.3940
+            print("X Position: {}".format((640 - centre[0]) * self.pixel_x - 0.208))
+            print("Y Position: {}".format(centre[1] * self.pixel_y - 0.394))
+            # 13px Radius at 0.020m height
+            # 20px at 0.079m height
+            # actual radius is 0.0225 m
+            m = (0.079 - 0.02) / (20 - 13)
+            b = 0.079 - 20 * m
+            z_pos = radius * m + b
+            print("Z Position: {}".format(z_pos))
+
+
+            print("RADIUS: {}".format(radius))
+
         vision = [radius, centre, frame]
         return vision
 
@@ -102,7 +127,13 @@ class ObjectDetector:
 
         while (True):
 
+            start_time = time.time()
+
             vision_param = self.detect()
+
+            end_time = time.time()
+
+            print("FPS: {}".format(1.0 / (end_time - start_time)))
             # radius = vision_param[0]
             # centre = vision_param[1]
             frame = vision_param[2]
