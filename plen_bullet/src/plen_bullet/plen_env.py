@@ -30,7 +30,7 @@ class PlenWalkEnv(gym.Env):
         super(PlenWalkEnv, self).__init__()
 
         self.render = render
-        self.running_step = 1. / 60.
+        self.running_step = 1. / 60.  # 30 or 60 Hz
         self.timestep = 1. / 240.
         self.sim_stepsize = int(self.running_step / self.timestep)
         print("--------------------------------------------")
@@ -82,7 +82,7 @@ class PlenWalkEnv(gym.Env):
             the ground)
         """
         # Human Gait-optimized Reward Parameters
-        self.gait_period_steps = 80  # /2 timesteps per leg swing: stock is 60
+        self.gait_period_steps = 60  # /2 timesteps per leg swing: stock is 60
         self.double_support_period_steps = int(self.gait_period_steps / 5.0)
         self.gait_period_counter = 0
         self.double_support_preriod_counter = 0
@@ -90,6 +90,11 @@ class PlenWalkEnv(gym.Env):
         self.left_contact_counter = 0
         # Reset counters at right heel strike after 40 steps
         # Also Reset each episode
+
+        # Init some vars
+        self.torso_x = 0
+        self.torso_y = 0
+        self.torso_z = self.init_height
 
         # Used for comparing cosine similarity to promote symmetry in gait
         # thigh_knee in URDF
@@ -131,27 +136,6 @@ class PlenWalkEnv(gym.Env):
         high_act = np.ones(18)
         self.action_space = spaces.Box(low_act, high_act, dtype=np.float32)
 
-        # Environment Action Space
-        # self.env_ranges = [
-        #     [-1.7, 1.7],  # RIGHT LEG
-        #     [-1.54, 0.12],
-        #     [-1.7, 0.75],
-        #     [-0.2, 0.95],
-        #     [-0.95, 1.54],
-        #     [-0.45, 0.8],
-        #     [-1.7, 1.7],  # LEFT LEG
-        #     [-0.12, 1.54],
-        #     [-0.75, 1.7],
-        #     [-0.95, 0.2],
-        #     [-1.54, 0.95],
-        #     [-0.8, 0.45],
-        #     [-1.7, 1.7],  # RIGHT ARM
-        #     [-0.15, 1.7],
-        #     [-0.2, 0.5],
-        #     [-1.7, 1.7],  # LEFT ARM
-        #     [-0.15, 1.7],
-        #     [-0.2, 0.5]
-        # ]
         self.env_ranges = [
             [-1.57, 1.57],  # RIGHT LEG
             [-0.15, 1.5],
@@ -628,28 +612,33 @@ class PlenWalkEnv(gym.Env):
         BaseAngVel = p.getBaseVelocity(self.robotId)
         left_contact = p.getContactPoints(self.robotId, self.plane, 19)
         # print(len(left_contact))
+
         if len(left_contact) > 0:
             self.left_contact = 1
             # print("LEFT CONTACT")
         else:
             # print("LEFT AIR")
             self.left_contact = 0
+
         right_contact = p.getContactPoints(self.robotId, self.plane, 11)
         if len(right_contact) > 0:
             self.right_contact = 1
-            # print("RIGHT CONTACT")
+            # print("\t \t RIGHT CONTACT")
         else:
             # print("RIGHT AIR")
             self.right_contact = 0
-        self.torso_x = baseOri[0][0]
-        self.torso_z = baseOri[0][2]
-        self.torso_y = baseOri[0][1]
+
+        # Simulate 30FPS Camera
+        if self.episode_timestep % 2:
+            self.torso_x = baseOri[0][0]
+            self.torso_z = baseOri[0][2]
+            self.torso_y = baseOri[0][1]
+            self.torso_vx = BaseAngVel[0][0]
         roll, pitch, yaw = p.getEulerFromQuaternion(
             [baseOri[1][0], baseOri[1][1], baseOri[1][2], baseOri[1][3]])
         self.torso_roll = roll
         self.torso_pitch = pitch
         self.torso_yaw = yaw
-        self.torso_vx = BaseAngVel[0][0]
         self.torso_w_roll = BaseAngVel[1][0]
         self.torso_w_pitch = BaseAngVel[1][1]
         self.torso_w_yaw = BaseAngVel[1][2]
@@ -830,7 +819,7 @@ class PlenWalkEnv(gym.Env):
             # print("LEFT HEEL STRIKE REWARD: {}".format(left_heel_strike_rwd))
 
         # Incentivise which foot should be on the ground during gait portion
-        gait_period_reward = 0.2  # stock is 0.1
+        gait_period_reward = 0.1  # stock is 0.1
         if self.gait_period_counter < self.gait_period_steps / 2.0:
             # print("FIRST HALF OF GAIT")
             # Right foot should be on the ground during first half of cycle
@@ -851,6 +840,37 @@ class PlenWalkEnv(gym.Env):
             self.double_support_preriod_counter += 1
             if self.double_support_preriod_counter >= self.double_support_period_steps:
                 reward -= 2
+
+        # Reward for contacting the ground with flat feet
+        # Foot Contact Ori Threshold
+        # f_ori_thresh = 0.15  # radians
+        # # Ori reward
+        # ori_reward = 0.2
+        # if self.left_contact == 1:
+        #     # Get Foot Orientation
+        #     lquat = p.getLinkState(self.robotId, 19)[1]
+        #     lroll, lpitch, lyaw = p.getEulerFromQuaternion(
+        #         [lquat[0], lquat[1], lquat[2], lquat[3]])
+        #     # print("LEFT ROLL: {} \t LEFT PITCH: {}".format(lroll, lpitch))
+        #     if np.abs(lroll) <= f_ori_thresh and np.abs(
+        #             lpitch) <= f_ori_thresh:
+        #         print("STRAIGHT LEFT")
+        #         reward += ori_reward
+        #     else:
+        #         reward -= ori_reward
+
+        # if self.right_contact == 1:
+        #     # Get Foot Orientation
+        #     rquat = p.getLinkState(self.robotId, 11)[1]
+        #     rroll, rpitch, ryaw = p.getEulerFromQuaternion(
+        #         [rquat[0], rquat[1], rquat[2], rquat[3]])
+        #     # print("LEFT ROLL: {} \t LEFT PITCH: {}".format(lroll, lpitch))
+        #     if np.abs(rroll) <= f_ori_thresh and np.abs(
+        #             rpitch) <= f_ori_thresh:
+        #         print("STRAIGHT RIGHT")
+        #         reward += ori_reward
+        #     else:
+        #         reward -= ori_reward
 
         # # Penalty for right foot on the ground for too long
         # if self.right_contact == 1:

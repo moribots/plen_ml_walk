@@ -51,9 +51,22 @@ class IMU:
         self.pitch = 0
         self.yaw = 0
 
+        # CALIBRATE
+        self.calibrate_imu()
+
+        print("IMU Calibrated!")
+
     def calibrate_imu(self):
         """
         """
+        # Reset calibration params
+        self.x_gyro_calibration = 0
+        self.y_gyro_calibration = 0
+        self.z_gyro_calibration = 0
+        self.roll_calibration = 0
+        self.pitch_calibration = 0
+        self.yaw_calibration = 0
+
         sum_xg = 0
         sum_yg = 0
         sum_zg = 0
@@ -161,8 +174,6 @@ class IMU:
 
 if __name__ == "__main__":
     imu = IMU()
-
-    imu.calibrate_imu()
 
     while True:
 
