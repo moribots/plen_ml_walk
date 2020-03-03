@@ -4,15 +4,16 @@ import socket  # for sockets
 import sys  # for exit
 import pickle  # for serializing data
 import struct  # for unpacking binary data
+import time
 
 
-class Socket:
-    def __init__(self, host="raspberrypi", port=41953, buffer_size=4096):
+class SocketClient:
+    def __init__(self, host="raspberrypi", port=41953, buffer_size=1024):
         # Maximumm receive message size in bytes
         self.buffer_size = buffer_size
         try:
-            # create an AF_INET, STREAM socket (TCP)
-            self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # create an AF_INET, STREAM socket (TCP - STREAM | UDP - DGRAM)
+            self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         except socket.error, msg:
             print('Failed to create socket. Error code: ' + str(msg[0]) +
                   ' , Error message : ' + msg[1])
@@ -54,8 +55,9 @@ class Socket:
     def receive_message(self):
         """ Receive socket message
         """
-        data_stream = self.receive_buffered_message()
-        data = pickle.loads(data_stream.decode())
+        data_stream = self.s.recv(self.buffer_size)
+        # data = data_stream
+        data = pickle.loads(data_stream)
 
         return data
 
@@ -82,3 +84,55 @@ class Socket:
             buf += newbuf
             count -= len(newbuf)
         return buf
+
+
+class SocketServer:
+    def __init__(self, host="bot", port=41953, buffer_size=1024):
+        localIP = "192.168.0.17"
+
+        msgFromServer = pickle.dumps([0.01, 0.02, 0.03])
+
+        bytesToSend = str.encode(msgFromServer)
+
+        # Create a datagram socket
+
+        self.s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+
+        # Bind to address and ip
+
+        self.s.bind((localIP, port))
+
+        print("UDP server up and listening")
+
+        # Listen for incoming datagrams
+
+        while (True):
+
+            bytesAddressPair = self.s.recvfrom(buffer_size)
+
+            message = bytesAddressPair[0]
+
+            address = bytesAddressPair[1]
+
+            clientMsg = "Message from Client:{}".format(message)
+            clientIP = "Client IP Address:{}".format(address)
+
+            print(clientMsg)
+            print(clientIP)
+
+            # Sending a reply to client
+
+            self.s.sendto(bytesToSend, address)
+
+
+if __name__ == "__main__":
+    # UNCOMMENT BELOW FOR SERVER TEST
+    # server = SocketServer()
+    # UNCOMMENT BELOW FOR CLIENT TEST
+    # while True:
+    #     time_start = time.time()
+    #     client = SocketClient(host="bot")
+    #     client.send_message("hello server")
+    #     print(client.receive_message())
+    #     time_end = time.time()
+    #     print("fps: {}".format(1.0 / (time_end - time_start)))

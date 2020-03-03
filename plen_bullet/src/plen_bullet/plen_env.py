@@ -634,6 +634,7 @@ class PlenWalkEnv(gym.Env):
             self.torso_z = baseOri[0][2]
             self.torso_y = baseOri[0][1]
             self.torso_vx = BaseAngVel[0][0]
+        print("Torso X: {}".format(self.torso_x))
         roll, pitch, yaw = p.getEulerFromQuaternion(
             [baseOri[1][0], baseOri[1][1], baseOri[1][2], baseOri[1][3]])
         self.torso_roll = roll
