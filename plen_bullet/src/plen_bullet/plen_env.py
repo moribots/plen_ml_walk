@@ -9,10 +9,12 @@ import numpy as np
 
 import time
 
+import os
+
 register(
     id="PlenWalkEnv-v1",
     entry_point='plen_bullet.plen_env:PlenWalkEnv',
-    max_episode_steps=300,
+    max_episode_steps=500,
 )
 
 
@@ -50,7 +52,7 @@ class PlenWalkEnv(gym.Env):
         # Possible Rewards
         self.reward_range = (-np.inf, np.inf)
 
-        self.max_episode_steps = 300
+        self.max_episode_steps = 500
 
         # Reward for being alive
         self.dead_penalty = 100.
@@ -434,6 +436,76 @@ class PlenWalkEnv(gym.Env):
         # for joint in self.movingJoints:
         #     p.changeDynamics(self.robotId, joint, maxJointVelocity=8.76)
 
+        # NOTE: USED TO EXPORT JOINT TRAJECTORIES AND COMMANDS
+        # RIGHT LEG
+        rhip_traj = []
+        rthigh_traj = []
+        rknee_traj = []
+        rshin_traj = []
+        rankle_traj = []
+        rfoot_traj = []
+        # LEFT LEG
+        lhip_traj = []
+        lthigh_traj = []
+        lknee_traj = []
+        lshin_traj = []
+        lankle_traj = []
+        lfoot_traj = []
+        # RIGHT ARM
+        rshoulder_traj = []
+        rarm_traj = []
+        relbow_traj = []
+        # LEFT ARM
+        lshoulder_traj = []
+        larm_traj = []
+        lelbow_traj = []
+
+        self.joint_trajectories = [
+            rhip_traj, rthigh_traj, rknee_traj, rshin_traj, rankle_traj,
+            rfoot_traj, lhip_traj, lthigh_traj, lknee_traj, lshin_traj,
+            lankle_traj, lfoot_traj, rshoulder_traj, rarm_traj, relbow_traj,
+            lshoulder_traj, larm_traj, lelbow_traj
+        ]
+
+        # RIGHT LEG
+        rhip_cmd = []
+        rthigh_cmd = []
+        rknee_cmd = []
+        rshin_cmd = []
+        rankle_cmd = []
+        rfoot_cmd = []
+        # LEFT LEG
+        lhip_cmd = []
+        lthigh_cmd = []
+        lknee_cmd = []
+        lshin_cmd = []
+        lankle_cmd = []
+        lfoot_cmd = []
+        # RIGHT ARM
+        rshoulder_cmd = []
+        rarm_cmd = []
+        relbow_cmd = []
+        # LEFT ARM
+        lshoulder_cmd = []
+        larm_cmd = []
+        lelbow_cmd = []
+
+        self.joint_cmds = [
+            rhip_cmd, rthigh_cmd, rknee_cmd, rshin_cmd, rankle_cmd, rfoot_cmd,
+            lhip_cmd, lthigh_cmd, lknee_cmd, lshin_cmd, lankle_cmd, lfoot_cmd,
+            rshoulder_cmd, rarm_cmd, relbow_cmd, lshoulder_cmd, larm_cmd,
+            lelbow_cmd
+        ]
+
+        self.joint_names = [
+            'rb_servo_r_hip', 'r_hip_r_thigh', 'r_thigh_r_knee',
+            'r_knee_r_shin', 'r_shin_r_ankle', 'r_ankle_r_foot',
+            'lb_servo_l_hip', 'l_hip_l_thigh', 'l_thigh_l_knee',
+            'l_knee_l_shin', 'l_shin_l_ankle', 'l_ankle_l_foot',
+            'torso_r_shoulder', 'r_shoulder_rs_servo', 're_servo_r_elbow',
+            'torso_l_shoulder', 'l_shoulder_ls_servo', 'le_servo_l_elbow'
+        ]
+
         print("PLEN ENVIRONMENT INITIALIZED")
 
     def reset(self):
@@ -467,6 +539,29 @@ class PlenWalkEnv(gym.Env):
         self.rknee_joint_angles = np.array([])
         self.lankle_joint_angles = np.array([])
         self.rankle_joint_angles = np.array([])
+
+        # Find abs path to this file
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        results_path = os.path.join(my_path, "../../trajectories/")
+
+        # SAVE JOINT TRAJECTORIES
+        for i in range(len(self.joint_trajectories)):
+            np.save(results_path + self.joint_names[i] + "_traj",
+                    self.joint_trajectories[i])
+
+        # CLEAR JOINT TRAJECTORIES
+        for i in range(len(self.joint_trajectories)):
+            self.joint_trajectories[i] = []
+
+        # SAVE JOINT COMMANDS
+        for i in range(len(self.joint_cmds)):
+            np.save(results_path + self.joint_names[i] + "_traj",
+                    self.joint_cmds[i])
+
+        # CLEAR JOINT COMMANDS
+        for i in range(len(self.joint_cmds)):
+            self.joint_cmds[i] = []
+
         return observation
 
     def _publish_reward(self, reward, episode_number):
@@ -530,6 +625,11 @@ class PlenWalkEnv(gym.Env):
                 cameraYaw=35,
                 cameraPitch=-30,
                 cameraTargetPosition=[self.torso_x, self.torso_y, 0])
+
+        # STORE JOINT COMMANDS
+        for i in range(len(self.joint_cmds)):
+            self.joint_cmds[i].append(env_action[i])
+
         return observation, reward, done, {}
 
     def agent_to_env(self, env_range, agent_val):
@@ -614,7 +714,7 @@ class PlenWalkEnv(gym.Env):
         # print(len(left_contact))
 
         if len(left_contact) > 0:
-            self.left_contact = 1
+            self.left_contact = 0
             # print("LEFT CONTACT")
         else:
             # print("LEFT AIR")
@@ -622,19 +722,19 @@ class PlenWalkEnv(gym.Env):
 
         right_contact = p.getContactPoints(self.robotId, self.plane, 11)
         if len(right_contact) > 0:
-            self.right_contact = 1
+            self.right_contact = 0
             # print("\t \t RIGHT CONTACT")
         else:
             # print("RIGHT AIR")
             self.right_contact = 0
 
         # Simulate 30FPS Camera
-        if self.episode_timestep % 2:
-            self.torso_x = baseOri[0][0]
-            self.torso_z = baseOri[0][2]
-            self.torso_y = baseOri[0][1]
-            self.torso_vx = BaseAngVel[0][0]
-        print("Torso X: {}".format(self.torso_x))
+        # if self.episode_timestep % 2:
+        self.torso_x = baseOri[0][0]
+        self.torso_z = baseOri[0][2]
+        self.torso_y = baseOri[0][1]
+        self.torso_vx = BaseAngVel[0][0]
+        # print("Torso X: {}".format(self.torso_x))
         roll, pitch, yaw = p.getEulerFromQuaternion(
             [baseOri[1][0], baseOri[1][1], baseOri[1][2], baseOri[1][3]])
         self.torso_roll = roll
@@ -703,6 +803,9 @@ class PlenWalkEnv(gym.Env):
                                              JointStates[4][0])
         self.rankle_joint_angles = np.append(self.rankle_joint_angles,
                                              JointStates[10][0])
+        # STORE JOINT TRAJECTORIES
+        for i in range(len(self.joint_trajectories)):
+            self.joint_trajectories[i].append(JointStates[i][0])
 
         return observations
 

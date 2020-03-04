@@ -8,7 +8,7 @@ import time
 
 
 class SocketClient:
-    def __init__(self, host="raspberrypi", port=41953, buffer_size=1024):
+    def __init__(self, host="raspberrypi", port=41953, buffer_size=32):
         # Maximumm receive message size in bytes
         self.buffer_size = buffer_size
         try:
@@ -39,7 +39,8 @@ class SocketClient:
         print('Socket Connected to ' + self.host + ' on ip ' + self.remote_ip)
 
     def send_message(self, data):
-        """ Send socket message
+        """ USE THIS FCN
+            Send socket message
         """
         data_stream = pickle.dumps(data)
         self.send_one_message(data_stream)
@@ -53,7 +54,8 @@ class SocketClient:
         self.s.sendall(data)
 
     def receive_message(self):
-        """ Receive socket message
+        """ USE THIS FCN
+            Receive socket message
         """
         data_stream = self.s.recv(self.buffer_size)
         # data = data_stream
@@ -87,10 +89,10 @@ class SocketClient:
 
 
 class SocketServer:
-    def __init__(self, host="bot", port=41953, buffer_size=1024):
+    def __init__(self, host="bot", port=41953, buffer_size=32):
         localIP = "192.168.0.17"
 
-        msgFromServer = pickle.dumps([0.01, 0.02, 0.03])
+        msgFromServer = pickle.dumps([0.00000000000001, 0.0000000000002, 0.000000000000003])
 
         bytesToSend = str.encode(msgFromServer)
 
@@ -127,7 +129,7 @@ class SocketServer:
 
 if __name__ == "__main__":
     # UNCOMMENT BELOW FOR SERVER TEST
-    # server = SocketServer()
+    server = SocketServer()
     # UNCOMMENT BELOW FOR CLIENT TEST
     # while True:
     #     time_start = time.time()

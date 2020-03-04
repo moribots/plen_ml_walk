@@ -2,8 +2,7 @@
 # IMPORTS
 import numpy as np
 from plen_real.servo_model import ServoJoint
-from plen_real.pixel_to_xyz import PixelToXYZ
-from plen_real.socket_comms import Socket
+from plen_real.socket_comms import SocketClient, SocketServer
 from plen_real.imu import IMU
 import time
 
@@ -13,7 +12,7 @@ class PlenReal:
 
         print("Initializing PLEN")
 
-        self.socket = Socket()
+        # self.socket = Socket()
 
         print("Socket Ready!")
 
@@ -57,13 +56,34 @@ class PlenReal:
                                gpio=22,
                                fb_chan=i,
                                pwm_chan=i))
-            else:
+            elif i < 12:
                 # Use ADC 2, gpio 27
                 self.joint_list.append(
                     ServoJoint(name=self.joint_names[i],
                                gpio=27,
                                fb_chan=i - 8,
-                               pwm_chan=i - 8))
+                               pwm_chan=i))
+
+            # TODO: NOW INITIALIZE ARM JOINTS; SPECIAL CASE FOR ONE PWM BOARD
+            self.joint_list.append(
+                ServoJoint(name=self.joint_names[13],
+                           gpio=27,
+                           fb_chan=13 - 8,
+                           pwm_chan=13))
+            # torso_l_shoulder
+            self.joint_list.append(
+                ServoJoint(name=self.joint_names[15],
+                           gpio=27,
+                           fb_chan=14 - 8,
+                           pwm_chan=14))
+            # l_shoulder_ls_servo
+            self.joint_list.append(
+                ServoJoint(name=self.joint_names[16],
+                           gpio=27,
+                           fb_chan=15 - 8,
+                           pwm_chan=15))
+
+        print("Joints Ready!")
 
         self.torso_z = 0
         self.torso_y = 0
@@ -72,12 +92,19 @@ class PlenReal:
         self.torso_yaw = 0
         self.torso_vx = 0
 
-        print("PRESS ENTER TO CALIBRATE IMU")
+        input("PRESS ENTER TO CALIBRATE IMU")
         self.imu = IMU()
 
         print("PLEN READY TO GO!")
 
         self.time = time.time()
+
+    def calibrate_motors(self):
+        # for i in range(len(self.joint_list)):
+        #     self.joint_list[i].calibrate(self.env_ranges[i][0],
+        #                                  self.env_ranges[i][1])
+        self.joint_list[0].calibrate(self.env_ranges[0][0],
+                                     self.env_ranges[0][1])
 
     def reset(self):
         self.episode_num += 1
@@ -252,3 +279,110 @@ class PlenReal:
             # print("Sampled Too Low!")
 
         return env_val
+
+    def replay(self):
+        """ Replays best policy directly from sim at 60Hz
+    	"""
+        print("Loading Joint Trajectories...")
+        # First, load the joint angles for each joint across each timestep
+
+        # RIGHT LEG
+        rhip_traj = []
+        rthigh_traj = []
+        rknee_traj = []
+        rshin_traj = []
+        rankle_traj = []
+        rfoot_traj = []
+        # LEFT LEG
+        lhip_traj = []
+        lthigh_traj = []
+        lknee_traj = []
+        lshin_traj = []
+        lankle_traj = []
+        lfoot_traj = []
+        # RIGHT ARM
+        rshoulder_traj = []
+        rarm_traj = []
+        # relbow_traj = []
+        # LEFT ARM
+        lshoulder_traj = []
+        larm_traj = []
+        # lelbow_traj = []
+
+        self.joint_trajectories = [
+            rhip_traj, rthigh_traj, rknee_traj, rshin_traj, rankle_traj,
+            rfoot_traj, lhip_traj, lthigh_traj, lknee_traj, lshin_traj,
+            lankle_traj, lfoot_traj, rshoulder_traj, rarm_traj, lshoulder_traj,
+            larm_traj
+        ]
+
+        # Next, load the joint commands for each joint across each timestep
+
+        # RIGHT LEG
+        rhip_cmd = []
+        rthigh_cmd = []
+        rknee_cmd = []
+        rshin_cmd = []
+        rankle_cmd = []
+        rfoot_cmd = []
+        # LEFT LEG
+        lhip_cmd = []
+        lthigh_cmd = []
+        lknee_cmd = []
+        lshin_cmd = []
+        lankle_cmd = []
+        lfoot_cmd = []
+        # RIGHT ARM
+        rshoulder_cmd = []
+        rarm_cmd = []
+        # relbow_cmd = []
+        # LEFT ARM
+        lshoulder_cmd = []
+        larm_cmd = []
+        # lelbow_cmd = []
+
+        self.joint_cmds = [
+            rhip_cmd, rthigh_cmd, rknee_cmd, rshin_cmd, rankle_cmd, rfoot_cmd,
+            lhip_cmd, lthigh_cmd, lknee_cmd, lshin_cmd, lankle_cmd, lfoot_cmd,
+            rshoulder_cmd, rarm_cmd, lshoulder_cmd, larm_cmd
+        ]
+
+        # Load Both
+        for i in range(len(self.joint_names)):
+            self.joint_trajectories[i] = np.load(self.joint_names[i] +
+                                                 "_traj.npy")
+            self.joint_cmds[i] = np.load(self.joint_names[i] + "_cmd.npy")
+
+        # WILL USE ONE OF THE ABOVE, DEPENDS ON BEST PERFORMANCE
+        choice = input("Use Command [c] or Position [p] trajectories?")
+
+        loop_time = 1 / 60.0
+
+        if choice == "c":
+            # Use Actions
+            for i in range(len(self.joint_cmds[0])):
+                # Record current time
+                start_time = time.time()
+                for j in range(len(self.joint_cmds)):
+                    self.joint_list[j].actuate(self.joint_cmds[j][i])
+                elapsed_time = time.time() = start_time
+                if loop_time > elapsed_time:
+                    # Ensure 60Hz loop
+                    time.sleep(loop_time - elapsed_time)
+        elif choice == "p":
+            # Use Joint Positions
+            for i in range(len(self.joint_trajectories[0])):
+                # Record current time
+                start_time = time.time()
+                for j in range(len(self.joint_trajectories)):
+                    self.joint_list[j].actuate(self.joint_trajectories[j][i])
+                elapsed_time = time.time() = start_time
+                if loop_time > elapsed_time:
+                    # Ensure 60Hz loop
+                    time.sleep(loop_time - elapsed_time)
+
+
+if __name__ == "__main__":
+    plen = PlenReal()
+    # input("Press Enter to calibrate motors")
+    # plen.calibrate_motors()

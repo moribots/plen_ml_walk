@@ -97,10 +97,7 @@ class ServoJoint:
             percent_of_pos_reached = 100.0
         return current_pos + (pos_change * percent_of_pos_reached)
 
-    def load_calibration(self):
-        return True
-
-    def calibrate(self, min_val, max_val, increment):
+    def calibrate(self, min_val, max_val, num_iters=100):
         # Send to min value and record digital sig
         # Send to max value and record digital sig
 
@@ -109,21 +106,32 @@ class ServoJoint:
         measurements = np.array([])
 
         # Number of data points to collect
-        num_iters = 1000
+        num_iters = num_iters
 
         for i in range(num_iters):
-            commanded_value = -90.0 + (i * 90 / num_iters)
+            commanded_value = (-np.pi / 2.0) + (i *
+                                                (np.pi) / float(num_iters - 1))
             commands = np.append(commands, commanded_value)
             self.actuate(commanded_value)
-            time.sleep(
-                0.1 /
-                (60.0 /
-                 (180.0 * num_iters)))  # according to rated speed 0.1sec/60deg
+            time.sleep(0.5)  # according to rated speed 0.1sec/60deg
             measurements = np.append(measurements, self.chan.value)
 
         # Perform fit
+        print("COMMANDS: {}".format(commands[:10]))
+        print("MEASUREMENTS: {}".format(measurements[:10]))
         polynomial = 4
-        self.fit = np.polyfit(commands, measurements, polynomial)
+        # We want to input measurements and receive equivalent commanded angles in radians
+        self.fit = np.poly1d(np.polyfit(measurements, commands, polynomial))
+        # Test Fit
+        print("TESTING FIT: 90 DEG; RESULT IS {}".format(
+            self.fit(self.chan.value)))
+
+        # Save fit
+        np.save(self.name + "_fit", self.fit)
+
+    def load_calibration(self):
+        # Load fit
+        self.fit = np.load(self.name + "_fit.npy")
 
     def remap(self, value):
         # Use calibraton value to remap from Digital Sig to Angle
@@ -136,6 +144,9 @@ class ServoJoint:
 
     def rad2deg(self, rad):
         return rad * 180.0 / np.pi
+
+    def deg2rad(self, deg):
+        return deg * np.pi / 180.0
 
     def actuate(self, desired_pos):
         self.kit.servo[
