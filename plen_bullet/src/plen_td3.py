@@ -154,7 +154,7 @@ def main():
             np.save(results_path + "/" + str(file_name), evaluations)
             if save_model:
                 policy.save(models_path + "/" + str(file_name) + str(t))
-                replay_buffer.save(t)
+                # replay_buffer.save(t)
 
     env.close()
 

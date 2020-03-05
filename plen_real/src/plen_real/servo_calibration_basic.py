@@ -13,13 +13,18 @@ joint_names = [
 loop = True
 
 calib = input("Calibration [c] or Test [t]?: ")
+pwm_min = int(input("Enter Min PWM: "))
+pwm_max = int(input("Enter Max PWM: "))
 
 while loop:
 
     if calib == "c":
         channel = int(
             input("Which channel is your servo connected to? [0-15]: "))
-        servo = ServoJoint(name=joint_names[channel], pwm_chan=channel)
+        servo = ServoJoint(name=joint_names[channel],
+                           pwm_chan=channel,
+                           pwm_min=pwm_min,
+                           pwm_max=pwm_max)
         servo.load_calibration()
 
         print("Setting Servo to 90 degrees: 0 for action space of [-1, 1]: ")
@@ -33,18 +38,21 @@ while loop:
     elif calib == "t":
         channel = int(
             input("Which channel is your servo connected to? [0-15]: "))
-        servo = ServoJoint(name=joint_names[channel], pwm_chan=channel)
+        servo = ServoJoint(name=joint_names[channel],
+                           pwm_chan=channel,
+                           pwm_min=pwm_min,
+                           pwm_max=pwm_max)
         servo.load_calibration()
 
-        val = float(input("Select a HIGH angle value (deg): "))
-        servo.actuate(servo.deg2rad(val))
-        print("MEASRED: {}".format(servo.measure()))
-        val = float(input("Select a LOW angle value (deg): "))
-        servo.actuate(servo.deg2rad(val))
-        print("MEASRED: {}".format(servo.measure()))
+        val = float(input("Select a HIGH angle value (rad): "))
+        servo.actuate(val)
+        # print("MEASURED: {}".format(servo.measure()))
+        val = float(input("Select a LOW angle value (rad): "))
+        servo.actuate(val)
+        # print("MEASURED: {}".format(servo.measure()))
         input("Press Enter to send servo to 0 (90): ")
-        servo.actuate(servo.deg2rad(val))
-        print("MEASRED: {}".format(servo.measure()))
+        servo.actuate(0.0)
+        # print("MEASURED: {}".format(servo.measure()))
 
         cont = input("Test another motor [y] or quit [n]? ")
 

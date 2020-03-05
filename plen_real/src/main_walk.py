@@ -2,7 +2,7 @@
 # IMPORTS
 import numpy as np
 from plen_real.servo_model import ServoJoint
-from plen_real.socket_comms import SocketClient, SocketServer
+# from plen_real.socket_comms import SocketClient, SocketServer
 from plen_real.imu import IMU
 import time
 
@@ -25,25 +25,26 @@ class PlenReal:
             'torso_l_shoulder', 'l_shoulder_ls_servo', 'le_servo_l_elbow'
         ]
 
+        # REAL ENV
         self.env_ranges = [
-            [-1.57, 1.57],  # RIGHT LEG
-            [-0.15, 1.5],
-            [-0.95, 0.75],
-            [-0.9, 0.3],
-            [-0.95, 1.2],
-            [-0.8, 0.4],
-            [-1.57, 1.57],  # LEFT LEG
-            [-1.5, 0.15],
-            [-0.75, 0.95],
-            [-0.3, 0.9],
-            [-1.2, 0.95],
-            [-0.4, 0.8],
-            [-1.57, 1.57],  # RIGHT ARM
-            [-0.15, 1.57],
-            [-0.2, 0.35],
-            [-1.57, 1.57],  # LEFT ARM
-            [-0.15, 1.57],
-            [-0.2, 0.35]
+            [-1.57, 1.57],  # RIGHT LEG rb_servo_r_hip
+            [-0.15, 1.5],  # r_hip_r_thigh
+            [-0.95, 0.75],  # r_thigh_r_knee
+            [-0.9, 0.3],  # r_knee_r_shin
+            [-0.95, 1.2],  # r_shin_r_ankle
+            [-0.8, 0.4],  # r_ankle_r_foot
+            [-1.57, 1.57],  # LEFT LEG lb_servo_l_hip
+            [-1.5, 0.15],  # l_hip_l_thigh
+            [-0.75, 0.95],  # l_thigh_l_knee
+            [-0.3, 0.9],  # l_knee_l_shin
+            [-1.2, 0.95],  # l_shin_l_ankle
+            [-0.4, 0.8],  # l_ankle_l_foot
+            [-1.57, 1.57],  # RIGHT ARM torso_r_shoulder
+            [-0.15, 1.57],  # r_shoulder_rs_servo
+            [-0.2, 0.35],  # re_servo_r_elbow
+            [-1.57, 1.57],  # LEFT ARM torso_l_shoulder
+            [-0.15, 1.57],  # l_shoulder_ls_servo
+            [-0.2, 0.35]  # le_servo_l_elbow
         ]
 
         self.joint_list = []
@@ -93,7 +94,7 @@ class PlenReal:
         self.torso_vx = 0
 
         input("PRESS ENTER TO CALIBRATE IMU")
-        self.imu = IMU()
+        # self.imu = IMU()
 
         print("PLEN READY TO GO!")
 
@@ -365,7 +366,7 @@ class PlenReal:
                 start_time = time.time()
                 for j in range(len(self.joint_cmds)):
                     self.joint_list[j].actuate(self.joint_cmds[j][i])
-                elapsed_time = time.time() = start_time
+                elapsed_time = time.time() - start_time
                 if loop_time > elapsed_time:
                     # Ensure 60Hz loop
                     time.sleep(loop_time - elapsed_time)
@@ -376,7 +377,7 @@ class PlenReal:
                 start_time = time.time()
                 for j in range(len(self.joint_trajectories)):
                     self.joint_list[j].actuate(self.joint_trajectories[j][i])
-                elapsed_time = time.time() = start_time
+                elapsed_time = time.time() - start_time
                 if loop_time > elapsed_time:
                     # Ensure 60Hz loop
                     time.sleep(loop_time - elapsed_time)
@@ -384,5 +385,5 @@ class PlenReal:
 
 if __name__ == "__main__":
     plen = PlenReal()
-    # input("Press Enter to calibrate motors")
-    # plen.calibrate_motors()
+    input("Press Enter to calibrate motors")
+    plen.calibrate_motors()

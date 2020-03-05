@@ -20,7 +20,7 @@ class ServoJoint:
                  fb_chan=0,
                  pwm_chan=0,
                  pwm_min=600,
-                 pwm_max=3000):
+                 pwm_max=2800):
         # RIGHT LEG:
         # Joint 1 name: rb_servo_r_hip
         # Joint 2 name: r_hip_r_thigh
@@ -97,7 +97,7 @@ class ServoJoint:
             percent_of_pos_reached = 100.0
         return current_pos + (pos_change * percent_of_pos_reached)
 
-    def calibrate(self, min_val, max_val, num_iters=100):
+    def calibrate(self, min_val, max_val, num_iters=22):
         # Send to min value and record digital sig
         # Send to max value and record digital sig
 
@@ -113,18 +113,23 @@ class ServoJoint:
                                                 (np.pi) / float(num_iters - 1))
             commands = np.append(commands, commanded_value)
             self.actuate(commanded_value)
-            time.sleep(0.5)  # according to rated speed 0.1sec/60deg
+            time.sleep(.5)  # according to rated speed 0.1sec/60deg
             measurements = np.append(measurements, self.chan.value)
 
+        time.sleep(1.0)  # according to rated speed 0.1sec/60deg
         # Perform fit
-        print("COMMANDS: {}".format(commands[:10]))
-        print("MEASUREMENTS: {}".format(measurements[:10]))
+        print("COMMANDS: {}".format(commands))
+        print("MEASUREMENTS: {}".format(measurements))
         polynomial = 4
         # We want to input measurements and receive equivalent commanded angles in radians
         self.fit = np.poly1d(np.polyfit(measurements, commands, polynomial))
         # Test Fit
         print("TESTING FIT: 90 DEG; RESULT IS {}".format(
             self.fit(self.chan.value)))
+
+        print("RETURNING TO -90")
+
+        self.actuate(-np.pi/2)
 
         # Save fit
         np.save(self.name + "_fit", self.fit)

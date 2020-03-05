@@ -46,11 +46,11 @@ def remap_range(value, in_min, in_max, out_min, out_max):
 while True:
     # convert 16bit adc0 (0-65535) trim pot read into -90|90 pos level
     read_pos_1 = remap_range(chan_1_0.value, 10944, 46784, -90, 90)
-    read_pos_2 = remap_range(chan_2_0.value, 10944, 46784, -90, 90)
+    # read_pos_2 = remap_range(chan_2_0.value, 10944, 46784, -90, 90)
 
     # set OS pos playback pos
-    print('POS1 = {pos}%'.format(pos=read_pos_1))
-    print('POS2 = {pos}%'.format(pos=read_pos_2))
+    print('POS1 = {pos}%'.format(pos=chan_1_0.value))
+    # print('POS2 = {pos}%'.format(pos=read_pos_2))
 
     # hang out and do nothing for a half second
     time.sleep(0.5)
