@@ -25,7 +25,8 @@ class PlenReal:
             'torso_l_shoulder', 'l_shoulder_ls_servo', 'le_servo_l_elbow'
         ]
 
-        # REAL ENV
+        # REAL
+        # NOTE: NOT USING HAND JOINTS SINCE NEED EXTRA PWM BOARD AND ADC
         self.env_ranges = [
             [-1.57, 1.57],  # RIGHT LEG rb_servo_r_hip
             [-0.15, 1.5],  # r_hip_r_thigh
@@ -41,10 +42,34 @@ class PlenReal:
             [-0.4, 0.8],  # l_ankle_l_foot
             [-1.57, 1.57],  # RIGHT ARM torso_r_shoulder
             [-0.15, 1.57],  # r_shoulder_rs_servo
-            [-0.2, 0.35],  # re_servo_r_elbow
+            # [-0.2, 0.35],  # re_servo_r_elbow
             [-1.57, 1.57],  # LEFT ARM torso_l_shoulder
-            [-0.15, 1.57],  # l_shoulder_ls_servo
-            [-0.2, 0.35]  # le_servo_l_elbow
+            [-0.15, 1.57]  # l_shoulder_ls_servo
+            # [-0.2, 0.35]  # le_servo_l_elbow
+        ]
+
+        # KEY TO FLIP MIN/MAX IN ENV RANGES ABOVE
+        # IF TRUE: KEEP SAME
+        # IF FALSE: FLIP
+        self.sim_to_real_key = [
+            False,  # RIGHT LEG rb_servo_r_hip
+            True,  # r_hip_r_thigh
+            True,  # r_thigh_r_knee
+            True,  # r_knee_r_shin
+            True,  # r_shin_r_ankle
+            True,  # r_ankle_r_foot
+            False,  # LEFT LEG lb_servo_l_hip
+            True,  # l_hip_l_thigh
+            True,  # l_thigh_l_knee
+            True,  # l_knee_l_shin
+            True,  # l_shin_l_ankle
+            True,  # l_ankle_l_foot
+            True,  # RIGHT ARM torso_r_shoulder
+            False,  # r_shoulder_rs_servo
+            # False,  # re_servo_r_elbow
+            False,  # LEFT ARM torso_l_shoulder
+            False  # l_shoulder_ls_servo
+            # False  # le_servo_l_elbow
         ]
 
         self.joint_list = []
@@ -57,7 +82,7 @@ class PlenReal:
                                gpio=22,
                                fb_chan=i,
                                pwm_chan=i))
-            elif i < 12:
+            elif i <= 12:
                 # Use ADC 2, gpio 27
                 self.joint_list.append(
                     ServoJoint(name=self.joint_names[i],
@@ -65,24 +90,32 @@ class PlenReal:
                                fb_chan=i - 8,
                                pwm_chan=i))
 
-            # TODO: NOW INITIALIZE ARM JOINTS; SPECIAL CASE FOR ONE PWM BOARD
-            self.joint_list.append(
-                ServoJoint(name=self.joint_names[13],
-                           gpio=27,
-                           fb_chan=13 - 8,
-                           pwm_chan=13))
-            # torso_l_shoulder
-            self.joint_list.append(
-                ServoJoint(name=self.joint_names[15],
-                           gpio=27,
-                           fb_chan=14 - 8,
-                           pwm_chan=14))
-            # l_shoulder_ls_servo
-            self.joint_list.append(
-                ServoJoint(name=self.joint_names[16],
-                           gpio=27,
-                           fb_chan=15 - 8,
-                           pwm_chan=15))
+        # NOW INITIALIZE ARM JOINTS; SPECIAL CASE FOR ONE PWM BOARD
+        self.joint_list.append(
+            ServoJoint(name=self.joint_names[13],
+                       gpio=27,
+                       fb_chan=13 - 8,
+                       pwm_chan=13))
+        # torso_l_shoulder
+        self.joint_list.append(
+            ServoJoint(name=self.joint_names[15],
+                       gpio=27,
+                       fb_chan=14 - 8,
+                       pwm_chan=14))
+        # l_shoulder_ls_servo
+        self.joint_list.append(
+            ServoJoint(name=self.joint_names[16],
+                       gpio=27,
+                       fb_chan=15 - 8,
+                       pwm_chan=15))
+
+        joint_calib = input("Calibrate Joints [c] or Load Calibration [l] or Do Nothing [n]?")
+
+        if joint_calib == "c":
+            self.calibrate_motors()
+        elif joint_calib == "l":
+            for joint in self.joint_list:
+                joint.load_calibration()
 
         print("Joints Ready!")
 
@@ -94,18 +127,26 @@ class PlenReal:
         self.torso_vx = 0
 
         input("PRESS ENTER TO CALIBRATE IMU")
-        # self.imu = IMU()
+        self.imu = IMU()
 
         print("PLEN READY TO GO!")
 
         self.time = time.time()
 
     def calibrate_motors(self):
-        # for i in range(len(self.joint_list)):
-        #     self.joint_list[i].calibrate(self.env_ranges[i][0],
-        #                                  self.env_ranges[i][1])
-        self.joint_list[0].calibrate(self.env_ranges[0][0],
-                                     self.env_ranges[0][1])
+        input("Press Enter when PLEN is elevated to a safe position:")
+        for i in range(len(self.joint_list)):
+            print("Calibrating Joint: " + self.joint_list[i].name)
+            min_val = self.env_ranges[i][0]
+            max_val = self.env_ranges[i][0]
+            if not self.sim_to_real_key[i]:
+                # Inicates URDF Opposite of Real
+                min_val = -min_val
+                max_val = -max_val
+            self.joint_list[i].calibrate(min_val, max_val)
+
+    # self.joint_list[0].calibrate(self.env_ranges[0][0],
+    #                              self.env_ranges[0][1])
 
     def reset(self):
         self.episode_num += 1
@@ -348,11 +389,11 @@ class PlenReal:
             rshoulder_cmd, rarm_cmd, lshoulder_cmd, larm_cmd
         ]
 
-        # Load Both
-        for i in range(len(self.joint_names)):
-            self.joint_trajectories[i] = np.load(self.joint_names[i] +
+        # Load Both - EXCLUDE HAND JOINTS
+        for i in range(len(self.joint_list)):
+            self.joint_trajectories[i] = np.load(self.joint_list[i].name +
                                                  "_traj.npy")
-            self.joint_cmds[i] = np.load(self.joint_names[i] + "_cmd.npy")
+            self.joint_cmds[i] = np.load(self.joint_list[i].name + "_cmd.npy")
 
         # WILL USE ONE OF THE ABOVE, DEPENDS ON BEST PERFORMANCE
         choice = input("Use Command [c] or Position [p] trajectories?")
@@ -365,7 +406,11 @@ class PlenReal:
                 # Record current time
                 start_time = time.time()
                 for j in range(len(self.joint_cmds)):
-                    self.joint_list[j].actuate(self.joint_cmds[j][i])
+                    joint_command = self.joint_cmds[j][i]
+                    if not self.sim_to_real_key[i]:
+                        # Key indicates that URDF oposite of reality
+                        joint_command = -joint_command
+                    self.joint_list[j].actuate(joint_command)
                 elapsed_time = time.time() - start_time
                 if loop_time > elapsed_time:
                     # Ensure 60Hz loop
@@ -376,7 +421,11 @@ class PlenReal:
                 # Record current time
                 start_time = time.time()
                 for j in range(len(self.joint_trajectories)):
-                    self.joint_list[j].actuate(self.joint_trajectories[j][i])
+                    joint_command = self.joint_trajectories[j][i]
+                    if not self.sim_to_real_key[j]:
+                        # Key indicates that URDF oposite of reality
+                        joint_command = -joint_command
+                    self.joint_list[j].actuate(joint_command)
                 elapsed_time = time.time() - start_time
                 if loop_time > elapsed_time:
                     # Ensure 60Hz loop
@@ -385,5 +434,3 @@ class PlenReal:
 
 if __name__ == "__main__":
     plen = PlenReal()
-    input("Press Enter to calibrate motors")
-    plen.calibrate_motors()

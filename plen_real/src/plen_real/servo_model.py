@@ -109,8 +109,11 @@ class ServoJoint:
         num_iters = num_iters
 
         for i in range(num_iters):
-            commanded_value = (-np.pi / 2.0) + (i *
-                                                (np.pi) / float(num_iters - 1))
+            # commanded_value = (-np.pi / 2.0) + (i *
+            # (np.pi) / float(num_iters - 1))
+            range_val = max_val - min_val
+            commanded_value = (min_val) + (i *
+                                           (range_val) / float(num_iters - 1))
             commands = np.append(commands, commanded_value)
             self.actuate(commanded_value)
             time.sleep(.5)  # according to rated speed 0.1sec/60deg
@@ -129,7 +132,7 @@ class ServoJoint:
 
         print("RETURNING TO -90")
 
-        self.actuate(-np.pi/2)
+        self.actuate(-np.pi / 2)
 
         # Save fit
         np.save(self.name + "_fit", self.fit)
