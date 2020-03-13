@@ -2,19 +2,25 @@
 # IMPORTS
 import numpy as np
 from plen_real.servo_model import ServoJoint
-# from plen_real.socket_comms import SocketClient, SocketServer
+from plen_real.socket_comms import SocketClient, SocketServer
 from plen_real.imu import IMU
 import time
+import os
+from plen_ros_helpers.td3 import TD3Agent
 
 
 class PlenReal:
     def __init__(self):
 
+        print("----------------------------")
         print("Initializing PLEN")
 
-        # self.socket = Socket()
-
+        self.socket = SocketClient()
+        print("----------------------------")
         print("Socket Ready!")
+
+        print("----------------------------")
+        print("CALIBRATING JOINTS")
 
         self.joint_names = [
             'rb_servo_r_hip', 'r_hip_r_thigh', 'r_thigh_r_knee',
@@ -108,8 +114,8 @@ class PlenReal:
                        gpio=27,
                        fb_chan=15 - 8,
                        pwm_chan=15))
-
-        joint_calib = input("Calibrate Joints [c] or Load Calibration [l] or Do Nothing [n]?")
+        joint_calib = input(
+            "Calibrate Joints [c] or Load Calibration [l] or Do Nothing [n]?")
 
         if joint_calib == "c":
             self.calibrate_motors()
@@ -117,7 +123,12 @@ class PlenReal:
             for joint in self.joint_list:
                 joint.load_calibration()
 
+        for joint in self.joint_list:
+            joint.actuate(0.0)
+
         print("Joints Ready!")
+
+        print("----------------------------")
 
         self.torso_z = 0
         self.torso_y = 0
@@ -128,6 +139,74 @@ class PlenReal:
 
         input("PRESS ENTER TO CALIBRATE IMU")
         self.imu = IMU()
+
+        print("----------------------------")
+        print("Setting up RL Environment")
+        # Observation Values
+        # JOINTS (see self.env_ranges)
+        # Low values of Joint Position Space
+        self.joints_low = []
+        # High values of Joint Position Space
+        self.joints_high = []
+        for j_state in self.env_ranges:
+            self.joints_low.append(j_state[0])
+            self.joints_high.append(j_state[1])
+
+        # JOINT EFFORT - NOTE: UNUSED SINCE SERVO CANNOT MEASURE
+        self.joint_effort_low = [-0.15] * 18
+        self.joint_effort_high = [0.15] * 18
+
+        # TORSO HEIGHT (0, 0.25)
+        self.torso_height_min = 0
+        self.torso_height_max = 0.25
+
+        # TORSO TWIST (x) (-inf, inf)
+        self.torso_vx_min = -np.inf
+        self.torso_vx_max = np.inf
+
+        self.torso_w_roll_min = -np.inf
+        self.torso_w_roll_max = np.inf
+
+        self.torso_w_pitch_min = -np.inf
+        self.torso_w_pitch_max = np.inf
+
+        self.torso_w_yaw_min = -np.inf
+        self.torso_w_yaw_max = np.inf
+
+        # TORSO ROLL (-pi, pi)
+        self.torso_roll_min = -np.pi
+        self.torso_roll_max = np.pi
+
+        # TORSO PITCH (-pi, pi)
+        self.torso_pitch_min = -np.pi
+        self.torso_pitch_max = np.pi
+
+        # TORSO YAW (-pi, pi)
+        self.torso_yaw_min = -np.pi
+        self.torso_yaw_max = np.pi
+
+        # TORSO DEVIATION FROM X AXIS (-inf, inf)
+        self.torso_y_min = -np.inf
+        self.torso_y_max = np.inf
+
+        # RIGHT FOOT CONTACT (0, 1)
+        self.rfs_min = 0
+        self.rfs_max = 1
+
+        # LEFT FOOT CONTACT (0, 1)
+        self.lfs_min = 0
+        self.lfs_max = 1
+
+        obs_dim = np.append(
+            self.joints_low,
+            np.array([
+                self.torso_height_min, self.torso_vx_min, self.torso_roll_min,
+                self.torso_pitch_min, self.torso_yaw_min, self.torso_y_min,
+                self.rfs_min, self.lfs_min
+            ]))
+        self.state_dim = len(obs_dim)
+        print("Environment Set!")
+        print("----------------------------")
 
         print("PLEN READY TO GO!")
 
@@ -172,6 +251,9 @@ class PlenReal:
 
         input("PUT PLEN ON THE GROUND, PRESS ENTER TO CALIBRATE IMU")
         self.imu.calibrate()
+
+        self.torso_x = 0
+        input("Press Enter to Start")
 
     def step(self, action):
         # Convert agent actions into real actions
@@ -221,23 +303,21 @@ class PlenReal:
         self.right_contact = 0
 
         # POSITION AND VELOCITY
+        self.socket.send_message("hello server")
         socket_msg = self.socket.receive_message()
         self.torso_y = socket_msg[1]
         self.torso_z = socket_msg[2]
         curr_time = time.time()
         self.torso_vx = (self.torso_x - socket_msg[0]) / float(curr_time -
                                                                self.time)
+        self.time = curr_time
         self.torso_x = socket_msg[0]
 
-        self.time = time.time()
-
         # ORIENTATION
-        # Filter IMU
+        # READ IMU
         self.imu.filter_rpy()
-        # Read IMU
-        self.imu.read_imu()
-        self.torso_roll = self.imu.roll
-        self.torso_pitch = self.imu.pitch
+        self.torso_roll = self.imu.true_roll
+        self.torso_pitch = self.imu.true_pitch
         self.torso_yaw = self.imu.yaw
 
         # JOINT STATES
@@ -323,8 +403,10 @@ class PlenReal:
         return env_val
 
     def replay(self):
-        """ Replays best policy directly from sim at 60Hz
-    	"""
+        """ Replays best policy directly from sim trajectories
+        """
+        for joint in self.joint_list:
+            joint.actuate(0.0)
         print("Loading Joint Trajectories...")
         # First, load the joint angles for each joint across each timestep
 
@@ -398,7 +480,7 @@ class PlenReal:
         # WILL USE ONE OF THE ABOVE, DEPENDS ON BEST PERFORMANCE
         choice = input("Use Command [c] or Position [p] trajectories?")
 
-        loop_time = 1 / 60.0
+        loop_time = 1 / 10.0  # 1/Hz
 
         if choice == "c":
             # Use Actions
@@ -425,12 +507,83 @@ class PlenReal:
                     if not self.sim_to_real_key[j]:
                         # Key indicates that URDF oposite of reality
                         joint_command = -joint_command
+                    # print("{} COMMAND: \t {}".format(self.joint_list[j].name,
+                    #                                  joint_command))
                     self.joint_list[j].actuate(joint_command)
                 elapsed_time = time.time() - start_time
                 if loop_time > elapsed_time:
                     # Ensure 60Hz loop
                     time.sleep(loop_time - elapsed_time)
+                    print("RATE: {}".format(1 / (time.time() - start_time)))
+
+    def deploy(self):
+        """ Deploy Live Policy using real sensors
+        """
+        # Find abs path to this file
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        models_path = os.path.join(my_path, "../models")
+        if not os.path.exists(models_path):
+            os.makedirs(models_path)
+
+        state_dim = self.state_dim
+        action_dim = 18
+        max_action = 1.0
+
+        print("RECORDED MAX ACTION: {}".format(max_action))
+
+        policy = TD3Agent(state_dim, action_dim, max_action)
+        # Optionally load existing policy, replace 9999 with num
+        policy_num = 3229999  # 629999 current best policy
+        if os.path.exists(models_path + "/" + "plen_walk_gazebo_" +
+                          str(policy_num) + "_critic"):
+            print("Loading Existing Policy")
+            policy.load(models_path + "/" + "plen_walk_gazebo_" +
+                        str(policy_num))
+
+        state = self.compute_observation
+        done = False
+        episode_reward = 0
+        episode_timesteps = 0
+        episode_num = 0
+        t = 0  # total timesteps
+        evaluations = []
+
+        run = True
+
+        while run:
+            t += 1
+            episode_timesteps += 1
+            # Deterministic Policy Action
+            action = np.clip(policy.select_action(np.array(state)),
+                             -max_action, max_action)
+            # rospy.logdebug("Selected Acton: {}".format(action))
+
+            # Perform action
+            next_state, reward, done, _ = self.step(action)
+
+            state = next_state
+            episode_reward += reward
+            # print("DT REWARD: {}".format(reward))
+
+            if done:
+                # +1 to account for 0 indexing.
+                # +0 on ep_timesteps since it will increment +1 even if done=True
+                print("Total T: {} Episode Num: {} Episode T: {} Reward: {}".
+                      format(t + 1, episode_num, episode_timesteps,
+                             episode_reward))
+                # Reset environment
+                reset_quit = input("Reset or Quit [q]?")
+                if reset_quit == "q":
+                    run = False
+                    break
+                state, done = self.reset(), False
+                evaluations.append(episode_reward)
+                episode_reward = 0
+                episode_timesteps = 0
+                episode_num += 1
 
 
 if __name__ == "__main__":
     plen = PlenReal()
+    plen.replay()
+    plen.replay()

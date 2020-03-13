@@ -25,7 +25,7 @@ while loop:
                            pwm_chan=channel,
                            pwm_min=pwm_min,
                            pwm_max=pwm_max)
-        servo.load_calibration()
+        # servo.load_calibration()
 
         print("Setting Servo to 90 degrees: 0 for action space of [-1, 1]: ")
         servo.actuate(servo.deg2rad(0))
@@ -42,7 +42,7 @@ while loop:
                            pwm_chan=channel,
                            pwm_min=pwm_min,
                            pwm_max=pwm_max)
-        servo.load_calibration()
+        # servo.load_calibration()
 
         val = float(input("Select a HIGH angle value (rad): "))
         servo.actuate(val)

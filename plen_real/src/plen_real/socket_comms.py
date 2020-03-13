@@ -8,7 +8,7 @@ import time
 
 
 class SocketClient:
-    def __init__(self, host="raspberrypi", port=41953, buffer_size=32):
+    def __init__(self, host="bot", port=41953, buffer_size=32):
         # Maximumm receive message size in bytes
         self.buffer_size = buffer_size
         try:
@@ -129,12 +129,12 @@ class SocketServer:
 
 if __name__ == "__main__":
     # UNCOMMENT BELOW FOR SERVER TEST
-    server = SocketServer()
+    # server = SocketServer()
     # UNCOMMENT BELOW FOR CLIENT TEST
-    # while True:
-    #     time_start = time.time()
-    #     client = SocketClient(host="bot")
-    #     client.send_message("hello server")
-    #     print(client.receive_message())
-    #     time_end = time.time()
-    #     print("fps: {}".format(1.0 / (time_end - time_start)))
+    while True:
+        time_start = time.time()
+        client = SocketClient(host="bot")
+        client.send_message("hello server")
+        print(client.receive_message())
+        time_end = time.time()
+        print("fps: {}".format(1.0 / (time_end - time_start)))

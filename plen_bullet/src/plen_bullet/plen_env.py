@@ -84,7 +84,7 @@ class PlenWalkEnv(gym.Env):
             the ground)
         """
         # Human Gait-optimized Reward Parameters
-        self.gait_period_steps = 60  # /2 timesteps per leg swing: stock is 60
+        self.gait_period_steps = 80  # /2 timesteps per leg swing NOTE: BEST 60
         self.double_support_period_steps = int(self.gait_period_steps / 5.0)
         self.gait_period_counter = 0
         self.double_support_preriod_counter = 0
@@ -555,7 +555,7 @@ class PlenWalkEnv(gym.Env):
 
         # SAVE JOINT COMMANDS
         for i in range(len(self.joint_cmds)):
-            np.save(results_path + self.joint_names[i] + "_traj",
+            np.save(results_path + self.joint_names[i] + "_cmd",
                     self.joint_cmds[i])
 
         # CLEAR JOINT COMMANDS
@@ -714,7 +714,7 @@ class PlenWalkEnv(gym.Env):
         # print(len(left_contact))
 
         if len(left_contact) > 0:
-            self.left_contact = 0
+            self.left_contact = 1
             # print("LEFT CONTACT")
         else:
             # print("LEFT AIR")
@@ -722,7 +722,7 @@ class PlenWalkEnv(gym.Env):
 
         right_contact = p.getContactPoints(self.robotId, self.plane, 11)
         if len(right_contact) > 0:
-            self.right_contact = 0
+            self.right_contact = 1
             # print("\t \t RIGHT CONTACT")
         else:
             # print("RIGHT AIR")
@@ -946,35 +946,35 @@ class PlenWalkEnv(gym.Env):
                 reward -= 2
 
         # Reward for contacting the ground with flat feet
-        # Foot Contact Ori Threshold
-        # f_ori_thresh = 0.15  # radians
-        # # Ori reward
-        # ori_reward = 0.2
-        # if self.left_contact == 1:
-        #     # Get Foot Orientation
-        #     lquat = p.getLinkState(self.robotId, 19)[1]
-        #     lroll, lpitch, lyaw = p.getEulerFromQuaternion(
-        #         [lquat[0], lquat[1], lquat[2], lquat[3]])
-        #     # print("LEFT ROLL: {} \t LEFT PITCH: {}".format(lroll, lpitch))
-        #     if np.abs(lroll) <= f_ori_thresh and np.abs(
-        #             lpitch) <= f_ori_thresh:
-        #         print("STRAIGHT LEFT")
-        #         reward += ori_reward
-        #     else:
-        #         reward -= ori_reward
+        # Foot Contact Orientation Threshold
+        f_ori_thresh = 0.1  # radians
+        # Ori reward
+        ori_reward = 0.1
+        if self.left_contact == 1:
+            # Get Foot Orientation
+            lquat = p.getLinkState(self.robotId, 19)[1]
+            lroll, lpitch, lyaw = p.getEulerFromQuaternion(
+                [lquat[0], lquat[1], lquat[2], lquat[3]])
+            # print("LEFT ROLL: {} \t LEFT PITCH: {}".format(lroll, lpitch))
+            if np.abs(lroll) <= f_ori_thresh and np.abs(
+                    lpitch) <= f_ori_thresh:
+                # print("STRAIGHT LEFT")
+                reward += ori_reward
+            # else:
+            #     reward -= ori_reward
 
-        # if self.right_contact == 1:
-        #     # Get Foot Orientation
-        #     rquat = p.getLinkState(self.robotId, 11)[1]
-        #     rroll, rpitch, ryaw = p.getEulerFromQuaternion(
-        #         [rquat[0], rquat[1], rquat[2], rquat[3]])
-        #     # print("LEFT ROLL: {} \t LEFT PITCH: {}".format(lroll, lpitch))
-        #     if np.abs(rroll) <= f_ori_thresh and np.abs(
-        #             rpitch) <= f_ori_thresh:
-        #         print("STRAIGHT RIGHT")
-        #         reward += ori_reward
-        #     else:
-        #         reward -= ori_reward
+        if self.right_contact == 1:
+            # Get Foot Orientation
+            rquat = p.getLinkState(self.robotId, 11)[1]
+            rroll, rpitch, ryaw = p.getEulerFromQuaternion(
+                [rquat[0], rquat[1], rquat[2], rquat[3]])
+            # print("LEFT ROLL: {} \t LEFT PITCH: {}".format(lroll, lpitch))
+            if np.abs(rroll) <= f_ori_thresh and np.abs(
+                    rpitch) <= f_ori_thresh:
+                # print("STRAIGHT RIGHT")
+                reward += ori_reward
+            # else:
+            #     reward -= ori_reward
 
         # # Penalty for right foot on the ground for too long
         # if self.right_contact == 1:

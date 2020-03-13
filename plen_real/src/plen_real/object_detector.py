@@ -25,9 +25,10 @@ class ObjectDetector:
         self.fontScale = 1
         self.fontColor = (255, 0, 0)
         self.lineType = 2
-        self.cam = 2
+        self.cam = 0
         self.iterations = 5
         self.cap = cv2.VideoCapture(self.cam)
+        # self.cap.set(cv2.CV_CAP_PROP_FPS, 60)
 
         self.x_dist = 1.43  # meters
         self.y_dist = 1.04  # meters
@@ -142,10 +143,9 @@ class ObjectDetector:
             cv2.imshow('frame', frame)
 
             # quit program
-            if cv2.waitKey(1) & 0xFF == ord(
-                    'q'
-            ):  # 0xFF is 8bit hex mask which is passed to cv2.waitKey
-                # so if key = q, then quit
+            # NOTE: value in waitKey is in ms, this is how long we wait before
+            # calling loop again
+            if cv2.waitKey(16) == 27:
                 break
 
         # When everything done, release the capture

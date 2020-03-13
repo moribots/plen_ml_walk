@@ -151,7 +151,12 @@ class ServoJoint:
         return self.remap(self.chan.value)
 
     def rad2deg(self, rad):
-        return rad * 180.0 / np.pi
+        deg = rad * 180.0 / np.pi
+        if deg > 90:
+            deg = 90
+        elif deg < -90:
+            deg = -90
+        return deg
 
     def deg2rad(self, deg):
         return deg * np.pi / 180.0
