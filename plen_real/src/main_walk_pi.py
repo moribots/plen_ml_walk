@@ -2,7 +2,7 @@
 # IMPORTS
 import numpy as np
 from plen_real.servo_model import ServoJoint
-from plen_real.socket_comms import SocketClient, SocketServer
+from plen_real.socket_comms import SocketClient
 from plen_real.imu import IMU
 import time
 import os

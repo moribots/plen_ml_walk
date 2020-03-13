@@ -37,6 +37,10 @@ class ObjectDetector:
         self.pixel_x = self.x_dist / 640.0
         self.pixel_y = self.y_dist / 480
 
+        self.x_position = 0
+        self.y_position = 0
+        self.z_position = 0
+
     def detect(self):
         """ Detect the object's position in pixel coordinates
         """
@@ -108,15 +112,17 @@ class ObjectDetector:
             # PRINT X,Y POSITION
             # Global Zero x: 0.208
             # Global Zero y: 0.3940
-            print("X Position: {}".format((640 - centre[0]) * self.pixel_x - 0.208))
-            print("Y Position: {}".format(centre[1] * self.pixel_y - 0.394))
+            self.x_position = (640 - centre[0]) * self.pixel_x - 0.208
+            print("X Position: {}".format(self.x_position))
+            self.y_position = centre[1] * self.pixel_y - 0.394
+            print("Y Position: {}".format(self.y_position))
             # 13px Radius at 0.020m height
             # 20px at 0.079m height
             # actual radius is 0.0225 m
             m = (0.079 - 0.02) / (20 - 13)
             b = 0.079 - 20 * m
-            z_pos = radius * m + b
-            print("Z Position: {}".format(z_pos))
+            self.z_position = radius * m + b
+            print("Z Position: {}".format(self.z_position))
 
 
             print("RADIUS: {}".format(radius))

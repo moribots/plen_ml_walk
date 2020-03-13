@@ -92,7 +92,8 @@ class SocketServer:
     def __init__(self, host="bot", port=41953, buffer_size=32):
         localIP = "192.168.0.17"
 
-        msgFromServer = pickle.dumps([0.00000000000001, 0.0000000000002, 0.000000000000003])
+        msgFromServer = pickle.dumps(
+            [0.00000000000001, 0.0000000000002, 0.000000000000003])
 
         bytesToSend = str.encode(msgFromServer)
 
@@ -106,25 +107,39 @@ class SocketServer:
 
         print("UDP server up and listening")
 
+        self.buffer_size = buffer_size
+        # # Listen for incoming datagrams
+
+        # while (True):
+
+        #     bytesAddressPair = self.s.recvfrom(buffer_size)
+
+        #     message = bytesAddressPair[0]
+
+        #     address = bytesAddressPair[1]
+
+        #     clientMsg = "Message from Client:{}".format(message)
+        #     clientIP = "Client IP Address:{}".format(address)
+
+        #     print(clientMsg)
+        #     print(clientIP)
+
+        #     # Sending a reply to client
+
+        #     self.s.sendto(bytesToSend, address)
+
+    def broadcast(self, msg):
+
+        bytesToSend = str.encode(msg)
+
         # Listen for incoming datagrams
 
-        while (True):
+        bytesAddressPair = self.s.recvfrom(self.buffer_size)
 
-            bytesAddressPair = self.s.recvfrom(buffer_size)
+        address = bytesAddressPair[1]
 
-            message = bytesAddressPair[0]
-
-            address = bytesAddressPair[1]
-
-            clientMsg = "Message from Client:{}".format(message)
-            clientIP = "Client IP Address:{}".format(address)
-
-            print(clientMsg)
-            print(clientIP)
-
-            # Sending a reply to client
-
-            self.s.sendto(bytesToSend, address)
+        # Sending a reply to client
+        self.s.sendto(bytesToSend, address)
 
 
 if __name__ == "__main__":
