@@ -20,7 +20,8 @@ class ServoJoint:
                  fb_chan=0,
                  pwm_chan=0,
                  pwm_min=600,
-                 pwm_max=2800):
+                 pwm_max=2800,
+                 servo_horn_bias=0):
         # RIGHT LEG:
         # Joint 1 name: rb_servo_r_hip
         # Joint 2 name: r_hip_r_thigh
@@ -49,6 +50,9 @@ class ServoJoint:
         self.name = name
         self.effort = effort  # Nm
         self.speed = speed  # rad/s
+
+        # offset in mechanical design
+        self.servo_horn_bias = servo_horn_bias
 
         # create the spi bus
         self.spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
@@ -84,7 +88,7 @@ class ServoJoint:
         self.pwm_chan = pwm_chan
         self.kit.servo[self.pwm_chan].set_pulse_width_range(pwm_min, pwm_max)
 
-        self.bias = 90.0  # degrees
+        self.bias = 90.0 + self.rad2deg(self.servo_horn_bias)  # degrees
 
     def forward_propagate(self, current_pos, desired_pos, dt):
         """ Predict the new position of the actuated servo

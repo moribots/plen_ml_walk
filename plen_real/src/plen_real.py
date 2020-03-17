@@ -36,15 +36,15 @@ class PlenReal:
         self.env_ranges = [
             [-1.57, 1.57],  # RIGHT LEG rb_servo_r_hip
             [-0.15, 1.5],  # r_hip_r_thigh
-            [-0.95, 0.75],  # r_thigh_r_knee
-            [-0.9, 0.3],  # r_knee_r_shin
+            [-0.95, 1.2],  # r_thigh_r_knee
+            [-1.1, 1.57],  # r_knee_r_shin
             [-0.95, 1.2],  # r_shin_r_ankle
             [-0.8, 0.4],  # r_ankle_r_foot
             [-1.57, 1.57],  # LEFT LEG lb_servo_l_hip
             [-1.5, 0.15],  # l_hip_l_thigh
-            [-0.75, 0.95],  # l_thigh_l_knee
-            [-0.3, 0.9],  # l_knee_l_shin
-            [-1.2, 0.95],  # l_shin_l_ankle
+            [-1.2, 0.95],  # l_thigh_l_knee
+            [-1.1, 1.57],  # l_knee_l_shin
+            [-1.2, 1.2],  # l_shin_l_ankle
             [-0.4, 0.8],  # l_ankle_l_foot
             [-1.57, 1.57],  # RIGHT ARM torso_r_shoulder
             [-0.15, 1.57],  # r_shoulder_rs_servo
@@ -73,10 +73,26 @@ class PlenReal:
             True,  # RIGHT ARM torso_r_shoulder
             False,  # r_shoulder_rs_servo
             # False,  # re_servo_r_elbow
-            False,  # LEFT ARM torso_l_shoulder
+            True,  # LEFT ARM torso_l_shoulder
             False  # l_shoulder_ls_servo
             # False  # le_servo_l_elbow
         ]
+
+        self.servo_horn_bias = [
+            -1,  # RIGHT LEG rb_servo_r_hip
+            1,  # r_hip_r_thigh
+            -1,  # r_thigh_r_knee
+            1,  # r_knee_r_shin
+            1,  # r_shin_r_ankle
+            1,  # r_ankle_r_foot
+            -1,  # LEFT LEG lb_servo_l_hip
+            -1,  # l_hip_l_thigh
+            1,  # l_thigh_l_knee
+            0,  # l_knee_l_shin
+            -1,  # l_shin_l_ankle
+            0,  # l_ankle_l_foot
+        ]
+        self.servo_horn_bias = [i * 0.157 for i in self.servo_horn_bias]
 
         self.joint_list = []
 
@@ -87,14 +103,23 @@ class PlenReal:
                     ServoJoint(name=self.joint_names[i],
                                gpio=22,
                                fb_chan=i,
-                               pwm_chan=i))
+                               pwm_chan=i,
+                               servo_horn_bias=self.servo_horn_bias[i]))
             elif i <= 12:
                 # Use ADC 2, gpio 27
-                self.joint_list.append(
-                    ServoJoint(name=self.joint_names[i],
-                               gpio=27,
-                               fb_chan=i - 8,
-                               pwm_chan=i))
+                if i < 12:
+                    self.joint_list.append(
+                        ServoJoint(name=self.joint_names[i],
+                                   gpio=27,
+                                   fb_chan=i - 8,
+                                   pwm_chan=i,
+                                   servo_horn_bias=self.servo_horn_bias[i]))
+                else:
+                    self.joint_list.append(
+                        ServoJoint(name=self.joint_names[i],
+                                   gpio=27,
+                                   fb_chan=i - 8,
+                                   pwm_chan=i))
 
         # NOW INITIALIZE ARM JOINTS; SPECIAL CASE FOR ONE PWM BOARD
         self.joint_list.append(
@@ -125,6 +150,10 @@ class PlenReal:
 
         for joint in self.joint_list:
             joint.actuate(0.0)
+
+        # Set arms to 30deg
+        self.joint_list[15].actuate(0.5)
+        self.joint_list[13].actuate(0.5)
 
         print("Joints Ready!")
 
@@ -404,9 +433,14 @@ class PlenReal:
 
     def replay(self):
         """ Replays best policy directly from sim trajectories
-        """
-        for joint in self.joint_list:
-            joint.actuate(0.0)
+        # """
+        input("ENTER TO LOAD JOINT TRAJECTORIES")
+        for i in range(12):
+            self.joint_list[i].actuate(0.0)
+
+        # Set arms to 30deg
+        self.joint_list[15].actuate(0.5)
+        self.joint_list[13].actuate(0.5)
         print("Loading Joint Trajectories...")
         # First, load the joint angles for each joint across each timestep
 
@@ -477,10 +511,44 @@ class PlenReal:
                                                  "_traj.npy")
             self.joint_cmds[i] = np.load(self.joint_list[i].name + "_cmd.npy")
 
+        # Bend Legs
+        full_bend = np.load("bend_traj.npy")
+
+        # Exclude Elbows
+        bend_legs = []
+        for i in range(13):
+            bend_legs.append(full_bend[i])
+        bend_legs.append(0.5)
+        bend_legs.append(full_bend[15])
+        bend_legs.append(0.5)
+
+        print("BEND LEG SIZE {}".format(len(bend_legs)))
+        print("BEND LEG COMMAND")
+        print(bend_legs)
+
+        input("PRESS ENTER TO BEND LEGS")
+
+        print("------------------------------")
+        print("BENDING LEGS")
+        print("------------------------------")
+
+        for j in range(12):
+            joint_command = bend_legs[j]
+            if not self.sim_to_real_key[j]:
+                # Key indicates that URDF oposite of reality
+                joint_command = -joint_command
+            # print("{} COMMAND: \t {}".format(self.joint_list[j].name,
+            #                                  joint_command))
+            self.joint_list[j].actuate(joint_command)
+
+        print("LEGS BENT")
+        print("------------------------------")
+
+
         # WILL USE ONE OF THE ABOVE, DEPENDS ON BEST PERFORMANCE
         choice = input("Use Command [c] or Position [p] trajectories?")
 
-        loop_time = 1 / 15.0  # 1/Hz
+        loop_time = 1 / 20.0  # 1/Hz
 
         if choice == "c":
             # Use Actions
@@ -515,6 +583,13 @@ class PlenReal:
                     # Ensure 60Hz loop
                     time.sleep(loop_time - elapsed_time)
                     print("RATE: {}".format(1 / (time.time() - start_time)))
+
+        for i in range(12):
+            self.joint_list[i].actuate(0.0)
+
+        # Set arms to 30deg
+        self.joint_list[15].actuate(0.5)
+        self.joint_list[13].actuate(0.5)
 
     # def deploy(self):
     #     """ Deploy Live Policy using real sensors
@@ -585,5 +660,5 @@ class PlenReal:
 
 if __name__ == "__main__":
     plen = PlenReal()
-    plen.replay()
-    plen.replay()
+    for i in range(20):
+        plen.replay()

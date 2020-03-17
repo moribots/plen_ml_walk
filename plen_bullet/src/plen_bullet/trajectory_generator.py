@@ -3,12 +3,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+from plen_bullet.plen_env import PlenWalkEnv
 
 
 class TrajectoryGenerator():
     def __init__(self):
         self.l_hip_knee = 25.0
         self.l_knee_foot = 40.0
+        self.env = PlenWalkEnv()
 
     def setup_trajectory_params(self,
                                 num_DoubleSupport,
@@ -63,9 +65,9 @@ class TrajectoryGenerator():
 
     def first_step(self):
         trajectoryLength = self._l * (
-            2 * self.num_DoubleSupport + self.num_SingleSupport) / (
+            2.0 * self.num_DoubleSupport + self.num_SingleSupport) / (
                 self.num_DoubleSupport + self.num_SingleSupport)
-        walkPoint = self.num_DoubleSupport * 2 + self.num_SingleSupport * 2
+        walkPoint = self.num_DoubleSupport * 2.0 + self.num_SingleSupport * 2.0
         # Rows: x,y,z | Columns: number of trajectory points
         # START AND END CONDITION
         self.foot_start_rfwd_r = np.zeros(
@@ -136,7 +138,7 @@ class TrajectoryGenerator():
         for i in range(self.num_DoubleSupport + self.num_SingleSupport):
             # Y CONTROL
             t = (i + 1.0) / (self.num_DoubleSupport + self.num_SingleSupport)
-            if t < 1 / 4:
+            if t < 1.0 / 4.0:
                 self.foot_start_rfwd_r[1][i] = -self._swayBody * (
                     math.sin(t * math.pi) - (1 - math.sin(math.pi * 2 * t)) *
                     (math.sin(4 * t * math.pi) / 4))
@@ -150,9 +152,9 @@ class TrajectoryGenerator():
                     t * math.pi)
 
     def intermediate_steps(self):
-        walkPoint = self.num_DoubleSupport * 2 + self.num_SingleSupport * 2
+        walkPoint = self.num_DoubleSupport * 2.0 + self.num_SingleSupport * 2.0
         trajectoryLength = self._l * (
-            2 * self.num_DoubleSupport + self.num_SingleSupport) / (
+            2.0 * self.num_DoubleSupport + self.num_SingleSupport) / (
                 self.num_DoubleSupport + self.num_SingleSupport)
 
         walkPoint0 = np.zeros((3, self.num_DoubleSupport))
@@ -219,9 +221,9 @@ class TrajectoryGenerator():
 
     def last_step(self):
         trajectoryLength = self._l * (
-            2 * self.num_DoubleSupport + self.num_SingleSupport) / (
+            2.0 * self.num_DoubleSupport + self.num_SingleSupport) / (
                 self.num_DoubleSupport + self.num_SingleSupport)
-        walkPoint = self.num_DoubleSupport * 2 + self.num_SingleSupport * 2
+        walkPoint = self.num_DoubleSupport * 2.0 + self.num_SingleSupport * 2.0
         self.foot_end_rfwd_r = np.zeros(
             (3, self.num_DoubleSupport + self.num_SingleSupport))
         self.foot_end_lfwd_r = np.zeros(
@@ -236,7 +238,7 @@ class TrajectoryGenerator():
                 ((i + 1 + self._sway_steps + self.num_DoubleSupport+self.num_SingleSupport)/(walkPoint-self.num_SingleSupport)-0.5)
             self.foot_end_rfwd_r[2][i] = self._sit
         for i in range(self.num_SingleSupport):
-            t = (i + 1) / self.num_SingleSupport
+            t = (i + 1.0) / self.num_SingleSupport
             sin_tpi = math.sin(t * math.pi)
 
             self.foot_end_lfwd_r[0][
@@ -326,7 +328,10 @@ class TrajectoryGenerator():
 
             # th3 = -th4 - th5
 
-            th1 = math.atan2(-fy, fz)
+            if isRightLeg:
+                th1 = math.atan2(-fy, fz)
+            else:
+                th1 = math.atan2(fy, fz)
 
             th3 = math.acos((fx**2 + fy**2 + fz**2 - lhip_knee**2 - lknee_foot**2) / (2.0*lhip_knee*lknee_foot))
 
@@ -335,29 +340,37 @@ class TrajectoryGenerator():
 
             th2 = -math.atan2((sqrtyz * math.sin(th3) + fx*math.cos(th3) + fx*hok) , (sqrtyz * math.cos(th3) + sqrtyz*hok -fx*math.sin(th3)))
 
+            # NOTE: KNEE [3] or [9] IS CAPPED AT +-[-1.1, 0.3] RADIANS FOR MAX AND THIGH [2] or [8] IS CAPPED AT +- [-0.95, 0.75] RADIANS
+
+            if isRightLeg:
+                # Check [3]knee and [2]thigh
+                if th3 < self.env.env_ranges[3][0]:
+                    th3 = self.env.env_ranges[3][0]
+                elif th3 > self.env.env_ranges[3][1]:
+                    th3 = self.env.env_ranges[3][1]
+
+                if th2 < self.env.env_ranges[2][0]:
+                    th2 = self.env.env_ranges[2][0]
+                elif th2 > self.env.env_ranges[2][1]:
+                    th2 = self.env.env_ranges[2][1]
+            else:
+                # Check [9]knee and [8]thigh
+                if th3 < self.env.env_ranges[9][0]:
+                    th3 = self.env.env_ranges[9][0]
+                elif th3 > self.env.env_ranges[9][1]:
+                    th3 = self.env.env_ranges[9][1]
+
+                if th2 < self.env.env_ranges[8][0]:
+                    th2 = self.env.env_ranges[8][0]
+                elif th2 > self.env.env_ranges[8][1]:
+                    th2 = self.env.env_ranges[8][1]
+
             th4 = -(th2 + th3)
 
-            th5 = -th1
-
-            a = math.sqrt(fx * fx + fy * fy + fz * fz)
-            # print("lhip_knee: {}".format(lhip_knee))
-            # print("lknee_foot: {}".format(lknee_foot))
-            # print("a: {}".format(a))
-
-            d1 = math.asin(fx / a)
-            d2 = math.acos(
-                (lhip_knee * lhip_knee + a * a - lknee_foot * lknee_foot) /
-                (2 * lhip_knee * a))
-            d4 = math.acos(
-                (lknee_foot * lknee_foot + a * a - lhip_knee * lhip_knee) /
-                (2 * lknee_foot * a))
-            d5 = math.pi - d2 - d4
-
-            t1 = (math.atan2(fy, fz))
-            t2 = -(d1 + d2)
-            t3 = math.pi - d5
-            t4 = t2 + t3
-            t5 = -t1
+            if isRightLeg:
+                th5 = -th1
+            else:
+                th5 = th1
 
             inverseAngle[i] = np.array([0, th1, th2, th3, th4, th5])
 
@@ -417,15 +430,15 @@ class TrajectoryGenerator():
     def main(self):
         self.setup_trajectory_params(num_DoubleSupport=10,
                                      num_SingleSupport=10,
-                                     height=20.0,
+                                     height=30.0,
                                      stride=10.0,
                                      sit=10.0,
-                                     swayBody=0.0,
-                                     foot_sway=0.0,
-                                     fwd_bias=10.0,
+                                     swayBody=5.0,
+                                     foot_sway=-0.0,
+                                     fwd_bias=15.0,
                                      sway_steps=5,
                                      lift_pushoff=0.0,
-                                     land_pullback=0.0,
+                                     land_pullback=4.0,
                                      timeStep=0.0165)
 
         # Starting Motion
