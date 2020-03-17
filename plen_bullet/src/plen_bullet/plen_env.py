@@ -397,7 +397,7 @@ class PlenWalkEnv(gym.Env):
         print("--------------------------------------------")
 
         # Change Right and Left Foot Dynamics
-        roll_fric = 0.1  # 0.1
+        roll_fric = 0.01  # 0.1
         lat_fric = 0.8
         spin_fric = 0.1
         p.changeDynamics(
@@ -429,7 +429,7 @@ class PlenWalkEnv(gym.Env):
         for j in range(p.getNumJoints(self.robotId)):
             p.changeDynamics(self.robotId,
                              j,
-                             linearDamping=0.0,
+                             linearDamping=1.0,
                              angularDamping=0.0,
                              restitution=0.5)
 
@@ -544,23 +544,23 @@ class PlenWalkEnv(gym.Env):
         my_path = os.path.abspath(os.path.dirname(__file__))
         results_path = os.path.join(my_path, "../../trajectories/")
 
-        # SAVE JOINT TRAJECTORIES
-        for i in range(len(self.joint_trajectories)):
-            np.save(results_path + self.joint_names[i] + "_traj",
-                    self.joint_trajectories[i])
+        # # SAVE JOINT TRAJECTORIES
+        # for i in range(len(self.joint_trajectories)):
+        #     np.save(results_path + self.joint_names[i] + "_traj",
+        #             self.joint_trajectories[i])
 
-        # CLEAR JOINT TRAJECTORIES
-        for i in range(len(self.joint_trajectories)):
-            self.joint_trajectories[i] = []
+        # # CLEAR JOINT TRAJECTORIES
+        # for i in range(len(self.joint_trajectories)):
+        #     self.joint_trajectories[i] = []
 
-        # SAVE JOINT COMMANDS
-        for i in range(len(self.joint_cmds)):
-            np.save(results_path + self.joint_names[i] + "_cmd",
-                    self.joint_cmds[i])
+        # # SAVE JOINT COMMANDS
+        # for i in range(len(self.joint_cmds)):
+        #     np.save(results_path + self.joint_names[i] + "_cmd",
+        #             self.joint_cmds[i])
 
-        # CLEAR JOINT COMMANDS
-        for i in range(len(self.joint_cmds)):
-            self.joint_cmds[i] = []
+        # # CLEAR JOINT COMMANDS
+        # for i in range(len(self.joint_cmds)):
+        #     self.joint_cmds[i] = []
 
         return observation
 
@@ -589,14 +589,20 @@ class PlenWalkEnv(gym.Env):
             format(episode_number, self.total_timesteps, reward,
                    moving_avg_reward))
 
-    def step(self, action):
+    def step(self, action, joint_act=True):
         # Convert agent actions into real actions
         env_action = np.zeros(18)
         # print("MESS {}".format(env_action))
 
         for i in range(len(action)):
             # Convert action from [-1, 1] to real env values
-            env_action[i] = self.agent_to_env(self.env_ranges[i], action[i])
+            if joint_act:
+                # Give joint position
+                env_action[i] = action[i]
+            else:
+                # Give agent command
+                env_action[i] = self.agent_to_env(self.env_ranges[i],
+                                                  action[i])
 
         # print("ENV ACTION {}".format(env_action))
         # p.stepSimulation()
@@ -618,17 +624,17 @@ class PlenWalkEnv(gym.Env):
         # Increment Gait Reward Counters
         self.gait_period_counter += 1
 
-        if self.render:
-            # Make camera follow robot
-            p.resetDebugVisualizerCamera(
-                cameraDistance=0.5,
-                cameraYaw=35,
-                cameraPitch=-30,
-                cameraTargetPosition=[self.torso_x, self.torso_y, 0])
+        # if self.render:
+        #     # Make camera follow robot
+        #     p.resetDebugVisualizerCamera(
+        #         cameraDistance=0.5,
+        #         cameraYaw=35,
+        #         cameraPitch=-30,
+        #         cameraTargetPosition=[self.torso_x, self.torso_y, 0])
 
         # STORE JOINT COMMANDS
         for i in range(len(self.joint_cmds)):
-            self.joint_cmds[i].append(env_action[i])
+            self.joint_cmds[i].append(action[i])
 
         return observation, reward, done, {}
 
