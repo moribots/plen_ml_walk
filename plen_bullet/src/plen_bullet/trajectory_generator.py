@@ -14,7 +14,7 @@ class TrajectoryGenerator():
                  stride=30.0,
                  bend_distance=10.0,
                  body_sway=5.0,
-                 fwd_bias=0.0,
+                 fwd_bias=10.0,
                  sway_steps=5):
         """ Initialize trajectory generation parameters.
             This only has the ability to implement a forward
