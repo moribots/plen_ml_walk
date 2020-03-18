@@ -177,34 +177,7 @@ def main():
     larm_traj = []
     lelbow_traj = []
 
-    # Populate Leg Joints
-    # START LEFT
-    # for i in range(traj.num_DoubleSupport + traj.num_SingleSupport):
-    #     # RIGHT LEG
-    #     rhip_traj.append(-traj.foot_start_lfwd[i][0])
-    #     rthigh_traj.append(-traj.foot_start_lfwd[i][1])
-    #     rknee_traj.append(-traj.foot_start_lfwd[i][2])
-    #     rshin_traj.append(-traj.foot_start_lfwd[i][3])
-    #     rankle_traj.append(traj.foot_start_lfwd[i][4])
-    #     rfoot_traj.append(traj.foot_start_lfwd[i][5])
-    #     # LEFT LEG
-    #     lhip_traj.append(traj.foot_start_lfwd[i][6])
-    #     lthigh_traj.append(traj.foot_start_lfwd[i][7])
-    #     lknee_traj.append(traj.foot_start_lfwd[i][8])
-    #     lshin_traj.append(traj.foot_start_lfwd[i][9])
-    #     lankle_traj.append(-traj.foot_start_lfwd[i][10])
-    #     lfoot_traj.append(traj.foot_start_lfwd[i][11])
-    #     # if i > traj.num_DoubleSupport:
-    #     # RIGHT ARM
-    #     rshoulder_traj.append(np.pi / 5)
-    #     rarm_traj.append(np.pi / 8)
-    #     relbow_traj.append(0)
-    #     # LEFT ARM
-    #     lshoulder_traj.append(np.pi / 5)
-    #     larm_traj.append(np.pi / 8)
-    #     lelbow_traj.append(0)
-
-    for p in range(5):
+    for p in range(20):
         for i in range(np.size(traj.foot_walk_rfwd, 0)):
             # WALK RIGHT
             # RIGHT LEG
