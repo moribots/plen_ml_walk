@@ -44,8 +44,13 @@ class TrajectoryGenerator():
         # Double the period so that each segment of the trajectory has its dts
         Period = 2.0 * (self.num_DoubleSupport + self.num_SingleSupport)
 
+        # CASE FOR SS = DS = 10
+
+        # PERIOD = 40
+
         # Support Foot - SS
         for i in range(self.num_SingleSupport):
+            # t FROM 0.1 to 1
             t = (i + 1.0) / self.num_SingleSupport
             # Linear Forward Trajectory: t * stride_length
             SS_support_foot[0][i] = t * self.stride_length
@@ -59,6 +64,7 @@ class TrajectoryGenerator():
         # Dominant Foot - DS
         for i in range(self.num_DoubleSupport):
             # Subtract Single Support from total Period
+            # t FROM 1/30 to 10/30
             t = (i + 1.0) / (Period - self.num_SingleSupport)
             DS_dominant_foot[0][i] = (0.5 - t) * self.stride_length
             DS_dominant_foot[1][i] = self._body_sway * np.sin(2 * np.pi * (
@@ -67,8 +73,9 @@ class TrajectoryGenerator():
 
         # Dominant Foot - SS
         for i in range(self.num_SingleSupport):
+            # t FROM 10 / 30 to 20 / 30
             # Add Elapsed Double Support and subtract Single Support
-            t = (i + 1.0 + self.num_DoubleSupport) / (Period -
+            t = (i + self.num_DoubleSupport) / (Period -
                                                       self.num_SingleSupport)
             SS_dominant_foot[0][i] = (0.5 - t) * self.stride_length
             SS_dominant_foot[1][i] = self._body_sway * np.sin(2.0 * np.pi * (
@@ -78,7 +85,8 @@ class TrajectoryGenerator():
         # Support Foot - DS
         for i in range(self.num_DoubleSupport):
             # Add Elapsed Double and Single Supports and sub Single Support
-            t = (i + 1.0 + self.num_DoubleSupport +
+            # t FROM 20/30 to 30/30
+            t = (i + self.num_DoubleSupport +
                  self.num_SingleSupport) / (Period - self.num_SingleSupport)
             DS_support_foot[0][i] = (0.5 - t) * self.stride_length
             DS_support_foot[2][i] = self._bend_distance
