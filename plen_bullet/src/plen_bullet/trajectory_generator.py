@@ -55,7 +55,6 @@ class TrajectoryGenerator():
         """ Generate Foot trajectories for Dominant and Support in
             cartesian coordinates relative to their respective hips.
         """
-        # SOURCE: https://www.hindawi.com/journals/mpe/2015/437979/
         DS_support_foot = np.zeros((3, 2 * self.num_DoubleSupport))
         SS_support_foot = np.zeros((3, self.num_SingleSupport))
         DS_dominant_foot = np.zeros((3, 2 * self.num_DoubleSupport))
