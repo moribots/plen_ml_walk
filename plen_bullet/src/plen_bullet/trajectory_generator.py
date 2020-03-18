@@ -86,8 +86,7 @@ class TrajectoryGenerator():
             # Here we create a discontinuity of 1/2 stride length
             # to promote speed
             # we do this by moving from -2/6 stride length to -1/2 stride length in this segment
-            DS_dominant_foot[0][i] = -self.stride_length * ((1 / 6.0) +
-                                                            (2 / 6.0) * t)
+            DS_dominant_foot[0][i] = -self.stride_length * (t / 2.0)
             # Clipped Sinewave Trajectory for Sway from -1/3 to 1/3 of -pi
             DS_dominant_foot[1][i] = np.sin(-np.pi *
                                             ((-1.0 / 3.0) +
@@ -114,10 +113,7 @@ class TrajectoryGenerator():
             # t FROM 0 to 1
             t = i / (2.0 * self.num_DoubleSupport - 1.0)
 
-            # Supporting discontinuity created by DS - Dominant
-            # moving from -2/6 stride length to -1/2 stride length in this segment
-            DS_support_foot[0][i] = self.stride_length * ((1 / 2.0) -
-                                                          (1 / 3.0) * t)
+            DS_support_foot[0][i] = self.stride_length * (1.0 - t) / 2.0
 
             DS_support_foot[1][i] = np.sin(-np.pi *
                                            ((2.0 / 3.0) +
