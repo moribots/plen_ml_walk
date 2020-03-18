@@ -257,32 +257,6 @@ def main():
             larm_traj.append(np.pi / 8)
             lelbow_traj.append(0)
 
-    # for i in range(traj.num_DoubleSupport + traj.num_SingleSupport):
-    #     # END
-    #     # RIGHT LEG
-    #     rhip_traj.append(-traj.foot_end_rfwd[i][0])
-    #     rthigh_traj.append(-traj.foot_end_rfwd[i][1])
-    #     rknee_traj.append(-traj.foot_end_rfwd[i][2])
-    #     rshin_traj.append(-traj.foot_end_rfwd[i][3])
-    #     rankle_traj.append(traj.foot_end_rfwd[i][4])
-    #     rfoot_traj.append(traj.foot_end_rfwd[i][5])
-    #     # LEFT LEG
-    #     lhip_traj.append(traj.foot_end_rfwd[i][6])
-    #     lthigh_traj.append(traj.foot_end_rfwd[i][7])
-    #     lknee_traj.append(traj.foot_end_rfwd[i][8])
-    #     lshin_traj.append(traj.foot_end_rfwd[i][9])
-    #     lankle_traj.append(-traj.foot_end_rfwd[i][10])
-    #     lfoot_traj.append(traj.foot_end_rfwd[i][11])
-    #     # if i > traj.num_DoubleSupport:
-    #     # RIGHT ARM
-    #     rshoulder_traj.append(np.pi / 5)
-    #     rarm_traj.append(np.pi / 8)
-    #     relbow_traj.append(0)
-    #     # LEFT ARM
-    #     lshoulder_traj.append(-np.pi / 5)
-    #     larm_traj.append(np.pi / 8)
-    #     lelbow_traj.append(0)
-
     # RIGHT ARM
     # rshoulder_traj = [0] * len(rhip_traj)
     # rarm_traj = [0] * len(rhip_traj)
@@ -301,7 +275,7 @@ def main():
         lshoulder_traj, larm_traj, lelbow_traj
     ]
 
-    bend_legs = traj.foot_start_rfwd[:][0]
+    bend_legs = traj.bend[:][0]
     for i in range(6):
         bend_legs = np.append(bend_legs, 0)
 
@@ -323,18 +297,12 @@ def main():
     # Save Leg Bend Traj
     np.save(results_path + "bend_traj", bend_legs)
 
-    print("TRAJ")
-    print(traj.foot_start_rfwd)
-
     print("BEND")
     for i in range(20):
         # Perform action
         time.sleep(1. / 20.)
         next_state, reward, done, _ = env.step(bend_legs)
 
-    # print("RKNEE")
-    # print(rankle_traj)
-    time.sleep(2)
     print("WALK")
     for t in range(len(joint_trajectories[0])):
 
