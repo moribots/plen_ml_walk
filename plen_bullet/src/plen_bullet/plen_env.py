@@ -421,7 +421,7 @@ class PlenWalkEnv(gym.Env):
         print("--------------------------------------------")
 
         # Change Right and Left Foot Dynamics
-        roll_fric = 0.1  # 0.01 for manual
+        roll_fric = 0.01  # 0.01 for manual
         lat_fric = 0.8
         spin_fric = 0.1
         p.changeDynamics(
@@ -453,7 +453,7 @@ class PlenWalkEnv(gym.Env):
         for j in range(p.getNumJoints(self.robotId)):
             p.changeDynamics(self.robotId,
                              j,
-                             linearDamping=0.0,  # 0.1 for manual
+                             linearDamping=1.0,  # 0.1 for manual
                              angularDamping=0.0,
                              restitution=0.5)
 
@@ -648,13 +648,13 @@ class PlenWalkEnv(gym.Env):
         # Increment Gait Reward Counters
         self.gait_period_counter += 1
 
-        if self.render:
-            # Make camera follow robot
-            p.resetDebugVisualizerCamera(
-                cameraDistance=0.5,
-                cameraYaw=35,
-                cameraPitch=-30,
-                cameraTargetPosition=[self.torso_x, self.torso_y, 0])
+        # if self.render:
+        #     # Make camera follow robot
+        #     p.resetDebugVisualizerCamera(
+        #         cameraDistance=0.5,
+        #         cameraYaw=35,
+        #         cameraPitch=-30,
+        #         cameraTargetPosition=[self.torso_x, self.torso_y, 0])
 
         # STORE JOINT COMMANDS
         for i in range(len(self.joint_cmds)):

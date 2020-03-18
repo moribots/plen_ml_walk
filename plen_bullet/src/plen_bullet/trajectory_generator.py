@@ -2,6 +2,7 @@
 
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 from plen_bullet.plen_env import PlenWalkEnv
 
 
@@ -27,6 +28,8 @@ class TrajectoryGenerator():
 
             see: https://www.hindawi.com/journals/mpe/2015/437979/
             for details
+
+            NOTE: All Values in mm
         """
         # Length of hip-knee segment
         self.l_hip_knee = 25.0
@@ -55,10 +58,10 @@ class TrajectoryGenerator():
             cartesian coordinates relative to their respective hips.
         """
         # SOURCE: https://www.hindawi.com/journals/mpe/2015/437979/
-        DS_dominant_foot = np.zeros((3, self.num_DoubleSupport))
-        SS_dominant_foot = np.zeros((3, self.num_SingleSupport))
         DS_support_foot = np.zeros((3, self.num_DoubleSupport))
         SS_support_foot = np.zeros((3, self.num_SingleSupport))
+        DS_dominant_foot = np.zeros((3, self.num_DoubleSupport))
+        SS_dominant_foot = np.zeros((3, self.num_SingleSupport))
 
         # Double the period so that each segment of the trajectory has its dts
         Period = 2.0 * (self.num_DoubleSupport + self.num_SingleSupport)
@@ -67,71 +70,78 @@ class TrajectoryGenerator():
 
         # PERIOD = 40
 
-        # Support Foot - SS
+        # Dominant Foot - SS
         for i in range(self.num_SingleSupport):
-            # t FROM 0.1 to 1
-            t = (i + 1.0) / self.num_SingleSupport
+            # t FROM 0 to 1
+            t = i / (self.num_SingleSupport - 1.0)
             # Linear Forward Trajectory: t * stride_length
-            SS_support_foot[0][i] = t * self.stride_length
-            # Clipped Sinewave Trajectory for Sway
-            SS_support_foot[1][i] = self._body_sway * np.sin(2.0 * np.pi * (
-                (i + 1.0 + Period - self.num_SingleSupport - self._sway_steps)
-                / Period))
+            SS_dominant_foot[0][i] = t * self.stride_length
+            # Clipped Sinewave Trajectory for Sway from 1/3 to 2/3 of -pi
+            # DS will handle 0 to 1/3 and 2/3 to 1
+            SS_dominant_foot[1][i] = np.sin(- np.pi * ((1/3.0) * (1 + t))) * self._body_sway
             # Clipped Sinewave Trajectory for Height
-            SS_support_foot[2][i] = np.sin(
+            SS_dominant_foot[2][i] = np.sin(
                 t * np.pi) * self.foot_lift_height + self._bend_distance
-        # Dominant Foot - DS
+
+        # Support Foot - DS
         for i in range(self.num_DoubleSupport):
             # Subtract Single Support from total Period
             # t FROM 1/30 to 10/30
             t = (i + 1.0) / (Period - self.num_SingleSupport)
-            DS_dominant_foot[0][i] = (0.5 - t) * self.stride_length
-            DS_dominant_foot[1][i] = self._body_sway * np.sin(2 * np.pi * (
+            DS_support_foot[0][i] = (0.5 - t) * self.stride_length
+            DS_support_foot[1][i] = self._body_sway * np.sin(2 * np.pi * (
                 (i + 1.0 - self._sway_steps) / Period))
-            DS_dominant_foot[2][i] = self._bend_distance
+            DS_support_foot[2][i] = self._bend_distance
 
-        # Dominant Foot - SS
+        # Support Foot - SS
         for i in range(self.num_SingleSupport):
             # t FROM 10 / 30 to 20 / 30
             # Add Elapsed Double Support and subtract Single Support
             t = (i + self.num_DoubleSupport) / (Period -
-                                                      self.num_SingleSupport)
-            SS_dominant_foot[0][i] = (0.5 - t) * self.stride_length
-            SS_dominant_foot[1][i] = self._body_sway * np.sin(2.0 * np.pi * (
+                                                self.num_SingleSupport)
+            SS_support_foot[0][i] = (0.5 - t) * self.stride_length
+            SS_support_foot[1][i] = self._body_sway * np.sin(2.0 * np.pi * (
                 (i + 1.0 + self.num_DoubleSupport - self._sway_steps) /
                 Period))
-            SS_dominant_foot[2][i] = self._bend_distance
-        # Support Foot - DS
+            SS_support_foot[2][i] = self._bend_distance
+
+        # Dominant Foot - DS
         for i in range(self.num_DoubleSupport):
             # Add Elapsed Double and Single Supports and sub Single Support
             # t FROM 20/30 to 30/30
             t = (i + self.num_DoubleSupport +
                  self.num_SingleSupport) / (Period - self.num_SingleSupport)
-            DS_support_foot[0][i] = (0.5 - t) * self.stride_length
-            DS_support_foot[2][i] = self._bend_distance
-            DS_support_foot[1][i] = self._body_sway * np.sin(2.0 * np.pi * (
+            DS_dominant_foot[0][i] = (0.5 - t) * self.stride_length
+            DS_dominant_foot[1][i] = self._body_sway * np.sin(2.0 * np.pi * (
                 (i + 1.0 + self.num_DoubleSupport + self.num_SingleSupport -
                  self._sway_steps) / Period))
+            DS_dominant_foot[2][i] = self._bend_distance
 
         # Forward Bias
         # Subtract foor position by amount of forward tilt
         if self.fwd_bias != 0:
-            DS_dominant_foot[0] = DS_dominant_foot[0] - self.fwd_bias
-            SS_dominant_foot[0] = SS_dominant_foot[0] - self.fwd_bias
             DS_support_foot[0] = DS_support_foot[0] - self.fwd_bias
             SS_support_foot[0] = SS_support_foot[0] - self.fwd_bias
+            DS_dominant_foot[0] = DS_dominant_foot[0] - self.fwd_bias
+            SS_dominant_foot[0] = SS_dominant_foot[0] - self.fwd_bias
 
-        # Dominant foot does: DS, Lift, DS
-        self.foot_walk_lfwd_r = np.column_stack([
+        # Dominant foot does DS, Single Support, DS
+        self.foot_walk_rfwd_r = np.column_stack([
             DS_dominant_foot[:, self._sway_steps:], SS_dominant_foot,
             DS_support_foot[:, :self._sway_steps]
         ])
 
-        # Support foot does DS, Single Support, DS
-        self.foot_walk_rfwd_r = np.column_stack([
+        # Support foot does: DS, Lift, DS
+        self.foot_walk_lfwd_r = np.column_stack([
             DS_support_foot[:, self._sway_steps:], SS_support_foot,
             DS_dominant_foot[:, :self._sway_steps]
         ])
+
+        # store for plot
+        self.SS_dominant_foot = SS_dominant_foot
+        self.DS_dominant_foot = DS_dominant_foot
+        self.SS_support_foot = SS_support_foot
+        self.DS_support_foot = DS_support_foot
 
     def assemble_trajectories(self):
         """ Assemble complements of trajectories in self.foot_path
@@ -260,3 +270,61 @@ class TrajectoryGenerator():
 
         # Convert to joint space
         self.joint_space_trajectories()
+
+    def plot(self):
+        """ Visualize trajctories for portfolio
+        """
+        # Walking Motion
+        self.foot_path()
+
+        # Assemble
+        self.assemble_trajectories()
+
+        # DOMINANT FOOT
+        # X,Y,Z TRAJ
+        plt.figure(0)
+        plt.autoscale(enable=True, axis='both', tight=None)
+        plt.title('Dominant Foot Trajectories - SS')
+        plt.ylabel('positon (mm)')
+        plt.xlabel('timestep')
+        plt.plot(self.SS_dominant_foot[0], color='r', label="x")
+        plt.plot(self.SS_dominant_foot[1], color='g', label="y")
+        plt.plot(self.SS_dominant_foot[2], color='b', label="z")
+        plt.yticks(np.arange(-20.0, 45.0 + 1.0, 2.0))
+
+        plt.figure(1)
+        plt.autoscale(enable=True, axis='both', tight=None)
+        plt.title('Dominant Foot Trajectories - DS')
+        plt.ylabel('positon (mm)')
+        plt.xlabel('timestep')
+        plt.plot(self.DS_dominant_foot[0], color='r', label="x")
+        plt.plot(self.DS_dominant_foot[1], color='g', label="y")
+        plt.plot(self.DS_dominant_foot[2], color='b', label="z")
+
+        # SUPPORT FOOT
+        # X,Y,Z TRAJ
+        plt.figure(2)
+        plt.autoscale(enable=True, axis='both', tight=None)
+        plt.title('Support Foot Trajectories - SS')
+        plt.ylabel('positon (mm)')
+        plt.xlabel('timestep')
+        plt.plot(self.SS_support_foot[0], color='r', label="x")
+        plt.plot(self.SS_support_foot[1], color='g', label="y")
+        plt.plot(self.SS_support_foot[2], color='b', label="z")
+
+        plt.figure(3)
+        plt.autoscale(enable=True, axis='both', tight=None)
+        plt.title('Support Foot Trajectories - DS')
+        plt.ylabel('positon (mm)')
+        plt.xlabel('timestep')
+        plt.plot(self.DS_support_foot[0], color='r', label="x")
+        plt.plot(self.DS_support_foot[1], color='g', label="y")
+        plt.plot(self.DS_support_foot[2], color='b', label="z")
+
+        plt.legend()
+        plt.show()
+
+
+if __name__ == '__main__':
+    traj = TrajectoryGenerator()
+    traj.plot()
