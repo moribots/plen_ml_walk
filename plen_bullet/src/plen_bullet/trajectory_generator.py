@@ -8,13 +8,14 @@ from plen_bullet.plen_env import PlenWalkEnv
 
 class TrajectoryGenerator():
     def __init__(self,
-                 num_DoubleSupport=10,
+                 num_DoubleSupport=5,
+                 num_SingleSupport=10,
                  height=30.0,
                  stride=30.0,
                  bend_distance=10.0,
                  body_sway=5.0,
                  foot_sway=-0.0,
-                 fwd_bias=15.0,
+                 fwd_bias=0.0,
                  sway_steps=5):
         """ Initialize trajectory generation parameters.
             This only has the ability to implement a forward
@@ -38,7 +39,7 @@ class TrajectoryGenerator():
         # Num. Timesteps spent with both feet planted
         self.num_DoubleSupport = num_DoubleSupport
         # Num. Timesteps spent in stride per trajectory
-        self.num_SingleSupport = num_DoubleSupport
+        self.num_SingleSupport = num_SingleSupport
         # Foot height during stride
         self.foot_lift_height = height
         # stride length
@@ -47,8 +48,6 @@ class TrajectoryGenerator():
         self._bend_distance = bend_distance
         # body sway length
         self._body_sway = body_sway
-        # Number of timesteps (of total) for swaying
-        self._sway_steps = sway_steps
         # Forward bias for torso
         self.fwd_bias = fwd_bias
         self.env = PlenWalkEnv()
@@ -58,17 +57,10 @@ class TrajectoryGenerator():
             cartesian coordinates relative to their respective hips.
         """
         # SOURCE: https://www.hindawi.com/journals/mpe/2015/437979/
-        DS_support_foot = np.zeros((3, self.num_DoubleSupport))
+        DS_support_foot = np.zeros((3, 2 * self.num_DoubleSupport))
         SS_support_foot = np.zeros((3, self.num_SingleSupport))
-        DS_dominant_foot = np.zeros((3, self.num_DoubleSupport))
+        DS_dominant_foot = np.zeros((3, 2 * self.num_DoubleSupport))
         SS_dominant_foot = np.zeros((3, self.num_SingleSupport))
-
-        # Double the period so that each segment of the trajectory has its dts
-        Period = 2.0 * (self.num_DoubleSupport + self.num_SingleSupport)
-
-        # CASE FOR SS = DS = 10
-
-        # PERIOD = 40
 
         # Dominant Foot - SS
         for i in range(self.num_SingleSupport):
@@ -78,44 +70,59 @@ class TrajectoryGenerator():
             SS_dominant_foot[0][i] = t * self.stride_length
             # Clipped Sinewave Trajectory for Sway from 1/3 to 2/3 of -pi
             # DS will handle 0 to 1/3 and 2/3 to 1
-            SS_dominant_foot[1][i] = np.sin(- np.pi * ((1/3.0) * (1 + t))) * self._body_sway
-            # Clipped Sinewave Trajectory for Height
+            SS_dominant_foot[1][i] = np.sin(-np.pi *
+                                            ((1 / 3.0) *
+                                             (1 + t))) * self._body_sway
+            # Sinewave Trajectory for Height from 0 to pi
             SS_dominant_foot[2][i] = np.sin(
                 t * np.pi) * self.foot_lift_height + self._bend_distance
 
-        # Support Foot - DS
-        for i in range(self.num_DoubleSupport):
-            # Subtract Single Support from total Period
-            # t FROM 1/30 to 10/30
-            t = (i + 1.0) / (Period - self.num_SingleSupport)
-            DS_support_foot[0][i] = (0.5 - t) * self.stride_length
-            DS_support_foot[1][i] = self._body_sway * np.sin(2 * np.pi * (
-                (i + 1.0 - self._sway_steps) / Period))
-            DS_support_foot[2][i] = self._bend_distance
+        # Dominant Foot - DS
+        # We do twice the trajectory to use half for each foot (see below)
+        for i in range(2 * self.num_DoubleSupport):
+            # t FROM 0 to 1
+            t = i / (2 * self.num_DoubleSupport - 1.0)
+
+            # Here we create a discontinuity of 1/2 stride length
+            # to promote speed
+            # we do this by moving from -2/6 stride length to -1/2 stride length in this segment
+            DS_dominant_foot[0][i] = -self.stride_length * ((1 / 6.0) +
+                                                            (2 / 6.0) * t)
+            # Clipped Sinewave Trajectory for Sway from -1/3 to 1/3 of -pi
+            DS_dominant_foot[1][i] = np.sin(-np.pi *
+                                            ((-1.0 / 3.0) +
+                                             (2 / 3.0) * t)) * self._body_sway
+            DS_dominant_foot[2][i] = self._bend_distance
 
         # Support Foot - SS
         for i in range(self.num_SingleSupport):
-            # t FROM 10 / 30 to 20 / 30
-            # Add Elapsed Double Support and subtract Single Support
-            t = (i + self.num_DoubleSupport) / (Period -
-                                                self.num_SingleSupport)
-            SS_support_foot[0][i] = (0.5 - t) * self.stride_length
-            SS_support_foot[1][i] = self._body_sway * np.sin(2.0 * np.pi * (
-                (i + 1.0 + self.num_DoubleSupport - self._sway_steps) /
-                Period))
+            # t FROM 0 to 1
+            t = i / (self.num_SingleSupport - 1.0)
+            # moving from 1/6 stride length to -1/6 stride length in this segment
+            SS_support_foot[0][i] = self.stride_length * ((2.0 / 6.0) - t *
+                                                          (4.0 / 6.0)) / 2.0
+
+            # Clipped Sinewave Trajectory for Sway from 1/3 to 2/3 of pi
+            # DS will handle 0 to 1/3 and 2/3 to 1
+            SS_support_foot[1][i] = np.sin(np.pi * ((1 / 3.0) *
+                                                    (1 + t))) * self._body_sway
             SS_support_foot[2][i] = self._bend_distance
 
-        # Dominant Foot - DS
-        for i in range(self.num_DoubleSupport):
-            # Add Elapsed Double and Single Supports and sub Single Support
-            # t FROM 20/30 to 30/30
-            t = (i + self.num_DoubleSupport +
-                 self.num_SingleSupport) / (Period - self.num_SingleSupport)
-            DS_dominant_foot[0][i] = (0.5 - t) * self.stride_length
-            DS_dominant_foot[1][i] = self._body_sway * np.sin(2.0 * np.pi * (
-                (i + 1.0 + self.num_DoubleSupport + self.num_SingleSupport -
-                 self._sway_steps) / Period))
-            DS_dominant_foot[2][i] = self._bend_distance
+        # Support Foot - DS
+        # We do twice the trajectory to use half for each foot (see below)
+        for i in range(2 * self.num_DoubleSupport):
+            # t FROM 0 to 1
+            t = i / (2.0 * self.num_DoubleSupport - 1.0)
+
+            # Supporting discontinuity created by DS - Dominant
+            # moving from -2/6 stride length to -1/2 stride length in this segment
+            DS_support_foot[0][i] = self.stride_length * ((1 / 2.0) -
+                                                          (1 / 3.0) * t)
+
+            DS_support_foot[1][i] = np.sin(-np.pi *
+                                           ((2.0 / 3.0) +
+                                            (2 / 3.0) * t)) * self._body_sway
+            DS_support_foot[2][i] = self._bend_distance
 
         # Forward Bias
         # Subtract foor position by amount of forward tilt
@@ -125,16 +132,16 @@ class TrajectoryGenerator():
             DS_dominant_foot[0] = DS_dominant_foot[0] - self.fwd_bias
             SS_dominant_foot[0] = SS_dominant_foot[0] - self.fwd_bias
 
-        # Dominant foot does DS, Single Support, DS
+        # Dominant foot does DS(1st half), Single Support, DS(2nd half)
         self.foot_walk_rfwd_r = np.column_stack([
-            DS_dominant_foot[:, self._sway_steps:], SS_dominant_foot,
-            DS_support_foot[:, :self._sway_steps]
+            DS_dominant_foot[:, self.num_DoubleSupport:], SS_dominant_foot,
+            DS_support_foot[:, :self.num_DoubleSupport]
         ])
 
-        # Support foot does: DS, Lift, DS
+        # Support foot does: DS(1st half, Lift, DS(2nd half)
         self.foot_walk_lfwd_r = np.column_stack([
-            DS_support_foot[:, self._sway_steps:], SS_support_foot,
-            DS_dominant_foot[:, :self._sway_steps]
+            DS_support_foot[:, self.num_DoubleSupport:], SS_support_foot,
+            DS_dominant_foot[:, :self.num_DoubleSupport]
         ])
 
         # store for plot
