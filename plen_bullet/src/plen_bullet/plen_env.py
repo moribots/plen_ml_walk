@@ -28,9 +28,11 @@ class PlenWalkEnv(gym.Env):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def __init__(self, render=False, realtime=False):
+    def __init__(self, render=False, realtime=False, joint_act=False):
         super(PlenWalkEnv, self).__init__()
 
+        # Play direct joint angles instead of Policy Actions if True
+        self.joint_act = joint_act
         self.render = render
         self.running_step = 1. / 60.  # 30 or 60 Hz
         self.timestep = 1. / 240.
@@ -139,6 +141,28 @@ class PlenWalkEnv(gym.Env):
         self.action_space = spaces.Box(low_act, high_act, dtype=np.float32)
 
         self.env_ranges = [
+            [-1.57, 1.57],  # RIGHT LEG
+            [-0.15, 1.5],
+            [-0.95, 0.75],
+            [-0.9, 0.3],
+            [-0.95, 1.2],
+            [-0.8, 0.4],
+            [-1.57, 1.57],  # LEFT LEG
+            [-1.5, 0.15],
+            [-0.75, 0.95],
+            [-0.3, 0.9],
+            [-1.2, 0.95],
+            [-0.4, 0.8],
+            [-1.57, 1.57],  # RIGHT ARM
+            [-0.15, 1.57],
+            [-0.2, 0.35],
+            [-1.57, 1.57],  # LEFT ARM
+            [-0.15, 1.57],
+            [-0.2, 0.35]
+        ]
+
+        # For use in manual trajectory
+        self.real_ranges = [
             [-1.57, 1.57],  # RIGHT LEG
             [-0.15, 1.5],
             [-0.95, 1.2],
@@ -397,7 +421,7 @@ class PlenWalkEnv(gym.Env):
         print("--------------------------------------------")
 
         # Change Right and Left Foot Dynamics
-        roll_fric = 0.01  # 0.1
+        roll_fric = 0.1  # 0.01 for manual
         lat_fric = 0.8
         spin_fric = 0.1
         p.changeDynamics(
@@ -429,7 +453,7 @@ class PlenWalkEnv(gym.Env):
         for j in range(p.getNumJoints(self.robotId)):
             p.changeDynamics(self.robotId,
                              j,
-                             linearDamping=1.0,
+                             linearDamping=0.0,  # 0.1 for manual
                              angularDamping=0.0,
                              restitution=0.5)
 
@@ -589,14 +613,14 @@ class PlenWalkEnv(gym.Env):
             format(episode_number, self.total_timesteps, reward,
                    moving_avg_reward))
 
-    def step(self, action, joint_act=True):
+    def step(self, action):
         # Convert agent actions into real actions
         env_action = np.zeros(18)
         # print("MESS {}".format(env_action))
 
         for i in range(len(action)):
             # Convert action from [-1, 1] to real env values
-            if joint_act:
+            if self.joint_act:
                 # Give joint position
                 env_action[i] = action[i]
             else:
@@ -624,13 +648,13 @@ class PlenWalkEnv(gym.Env):
         # Increment Gait Reward Counters
         self.gait_period_counter += 1
 
-        # if self.render:
-        #     # Make camera follow robot
-        #     p.resetDebugVisualizerCamera(
-        #         cameraDistance=0.5,
-        #         cameraYaw=35,
-        #         cameraPitch=-30,
-        #         cameraTargetPosition=[self.torso_x, self.torso_y, 0])
+        if self.render:
+            # Make camera follow robot
+            p.resetDebugVisualizerCamera(
+                cameraDistance=0.5,
+                cameraYaw=35,
+                cameraPitch=-30,
+                cameraTargetPosition=[self.torso_x, self.torso_y, 0])
 
         # STORE JOINT COMMANDS
         for i in range(len(self.joint_cmds)):

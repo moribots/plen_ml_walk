@@ -182,26 +182,26 @@ class TrajectoryGenerator():
             # NOTE: Cap Angles based on actual joint limits
             if RightLeg:
                 # Check [3]knee and [2]thigh
-                if th3 < self.env.env_ranges[3][0]:
-                    th3 = self.env.env_ranges[3][0]
-                elif th3 > self.env.env_ranges[3][1]:
-                    th3 = self.env.env_ranges[3][1]
+                if th3 < self.env.real_ranges[3][0]:
+                    th3 = self.env.real_ranges[3][0]
+                elif th3 > self.env.real_ranges[3][1]:
+                    th3 = self.env.real_ranges[3][1]
 
-                if th2 < self.env.env_ranges[2][0]:
-                    th2 = self.env.env_ranges[2][0]
-                elif th2 > self.env.env_ranges[2][1]:
-                    th2 = self.env.env_ranges[2][1]
+                if th2 < self.env.real_ranges[2][0]:
+                    th2 = self.env.real_ranges[2][0]
+                elif th2 > self.env.real_ranges[2][1]:
+                    th2 = self.env.real_ranges[2][1]
             else:
                 # Check [9]knee and [8]thigh
-                if th3 < self.env.env_ranges[9][0]:
-                    th3 = self.env.env_ranges[9][0]
-                elif th3 > self.env.env_ranges[9][1]:
-                    th3 = self.env.env_ranges[9][1]
+                if th3 < self.env.real_ranges[9][0]:
+                    th3 = self.env.real_ranges[9][0]
+                elif th3 > self.env.real_ranges[9][1]:
+                    th3 = self.env.real_ranges[9][1]
 
-                if th2 < self.env.env_ranges[8][0]:
-                    th2 = self.env.env_ranges[8][0]
-                elif th2 > self.env.env_ranges[8][1]:
-                    th2 = self.env.env_ranges[8][1]
+                if th2 < self.env.real_ranges[8][0]:
+                    th2 = self.env.real_ranges[8][0]
+                elif th2 > self.env.real_ranges[8][1]:
+                    th2 = self.env.real_ranges[8][1]
 
             th4 = -(th2 + th3)
 

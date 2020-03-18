@@ -18,7 +18,7 @@ import time
 def main():
     """ The main() function. """
 
-    # TRAINING PARAMETERS
+    # GYM Env
     env_name = "PlenWalkEnv-v1"
     seed = 0
     max_timesteps = 4e6
@@ -34,7 +34,7 @@ def main():
     if not os.path.exists(models_path):
         os.makedirs(models_path)
 
-    env = gym.make(env_name, render=True)
+    env = gym.make(env_name, render=True, joint_act=True)
 
     # Set seeds
     env.seed(seed)
