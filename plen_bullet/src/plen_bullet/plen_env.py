@@ -421,7 +421,11 @@ class PlenWalkEnv(gym.Env):
         print("--------------------------------------------")
 
         # Change Right and Left Foot Dynamics
-        roll_fric = 0.01  # 0.01 for manual
+        if self.joint_act:
+            roll_fric = 0.01
+        else:
+            roll_fric = 0.1
+
         lat_fric = 0.8
         spin_fric = 0.1
         p.changeDynamics(
@@ -450,10 +454,14 @@ class PlenWalkEnv(gym.Env):
         # Better performance (realism) if damping for all joints turned off
         # These dampings essentially act as aerodynamic drag
         # Default damping is 0.04
+        if self.joint_act:
+            damp = 0.1
+        else:
+            damp = 0.0
         for j in range(p.getNumJoints(self.robotId)):
             p.changeDynamics(self.robotId,
                              j,
-                             linearDamping=1.0,  # 0.1 for manual
+                             linearDamping=damp,  # 0.0 for RL, 1.0 for manual
                              angularDamping=0.0,
                              restitution=0.5)
 

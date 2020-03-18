@@ -14,7 +14,6 @@ class TrajectoryGenerator():
                  stride=30.0,
                  bend_distance=10.0,
                  body_sway=5.0,
-                 foot_sway=-0.0,
                  fwd_bias=0.0,
                  sway_steps=5):
         """ Initialize trajectory generation parameters.
@@ -50,7 +49,7 @@ class TrajectoryGenerator():
         self._body_sway = body_sway
         # Forward bias for torso
         self.fwd_bias = fwd_bias
-        self.env = PlenWalkEnv()
+        self.env = PlenWalkEnv(joint_act=True)
 
     def foot_path(self):
         """ Generate Foot trajectories for Dominant and Support in
@@ -83,11 +82,11 @@ class TrajectoryGenerator():
             # t FROM 0 to 1
             t = i / (2 * self.num_DoubleSupport - 1.0)
 
-            # Here we create a discontinuity of 1/2 stride length
-            # to promote speed
-            # we do this by moving from -2/6 stride length to -1/2 stride length in this segment
+            # Move by 1/4 stride length for each foot
             DS_dominant_foot[0][i] = -self.stride_length * (t / 2.0)
             # Clipped Sinewave Trajectory for Sway from -1/3 to 1/3 of -pi
+            # 0 to 1/3 for dominant support (1st half)
+            # -1/3 to 0 for support support (2nd half)
             DS_dominant_foot[1][i] = np.sin(-np.pi *
                                             ((-1.0 / 3.0) +
                                              (2 / 3.0) * t)) * self._body_sway
@@ -97,9 +96,9 @@ class TrajectoryGenerator():
         for i in range(self.num_SingleSupport):
             # t FROM 0 to 1
             t = i / (self.num_SingleSupport - 1.0)
-            # moving from 1/6 stride length to -1/6 stride length in this segment
-            SS_support_foot[0][i] = self.stride_length * ((2.0 / 6.0) - t *
-                                                          (4.0 / 6.0)) / 2.0
+            # moving from 1/4 stride length to -1/4 stride length in this segment
+            SS_support_foot[0][i] = self.stride_length * (
+                (1.0 / 2.0) - t) / 2.0
 
             # Clipped Sinewave Trajectory for Sway from 1/3 to 2/3 of pi
             # DS will handle 0 to 1/3 and 2/3 to 1
@@ -113,8 +112,12 @@ class TrajectoryGenerator():
             # t FROM 0 to 1
             t = i / (2.0 * self.num_DoubleSupport - 1.0)
 
+            # Move by 1/4 stride length for each foot
             DS_support_foot[0][i] = self.stride_length * (1.0 - t) / 2.0
 
+            # Clipped Sinewave Trajectory for Sway from 2/3 to 4/3 of pi
+            # 2/3 to 1 for support support (1st half)
+            # 1 to 4/3 for dominant support (2nd half)
             DS_support_foot[1][i] = np.sin(-np.pi *
                                            ((2.0 / 3.0) +
                                             (2 / 3.0) * t)) * self._body_sway
