@@ -8,7 +8,6 @@ from plen_bullet.plen_env import PlenWalkEnv
 class TrajectoryGenerator():
     def __init__(self,
                  num_DoubleSupport=10,
-                 num_SingleSupport=10,
                  height=30.0,
                  stride=30.0,
                  bend_distance=10.0,
@@ -16,10 +15,27 @@ class TrajectoryGenerator():
                  foot_sway=-0.0,
                  fwd_bias=15.0,
                  sway_steps=5):
+        """ Initialize trajectory generation parameters.
+            This only has the ability to implement a forward
+            trajectory, and with no consideration for feedback
+            control.
+
+            ZMP with LQI is a good candidate for future improvement.
+
+            Note that regardless of the solver use, the foot trajectory
+            must provide a solution to the IK problem.
+
+            see: https://www.hindawi.com/journals/mpe/2015/437979/
+            for details
+        """
+        # Length of hip-knee segment
         self.l_hip_knee = 25.0
+        # Length of knee-ankle segment
         self.l_knee_foot = 40.0
+        # Num. Timesteps spent with both feet planted
         self.num_DoubleSupport = num_DoubleSupport
-        self.num_SingleSupport = num_SingleSupport
+        # Num. Timesteps spent in stride per trajectory
+        self.num_SingleSupport = num_DoubleSupport
         # Foot height during stride
         self.foot_lift_height = height
         # stride length
@@ -28,14 +44,17 @@ class TrajectoryGenerator():
         self._bend_distance = bend_distance
         # body sway length
         self._body_sway = body_sway
-        # number of steps dedicating to swaying (moving torso to the side)
+        # Number of timesteps (of total) for swaying
         self._sway_steps = sway_steps
         # Forward bias for torso
         self.fwd_bias = fwd_bias
-        self._stepPoint = num_DoubleSupport + num_SingleSupport
         self.env = PlenWalkEnv()
 
     def foot_path(self):
+        """ Generate Foot trajectories for Dominant and Support in
+            cartesian coordinates relative to their respective hips.
+        """
+        # SOURCE: https://www.hindawi.com/journals/mpe/2015/437979/
         DS_dominant_foot = np.zeros((3, self.num_DoubleSupport))
         SS_dominant_foot = np.zeros((3, self.num_SingleSupport))
         DS_support_foot = np.zeros((3, self.num_DoubleSupport))
@@ -95,6 +114,7 @@ class TrajectoryGenerator():
                  self._sway_steps) / Period))
 
         # Forward Bias
+        # Subtract foor position by amount of forward tilt
         if self.fwd_bias != 0:
             DS_dominant_foot[0] = DS_dominant_foot[0] - self.fwd_bias
             SS_dominant_foot[0] = SS_dominant_foot[0] - self.fwd_bias
@@ -114,6 +134,13 @@ class TrajectoryGenerator():
         ])
 
     def assemble_trajectories(self):
+        """ Assemble complements of trajectories in self.foot_path
+            to change leading foot.
+
+            Note that for example, if the right foot is the dominant one,
+            the left foot has the same trajectory as the right foot were it
+            a support foot, but with its y position negated
+        """
         # Right and left foot trajectories are the same,
         # except that the y component is flipped
         self.foot_walk_lfwd_l = self.foot_walk_rfwd_r * np.array([[1], [-1],
@@ -121,7 +148,9 @@ class TrajectoryGenerator():
         self.foot_walk_rfwd_l = self.foot_walk_lfwd_r * np.array([[1], [-1],
                                                                   [1]])
 
-    def inverseKinematicsList(self, point, RightLeg):
+    def IK(self, point, RightLeg):
+        """ Inverse Kinematics to actuate foot with respect to hip joint
+        """
         # Joint Angles for each leg
         joint_angles = np.zeros((point[0].size, 6))
         # SOURCE: https://www.hindawi.com/journals/mpe/2015/437979/
@@ -186,8 +215,12 @@ class TrajectoryGenerator():
         return joint_angles
 
     def joint_space_trajectories(self):
+        """ Assemble joint-space trajectories from EE-space trajectories
+            fed through IK process
+        """
         # Amount to bend down
         # can incrememnt bend as robot moves down for smooth transistion
+        # Rows: Trajectory | Columns: x,y,z of foot wrt hip
         bend_array = np.column_stack([
             np.array([0.0, 0.0, self._bend_distance]),
             np.array([0.0, 0.0, self._bend_distance]),
@@ -196,26 +229,26 @@ class TrajectoryGenerator():
         # # BEND LEGS
         self.bend = np.column_stack([
             # RIGHT COMPONENT OF RIGHT SIDE START
-            self.inverseKinematicsList(bend_array, True),
+            self.IK(bend_array, True),
             # LEFT COMPONENT OF RIGHT SIDE START
-            self.inverseKinematicsList(bend_array, False)
+            self.IK(bend_array, False)
         ])
 
         # # WALK
         # RIGHT SIDE WALK
         self.foot_walk_rfwd = np.column_stack([
             # RIGHT COMPONENT OF RIGHT SIDE WALK
-            self.inverseKinematicsList(self.foot_walk_rfwd_r, True),
+            self.IK(self.foot_walk_rfwd_r, True),
             # LEFT COMPONENT OF RIGHT SIDE WALK
-            self.inverseKinematicsList(self.foot_walk_rfwd_l, False)
+            self.IK(self.foot_walk_rfwd_l, False)
         ])
 
         # LEFT SIDE WALK
         self.foot_walk_lfwd = np.column_stack([
             # RIGHT COMPONENT OF LEFT SIDE WALK
-            self.inverseKinematicsList(self.foot_walk_lfwd_r, True),
+            self.IK(self.foot_walk_lfwd_r, True),
             # LEFT COMPONENT OF LEFT SIDE WALK
-            self.inverseKinematicsList(self.foot_walk_lfwd_l, False)
+            self.IK(self.foot_walk_lfwd_l, False)
         ])
 
     def main(self):
@@ -227,9 +260,3 @@ class TrajectoryGenerator():
 
         # Convert to joint space
         self.joint_space_trajectories()
-
-
-if __name__ == "__main__":
-    traj = TrajectoryGenerator()
-
-    traj.main()
