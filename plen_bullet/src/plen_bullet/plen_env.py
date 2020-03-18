@@ -656,13 +656,13 @@ class PlenWalkEnv(gym.Env):
         # Increment Gait Reward Counters
         self.gait_period_counter += 1
 
-        # if self.render:
-        #     # Make camera follow robot
-        #     p.resetDebugVisualizerCamera(
-        #         cameraDistance=0.5,
-        #         cameraYaw=35,
-        #         cameraPitch=-30,
-        #         cameraTargetPosition=[self.torso_x, self.torso_y, 0])
+        if self.render:
+            # Make camera follow robot
+            p.resetDebugVisualizerCamera(
+                cameraDistance=0.5,
+                cameraYaw=35,
+                cameraPitch=-30,
+                cameraTargetPosition=[self.torso_x, 0, 0])
 
         # STORE JOINT COMMANDS
         for i in range(len(self.joint_cmds)):
