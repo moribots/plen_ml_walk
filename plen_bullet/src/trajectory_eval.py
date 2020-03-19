@@ -270,6 +270,8 @@ def main():
     # Save Leg Bend Traj
     np.save(results_path + "bend_traj", bend_legs)
 
+    # time.sleep(10)
+
     print("BEND")
     for i in range(20):
         # Perform action
