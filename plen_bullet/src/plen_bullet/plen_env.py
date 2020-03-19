@@ -11,6 +11,7 @@ import time
 
 import os
 
+# Register as OpenAI Gym Environment
 register(
     id="PlenWalkEnv-v1",
     entry_point='plen_bullet.plen_env:PlenWalkEnv',
@@ -25,6 +26,8 @@ class PlenWalkEnv(gym.Env):
     }
 
     def _seed(self, seed=None):
+        """ Seed for system noise
+        """
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
@@ -140,6 +143,8 @@ class PlenWalkEnv(gym.Env):
         high_act = np.ones(18)
         self.action_space = spaces.Box(low_act, high_act, dtype=np.float32)
 
+        # Ranges used during training (now obsolete. keeping them around for
+        # replay purposes)
         self.env_ranges = [
             [-1.57, 1.57],  # RIGHT LEG
             [-0.15, 1.5],
@@ -161,7 +166,7 @@ class PlenWalkEnv(gym.Env):
             [-0.2, 0.35]
         ]
 
-        # For use in manual trajectory
+        # Updated range values
         self.real_ranges = [
             [-1.57, 1.57],  # RIGHT LEG
             [-0.15, 1.5],
@@ -253,6 +258,8 @@ class PlenWalkEnv(gym.Env):
                 self.torso_pitch_max, self.torso_yaw_max, self.torso_y_max,
                 self.rfs_max, self.lfs_max
             ]))
+
+        # Observation Space using OpenAI Gym Interface
         self.observation_space = spaces.Box(obs_low, obs_high)
 
         self.torso_z = 0
@@ -271,19 +278,25 @@ class PlenWalkEnv(gym.Env):
             self.physicsClient = p.connect(p.DIRECT)  # non-graphical version
         p.setAdditionalSearchPath(
             pybullet_data.getDataPath())  # used by loadURDF
+
+        # Set Camera
         p.resetDebugVisualizerCamera(cameraDistance=0.5,
                                      cameraYaw=35,
                                      cameraPitch=-30,
                                      cameraTargetPosition=[0, 0, 0])
         self._seed()
+
         if realtime:
             p.setRealTimeSimulation(1)  # 1=Realtime, 0=Simtime
         else:
             p.setRealTimeSimulation(0)  # 1=Realtime, 0=Simtime
         p.resetSimulation()
+
+        # Gravity
         p.setGravity(0, 0, -9.81)  # m/s^2
-        self.frame_skip = 4
-        self.numSolverIterations = 5
+
+        # self.frame_skip = 4
+        # self.numSolverIterations = 5
         # p.setPhysicsEngineParameter(
         #     fixedTimeStep=self.timestep * self.frame_skip,
         #     numSolverIterations=self.numSolverIterations,
@@ -295,11 +308,13 @@ class PlenWalkEnv(gym.Env):
         # Modify Ground Plane Friction and Restitution
         p.changeDynamics(self.plane, -1, lateralFriction=0.8, restitution=0.5)
 
+        # base_footprint coordinates
         self.StartPos = [0, 0, 0.158]
         self.StartOrientation = p.getQuaternionFromEuler([0, 0, 0])
         self.robotId = p.loadURDF("plen.urdf", self.StartPos,
                                   self.StartOrientation)
-        # Gathered from experiment, see self.move_joints
+
+        # Joint IDs for actuated joints according to Bullet
         self.movingJoints = [
             5, 6, 7, 9, 10, 11, 13, 14, 15, 17, 18, 19, 20, 21, 24, 26, 27, 30
         ]
@@ -331,7 +346,7 @@ class PlenWalkEnv(gym.Env):
             print("Link name: {} \t index: {}".format(
                 _name, _link_name_to_index[_name]))
 
-        # COLLISIONS
+        # Add self-collision
         print("--------------------------------------------")
         print("COLLISIONS")
         print("--------------------------------------------")
@@ -541,6 +556,8 @@ class PlenWalkEnv(gym.Env):
         print("PLEN ENVIRONMENT INITIALIZED")
 
     def reset(self):
+        """ Ends the Episode, returns the robot state, and resets the robot
+        """
         p.resetBasePositionAndOrientation(self.robotId,
                                           posObj=self.StartPos,
                                           ornObj=self.StartOrientation)
@@ -598,11 +615,8 @@ class PlenWalkEnv(gym.Env):
 
     def _publish_reward(self, reward, episode_number):
         """
-        This function publishes the given reward in the reward topic for
-        easy access from ROS infrastructure.
-        :param reward:
-        :param episode_number:
-        :return:
+        This function prints the reward for this episode, as well as
+        the Moving Average Reward
         """
 
         # Now Calculate Moving Avg
@@ -622,6 +636,13 @@ class PlenWalkEnv(gym.Env):
                    moving_avg_reward))
 
     def step(self, action):
+        """ Performs one action either using the Policy,
+            or using joint positions directly.
+
+            Then, computes an observation of the state,
+            as well as the reward for this action,
+            and determines whether the state is terminal.
+        """
         # Convert agent actions into real actions
         env_action = np.zeros(18)
         # print("MESS {}".format(env_action))
@@ -745,6 +766,8 @@ class PlenWalkEnv(gym.Env):
         # print("KEY: {}".format(key))
 
     def compute_observation(self):
+        """ Reads the relevant state parameters from the simulation
+        """
         baseOri = np.array(p.getBasePositionAndOrientation(self.robotId))
         JointStates = p.getJointStates(self.robotId, self.movingJoints)
         BaseAngVel = p.getBaseVelocity(self.robotId)

@@ -242,6 +242,10 @@ class PlenReal:
         self.time = time.time()
 
     def calibrate_motors(self):
+        """ Take a number of measurements from the feedback potentiometer at
+            various known motor positions and fit a polynomial for future
+            readings
+        """
         input("Press Enter when PLEN is elevated to a safe position:")
         for i in range(len(self.joint_list)):
             print("Calibrating Joint: " + self.joint_list[i].name)
@@ -257,6 +261,8 @@ class PlenReal:
     #                              self.env_ranges[0][1])
 
     def reset(self):
+        """ Ends the Episode, returns the robot state, and resets the robot
+        """
         self.episode_num += 1
         self.moving_avg_counter += 1
         self.cumulated_episode_reward = 0
@@ -285,6 +291,13 @@ class PlenReal:
         input("Press Enter to Start")
 
     def step(self, action):
+        """ Performs one action either using the Policy,
+            or using joint positions directly.
+
+            Then, computes an observation of the state,
+            as well as the reward for this action,
+            and determines whether the state is terminal.
+        """
         # Convert agent actions into real actions
         env_action = np.zeros(18)
         # print("MESS {}".format(env_action))
@@ -326,6 +339,8 @@ class PlenReal:
         return done
 
     def compute_observation(self):
+        """ Reads the relevant state parameters from the sensors
+        """
         # print(len(left_contact))
 
         self.left_contact = 0
@@ -522,9 +537,9 @@ class PlenReal:
         bend_legs.append(full_bend[15])
         bend_legs.append(0.5)
 
-        print("BEND LEG SIZE {}".format(len(bend_legs)))
-        print("BEND LEG COMMAND")
-        print(bend_legs)
+        # print("BEND LEG SIZE {}".format(len(bend_legs)))
+        # print("BEND LEG COMMAND")
+        # print(bend_legs)
 
         input("PRESS ENTER TO BEND LEGS")
 

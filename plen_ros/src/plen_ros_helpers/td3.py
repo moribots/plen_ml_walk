@@ -424,7 +424,7 @@ def trainer(env_name,
             eval_freq,
             save_model,
             file_name="best_avg"):
-    """
+    """ Test Script on stock OpenAI Gym Envs
     """
 
     if not os.path.exists("../results"):

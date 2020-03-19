@@ -75,7 +75,7 @@ def main():
 
     for t in range(int(max_timesteps)):
 
-        time.sleep(1. / 24.)
+        time.sleep(1. / 20.)
 
         episode_timesteps += 1
         # Deterministic Policy Action
