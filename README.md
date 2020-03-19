@@ -2,13 +2,13 @@
 
 ## Project Overview
 
-For this project, I took the CAD files from the [PLEN](https://plen.jp/wp/en/) robot and turned them into OpenAI Gym environments in Pybullet and Gazebo via URDF. Then, I applied Twin-Delayed Deep Deterministic Policy Gradient (TD3) Reinforcement Learning to learn a gait. Finally, I built the real robot and tested my learned policy. If you would like to train your own RL or ZMP algorithm on this robot, please check out the [GitHub repository](https://github.com/moribots/plen_ml_walk) I used OpenAI Gym so you can just plug and play your code!
+For this project, I took the CAD files from the [PLEN](https://plen.jp/wp/en/) robot and turned them into OpenAI Gym environments in Pybullet and Gazebo via URDF. Then, I applied Twin-Delayed Deep Deterministic Policy Gradient (TD3) Reinforcement Learning to learn a gait. Finally, I built the real robot and tested my learned policy. I used OpenAI Gym so you can just plug and play your code!
 
-[![Watch the video](media/yt_thumb.png)](https://www.youtube.com/embed/EkgeR68JXx8)
+[![Watch the video](media/rl.png)](https://www.youtube.com/embed/EkgeR68JXx8)
 
 As the sim-to-real experiment was unsuccessful, I implemented a simple sinewave-based trajectory for the robot's feet and solved the **Inverse Kinematics** using [this paper](https://www.hindawi.com/journals/mpe/2015/437979/). Based on this implementation, I learned that the robot needs wider hips, a lower CoM, and higher-torque motors for any RL policy to be deployed. Here's a video of the manual trajectory:
 
-[![Watch the video](media/yt_thumb.png)](https://www.youtube.com/embed/VoFJJ-k5Xmw)
+[![Watch the video](media/traj.png)](https://www.youtube.com/embed/VoFJJ-k5Xmw)
 
 The core project components were:
 
@@ -17,7 +17,7 @@ The core project components were:
 * **RViz and Gazebo** for an alternate ROS-based simulation, as well as for constructing and testing the URDF mechanically and dynamically.
 * **The Real Robot** was 3D printed and controlled using a [Raspberry Pi Zero W](https://www.adafruit.com/product/3400) along with 16 [servo motors](https://www.pololu.com/product/3436) and a 9-axis [IMU](https://www.adafruit.com/product/3387).
 
-To read the theory behind each element of this project, please visit my ![portfolio website](https://moribots.github.io/project/plen)
+To read the theory behind each element of this project, please visit my [portfolio website](https://moribots.github.io/project/plen)
 
 ## Quickstart guide
 * `fork` this repository, then download and build using `wstool` and `catkin_make` if you want to use the Gazebo Environment.
@@ -25,7 +25,7 @@ To read the theory behind each element of this project, please visit my ![portfo
 * To run the Pybullet training script, simple navigate to `plen_td3.py` under the `src` directory in the `plen_bullet` package, and run.
 * To evaluate a policy in Pybullet, navigate to the above directory, and run `walk_eval.py`. You will need to open the file and edit the policy `number` to choose a different one.
 * To evaluate the manual trajectory in Pybullet, navigate to the above directory and run `trajectory_eval.py`. Feel free to go one directory deeper into `trajectory_generator.py` and edit the gait parameters to your liking.
-* To run  a policy or to replay a trajectory on the real robot, you will need to send the `plen_real` package to the robot's Raspberry Pi. Then, navigate into that package's `src` directory, and run `plen_real.py` and follow the instructions on screen. To deploy a policy, you will need to run `main_plen_walk_pc.py` on your computer to send the robot's pose as measured by an overhead camera. Note that you will need to calibrate the ![camera](https://www.fdxlabs.com/calculate-x-y-z-real-world-coordinates-from-a-single-camera-using-opencv/) and ![IMU](https://teslabs.com/articles/magnetometer-calibration/) following the instructions linked. 
+* To run  a policy or to replay a trajectory on the real robot, you will need to send the `plen_real` package to the robot's Raspberry Pi. Then, navigate into that package's `src` directory, and run `plen_real.py` and follow the instructions on screen. To deploy a policy, you will need to run `main_plen_walk_pc.py` on your computer to send the robot's pose as measured by an overhead camera. Note that you will need to calibrate the [camera](https://www.fdxlabs.com/calculate-x-y-z-real-world-coordinates-from-a-single-camera-using-opencv/) and [IMU](https://teslabs.com/articles/magnetometer-calibration/) following the instructions linked. 
 * Finally, if you would like to use your own RL script on this robot, you can do so by importing `plen_env.py` either from the `plen_bullet` or `plen_ros` packages and use them as you would any other OpenAI Gym Environment.
 
 ## Packages
@@ -46,10 +46,23 @@ This package also contains the `urdf` files for the robot in `xacro` format. Thi
 
 The files presented in the `cad` directory were modified to fit 9g servo motors, as well as a Raspberry Pi and PWM board instead of the stock components recommended by the PLEN Project Company.
 
+![cad](media/cad.png)
 
 ## Required Components & Assembly
 
-## Future Work
-One method of closing the sim-to-real gap is to increase the fidelity of the simulation. This has been done for ![quadrupedal robots](website) in Pybullet, so it should be possible for PLEN as well. In addition, I noticed that Gazebo more accurately represents contacts, so an alternate or parallel route for improvement would be to implement a plugin to deterministically step the simulation while still applying joint commands.
+* [Raspberry Pi Zero W](https://www.adafruit.com/product/3400)
+* [PWM Board](https://www.adafruit.com/product/815)
+* [FS90-FB Servo Motors](https://www.pololu.com/product/3436) or TowerPro 9g
+* [IMU](https://www.adafruit.com/product/3387)
+* [60FPS Camera](https://www.gamestop.com/video-games/pc/accessories/cameras-and-webcams/products/kiyo-ring-light-equipped-web-camera/162981.html?utm_source=sdi&utm_medium=feeds&utm_campaign=PLA&utm_kxconfid=t9vz73bvj&gclid=EAIaIQobChMIq4G_gN2n6AIVzv7jBx1vbghMEAQYASABEgIstvD_BwE&gclsrc=aw.ds) for pose tracking (sim runs at 60Hz)
+* [4.8V Battery](https://www.pololu.com/product/2231)
+* [ADC](https://www.adafruit.com/product/856)
+* [Force Sensing Resistor for Foot Contact](https://www.adafruit.com/product/166)
 
-Finally, while this was not my original goal, I inadvertedly dove into ![Zero Moment Point trajectory generation for bipedal robots](website) during the final week of this project. Although the topic requires significantly more research for me to implement (hence why I opted for open-loop sinewave-based foot trajectories), it is definitely worthwhile. It would be interested to apply a ZMP-based gait, and use RL to improve upon it.
+For assembly instructions, please follow [this guide]() by the PLEN Project Company. Feel free to use the `servo_calibration_basic.py` script to help you align the servo horns. Note that a software offset of 9 degrees was applied to each servvo motor (see `plen_real.py` in `plen_real`) to zero them properly.
+
+
+## Future Work
+One method of closing the sim-to-real gap is to increase the fidelity of the simulation. This has been done for [quadrupedal robots](website) in Pybullet, so it should be possible for PLEN as well. In addition, I noticed that Gazebo more accurately represents contacts, so an alternate or parallel route for improvement would be to implement a plugin to deterministically step the simulation while still applying joint commands.
+
+Finally, while this was not my original goal, I inadvertedly dove into [Zero Moment Point trajectory generation for bipedal robots](website) during the final week of this project. Although the topic requires significantly more research for me to implement (hence why I opted for open-loop sinewave-based foot trajectories), it is definitely worthwhile. It would be interested to apply a ZMP-based gait, and use RL to improve upon it.
