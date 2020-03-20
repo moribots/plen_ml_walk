@@ -177,7 +177,6 @@ install(PROGRAMS
   src/joint_trajectory_test
   src/plen_td3
   src/walk_eval
-  src/gazebo_tools_test
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -199,7 +198,7 @@ install(TARGETS gazebo_tools_test
 # )
 
 ## Mark cpp header files for installation
-install(DIRECTORY include/${PROJECT_NAME}/
+install(DIRECTORY
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING PATTERN "*.h"
   PATTERN ".svn" EXCLUDE
