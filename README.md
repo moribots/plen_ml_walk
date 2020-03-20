@@ -6,16 +6,16 @@ For this project, I took the CAD files from the [PLEN](https://plen.jp/wp/en/) r
 
 [![Watch the video](media/rl.png)](https://www.youtube.com/embed/EkgeR68JXx8)
 
-As the sim-to-real experiment was unsuccessful, I implemented a simple sinewave-based trajectory for the robot's feet and solved the **Inverse Kinematics** using [this paper](https://www.hindawi.com/journals/mpe/2015/437979/). Based on this implementation, I learned that the robot needs wider hips, a lower CoM, and higher-torque motors for any RL policy to be deployed. Here's a video of the manual trajectory:
+As the sim-to-real experiment was unsuccessful, I implemented a simple sinewave-based trajectory for the robot's feet and solved the `Inverse Kinematics` using [this paper](https://www.hindawi.com/journals/mpe/2015/437979/). Based on this implementation, I learned that the robot needs wider hips, a lower CoM, and higher-torque motors for any RL policy to be deployed. Here's a video of the manual trajectory:
 
 [![Watch the video](media/traj.png)](https://www.youtube.com/embed/VoFJJ-k5Xmw)
 
 The core project components were:
 
-* **Pytorch** to construct the six deep neural networks required by TD3 Reinforcement Learning.
-* **PyBullet** for simulating the robot and environment.
-* **RViz and Gazebo** for an alternate ROS-based simulation, as well as for constructing and testing the URDF mechanically and dynamically.
-* **The Real Robot** was 3D printed and controlled using a [Raspberry Pi Zero W](https://www.adafruit.com/product/3400) along with 16 [servo motors](https://www.pololu.com/product/3436) and a 9-axis [IMU](https://www.adafruit.com/product/3387).
+* `Pytorch` to construct the six deep neural networks required by TD3 Reinforcement Learning.
+* `PyBullet` for simulating the robot and environment.
+* `RViz and Gazebo` for an alternate ROS-based simulation, as well as for constructing and testing the URDF mechanically and dynamically.
+* `The Real Robot` was 3D printed and controlled using a [Raspberry Pi Zero W](https://www.adafruit.com/product/3400) along with 16 [servo motors](https://www.pololu.com/product/3436) and a 9-axis [IMU](https://www.adafruit.com/product/3387).
 
 To read the theory behind each element of this project, please visit my [portfolio website](https://moribots.github.io/project/plen)
 
