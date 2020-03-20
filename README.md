@@ -59,7 +59,7 @@ The files presented in the `cad` directory were modified to fit 9g servo motors,
 * [ADC](https://www.adafruit.com/product/856)
 * [Force Sensing Resistor for Foot Contact](https://www.adafruit.com/product/166)
 
-For assembly instructions, please follow [this guide]() by the PLEN Project Company. Feel free to use the `servo_calibration_basic.py` script to help you align the servo horns. Note that a software offset of 9 degrees was applied to each servvo motor (see `plen_real.py` in `plen_real`) to zero them properly.
+For assembly instructions, please follow [this guide](http://plen.jp/playground/wiki/tutorials/index.html) by the PLEN Project Company. Feel free to use the `servo_calibration_basic.py` script to help you align the servo horns. Note that a software offset of 9 degrees was applied to each servvo motor (see `plen_real.py` in `plen_real`) to zero them properly.
 
 
 ## Future Work
