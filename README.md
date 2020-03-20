@@ -15,7 +15,7 @@ The core project components were:
 * `Pytorch` to construct the six deep neural networks required by TD3 Reinforcement Learning.
 * `PyBullet` for simulating the robot and environment.
 * `RViz and Gazebo` for an alternate ROS-based simulation, as well as for constructing and testing the URDF mechanically and dynamically.
-* `The Real Robot` was 3D printed and controlled using a [Raspberry Pi Zero W](https://www.adafruit.com/product/3400) along with 16 [servo motors](https://www.pololu.com/product/3436) and a 9-axis [IMU](https://www.adafruit.com/product/3387).
+* `The Real Robot` was 3D printed and can be controlled using either joint position replay, or by sampling actions from a policy.
 
 To read the theory behind each element of this project, please visit my [portfolio website](https://moribots.github.io/project/plen)
 
@@ -59,7 +59,7 @@ The files presented in the `cad` directory were modified to fit 9g servo motors,
 * [ADC](https://www.adafruit.com/product/856)
 * [Force Sensing Resistor for Foot Contact](https://www.adafruit.com/product/166)
 
-For assembly instructions, please follow [this guide](http://plen.jp/playground/wiki/tutorials/index.html) by the PLEN Project Company. Feel free to use the `servo_calibration_basic.py` script to help you align the servo horns. Note that a software offset of 9 degrees was applied to each servvo motor (see `plen_real.py` in `plen_real`) to zero them properly.
+For assembly instructions, please follow [this guide](http://plen.jp/playground/wiki/tutorials/index.html) by the PLEN Project Company. Feel free to use the `servo_calibration_basic.py` script to help you align the servo horns. Note that a software offset of 9 degrees was applied to each servo motor (see `plen_real.py` in `plen_real`) to zero them properly.
 
 
 ## Future Work
