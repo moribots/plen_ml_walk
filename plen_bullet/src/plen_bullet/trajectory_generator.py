@@ -54,6 +54,9 @@ class TrajectoryGenerator():
     def foot_path(self):
         """ Generate Foot trajectories for Dominant and Support in
             cartesian coordinates relative to their respective hips.
+
+            # sinewave trajectory generation loosely based on
+            # https://github.com/Einsbon/bipedal-robot-walking-simulation/blob/master/walkGenerator.py
         """
         DS_support_foot = np.zeros((3, 2 * self.num_DoubleSupport))
         SS_support_foot = np.zeros((3, self.num_SingleSupport))
