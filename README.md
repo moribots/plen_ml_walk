@@ -28,6 +28,16 @@ To read the theory behind each element of this project, please visit my [portfol
 * To run  a policy or to replay a trajectory on the real robot, you will need to send the `plen_real` package to the robot's Raspberry Pi. Then, navigate into that package's `src` directory, and run `plen_real.py` and follow the instructions on screen. To deploy a policy, you will need to run `main_plen_walk_pc.py` on your computer to send the robot's pose as measured by an overhead camera. Note that you will need to calibrate the [camera](https://www.fdxlabs.com/calculate-x-y-z-real-world-coordinates-from-a-single-camera-using-opencv/) and [IMU](https://teslabs.com/articles/magnetometer-calibration/) following the instructions linked. 
 * Finally, if you would like to use your own RL script on this robot, you can do so by importing `plen_env.py` either from the `plen_bullet` or `plen_ros` packages and use them as you would any other OpenAI Gym Environment.
 
+## Dependencies
+* ROS Melodic
+* Gazebo
+* Pytorch
+* Pybullet
+* Gym
+* Numpy
+* [Adadfruit Servo Toolkit](https://learn.adafruit.com/adafruit-16-channel-servo-driver-with-raspberry-pi/using-the-adafruit-library)
+* [Adafruit Sensor Toolkit](https://learn.adafruit.com/reading-a-analog-in-and-controlling-audio-volume-with-the-raspberry-pi/necessary-packages)
+
 ## Packages
 
 ### `plen_bullet`
