@@ -35,6 +35,7 @@ To read the theory behind each element of this project, please visit my [portfol
 * Pybullet
 * Gym
 * Numpy
+* OpenCV
 * [Adadfruit Servo Toolkit](https://learn.adafruit.com/adafruit-16-channel-servo-driver-with-raspberry-pi/using-the-adafruit-library)
 * [Adafruit Sensor Toolkit](https://learn.adafruit.com/reading-a-analog-in-and-controlling-audio-volume-with-the-raspberry-pi/necessary-packages)
 
